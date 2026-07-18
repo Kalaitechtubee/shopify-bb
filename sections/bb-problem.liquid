@@ -1,0 +1,599 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-problem-{{ section.id }} {
+    background-color: {{ section.settings.section_background_color }};
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    
+    --problem-max-width: {{ section.settings.container_max_width }}px;
+    --problem-badge-bg: {{ section.settings.badge_bg_color }};
+    --problem-badge-text: {{ section.settings.badge_text_color }};
+    --problem-badge-radius: {{ section.settings.badge_border_radius }}px;
+    --problem-badge-size: {{ section.settings.badge_font_size }}px;
+    --problem-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    
+    --problem-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --problem-heading-weight: {{ section.settings.heading_weight }};
+    --problem-heading-color: {{ section.settings.heading_color }};
+    --problem-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    
+    --problem-panel-bg: {{ section.settings.panel_bg_color }};
+    --problem-panel-radius: {{ section.settings.panel_border_radius }}px;
+    --problem-panel-padding-desktop: {{ section.settings.panel_padding_desktop }}px;
+    --problem-panel-margin: {{ section.settings.panel_margin_bottom }}px;
+    
+    --problem-quote-size: {{ section.settings.quote_size }}px;
+    --problem-quote-color: {{ section.settings.quote_color }};
+    --problem-quote-margin: {{ section.settings.quote_margin_bottom }}px;
+    
+    --problem-list-gap: {{ section.settings.list_gap }}px;
+    --problem-item-size: {{ section.settings.item_font_size }}px;
+    --problem-item-color: {{ section.settings.item_text_color }};
+    
+    --problem-icon-size: {{ section.settings.icon_size }}px;
+    --problem-icon-bg: {{ section.settings.icon_bg_color }};
+    --problem-icon-color: {{ section.settings.icon_symbol_color }};
+    
+    --problem-alert-bg: {{ section.settings.alert_bg_color }};
+    --problem-alert-border-color: {{ section.settings.alert_border_color }};
+    --problem-alert-border-width: {{ section.settings.alert_border_width }}px;
+    --problem-alert-size: {{ section.settings.alert_font_size }}px;
+    --problem-alert-color: {{ section.settings.alert_text_color }};
+    --problem-alert-highlight-color: {{ section.settings.alert_highlight_color }};
+    --problem-alert-padding: {{ section.settings.alert_padding_y }}px {{ section.settings.alert_padding_x }}px;
+  }
+  @media (min-width: 768px) {
+    #bb-problem-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-problem-{{ section.id }} .bb-problem-v2__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+    #bb-problem-{{ section.id }} .bb-problem-v2__panel {
+      padding: {{ section.settings.panel_padding_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-problem-{{ section.id }}"
+  class="bb-section bb-problem-section-wrapper {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-problem-v2">
+      
+      <!-- Subheading Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-problem-v2__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading — two-color split: navy line 1, maroon line 2 -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-problem-v2__heading">
+          Hair fall isn't about<br>
+          <span class="bb-heading-maroon">weak hair. It's a lazy scalp.</span>
+        </h2>
+      {%- endif -%}
+
+      <!-- Dark Panel Box -->
+      <div class="bb-problem-v2__panel bb-fade-in">
+        <!-- Quote with left accent bar -->
+        {%- if section.settings.quote_text != blank -%}
+          <div class="bb-problem-v2__quote-wrap">
+            <div class="bb-problem-v2__quote-bar"></div>
+            <p class="bb-problem-v2__quote">{{ section.settings.quote_text }}</p>
+          </div>
+        {%- endif -%}
+
+        <!-- Problem Checklist Items -->
+        {%- if section.blocks.size > 0 -%}
+          <ul class="bb-problem-v2__list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'problem_item' -%}
+                <li class="bb-problem-v2__list-item" {{ block.shopify_attributes }}>
+                  <span class="bb-problem-v2__icon">
+                    {%- if block.settings.custom_icon != blank -%}
+                      <img src="{{ block.settings.custom_icon | image_url: width: 48 }}" alt="" loading="lazy">
+                    {%- else -%}
+                      {%- if section.settings.bullet_icon_type == 'checkmark' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      {%- else -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </span>
+                  <span>{{ block.settings.text }}</span>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <!-- Alert horizontal box -->
+      {%- if section.settings.alert_text != blank -%}
+        <div class="bb-problem-v2__alert bb-fade-in">
+          {{ section.settings.alert_text }}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+
+{% schema %}
+{
+  "name": "BB Problem Section",
+  "tag": "section",
+  "class": "bb-section-problem",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "THE REAL PROBLEM"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Hair fall isn't about weak hair. It's a lazy scalp."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Panel Options"
+    },
+    {
+      "type": "color",
+      "id": "panel_bg_color",
+      "label": "Panel Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "panel_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Panel Border Radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "panel_padding_desktop",
+      "min": 10,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Panel Padding — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "panel_padding_mobile",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Panel Padding — Mobile",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "panel_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Panel Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Quote Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "quote_text",
+      "label": "Quote Text",
+      "default": "\"You're applying oils, serums, and treatments — but nothing is actually reaching where growth begins.\""
+    },
+    {
+      "type": "color",
+      "id": "quote_color",
+      "label": "Quote Color",
+      "default": "rgba(255, 255, 255, 0.85)"
+    },
+    {
+      "type": "range",
+      "id": "quote_size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Quote Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "quote_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Quote Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Checklist Settings"
+    },
+    {
+      "type": "color",
+      "id": "item_text_color",
+      "label": "List Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "item_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "List Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "list_gap",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "List Item Gap",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "bullet_icon_type",
+      "label": "Default Bullet Icon Style",
+      "default": "cross",
+      "options": [
+        { "value": "checkmark", "label": "Checkmark" },
+        { "value": "cross", "label": "Cross (X)" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "icon_bg_color",
+      "label": "Bullet Icon Background Circle",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "icon_symbol_color",
+      "label": "Bullet Symbol (SVG) Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Bullet Icon Size",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Alert Box Options"
+    },
+    {
+      "type": "richtext",
+      "id": "alert_text",
+      "label": "Alert Box Content",
+      "default": "<p>The fix isn't a better serum. It's <strong>getting actives to where growth actually starts</strong> — deep in the follicle.</p>"
+    },
+    {
+      "type": "color",
+      "id": "alert_bg_color",
+      "label": "Alert Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "alert_border_color",
+      "label": "Alert Left Border Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "alert_border_width",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Alert Left Border Thickness",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "alert_text_color",
+      "label": "Alert Text Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "alert_highlight_color",
+      "label": "Alert Highlighted Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "alert_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Alert Font Size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "alert_padding_y",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Alert Padding Vertical",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "alert_padding_x",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Alert Padding Horizontal",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "General Spacing"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section Background Color",
+      "default": "#FAF5F5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "problem_item",
+      "name": "Problem Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Problem Text",
+          "default": "Noticeable hair thinning on the crown"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Bullet Icon (optional file upload)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Problem Section",
+      "blocks": [
+        {
+          "type": "problem_item",
+          "settings": {
+            "text": "Poor blood circulation starves your follicles of nutrients"
+          }
+        },
+        {
+          "type": "problem_item",
+          "settings": {
+            "text": "Dormant follicles stop responding to surface-level products"
+          }
+        },
+        {
+          "type": "problem_item",
+          "settings": {
+            "text": "Regular serums sit on the scalp — they never penetrate deep enough"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

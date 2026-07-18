@@ -1,0 +1,490 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-routine-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    
+    /* CSS Variables mapping for complete customization */
+    --rt-bg: {{ section.settings.background_color }};
+    --rt-max-width: {{ section.settings.container_max_width }}px;
+    
+    --rt-badge-bg: {{ section.settings.badge_bg_color }};
+    --rt-badge-text: {{ section.settings.badge_text_color }};
+    --rt-badge-border: {{ section.settings.badge_border_color }};
+    --rt-badge-radius: {{ section.settings.badge_border_radius }}px;
+    --rt-badge-size: {{ section.settings.badge_font_size }}px;
+    --rt-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    
+    --rt-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --rt-heading-weight: {{ section.settings.heading_weight }};
+    --rt-heading-color: {{ section.settings.heading_color }};
+    --rt-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    
+    --rt-num-bg: {{ section.settings.num_bg_color }};
+    --rt-num-color: {{ section.settings.num_text_color }};
+    --rt-num-size: {{ section.settings.num_circle_size }}px;
+    --rt-num-radius: {{ section.settings.num_border_radius }}px;
+    --rt-num-font-size: {{ section.settings.num_font_size }}px;
+    
+    --rt-divider-width: {{ section.settings.divider_width }}px;
+    --rt-divider-style: {{ section.settings.divider_style }};
+    --rt-divider-color: {{ section.settings.divider_color }};
+    
+    --rt-padding-y: {{ section.settings.item_padding_y }}px;
+    
+    --rt-text-size: {{ section.settings.card_text_size }}px;
+    --rt-text-color: {{ section.settings.text_color }};
+    --rt-highlight-color: {{ section.settings.highlight_color }};
+  }
+  @media (min-width: 768px) {
+    #bb-routine-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-routine-{{ section.id }} .bb-routine-v2__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-routine-{{ section.id }}"
+  class="bb-section bb-routine-v2 {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-routine-v2__inner bb-text-center">
+      
+      <!-- Subheading Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-routine-v2__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-routine-v2__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <!-- Steps Stack -->
+      <div class="bb-routine-v2__list">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'routine_step' -%}
+              <div class="bb-routine-v2__item bb-fade-in" {{ block.shopify_attributes }}>
+                <div class="bb-routine-v2__number">
+                  {%- if block.settings.custom_icon != blank -%}
+                    <img src="{{ block.settings.custom_icon | image_url: width: 64 }}" alt="" loading="lazy" style="width:100%; height:100%; object-fit:contain;">
+                  {%- else -%}
+                    {{ forloop.index }}
+                  {%- endif -%}
+                </div>
+                <div class="bb-routine-v2__content">
+                  <div class="bb-routine-v2__text">{{ block.settings.text }}</div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign routine_meta = product.metafields.custom.routine_steps.value -%}
+          {%- if routine_meta != blank -%}
+            {%- for item in routine_meta -%}
+              <div class="bb-routine-v2__item bb-fade-in">
+                <div class="bb-routine-v2__number">
+                  {{ forloop.index }}
+                </div>
+                <div class="bb-routine-v2__content">
+                  <div class="bb-routine-v2__text">
+                    <strong>{{ item.title }}</strong> — {{ item.description }}
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Daily Routine",
+  "tag": "section",
+  "class": "bb-section-daily-routine",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "HOW TO USE"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Simple 5-step daily routine"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Step Items Options"
+    },
+    {
+      "type": "range",
+      "id": "item_padding_y",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Step Item Vertical Padding",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Number Blocks"
+    },
+    {
+      "type": "color",
+      "id": "num_bg_color",
+      "label": "Number Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "num_text_color",
+      "label": "Number Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "num_circle_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Number Block Size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "num_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Number Block Corner Radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "num_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Number Font Size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Divider Lines"
+    },
+    {
+      "type": "range",
+      "id": "divider_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Divider Line Width",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "divider_style",
+      "label": "Divider Line Style",
+      "default": "solid",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "dashed", "label": "Dashed" },
+        { "value": "dotted", "label": "Dotted" },
+        { "value": "none", "label": "None" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider Line Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "header",
+      "content": "Card Typography"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Bold Highlight Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Text Font Size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Section Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "routine_step",
+      "name": "Routine Step",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Step Content Text",
+          "default": "<p>Start with a <strong>clean, dry scalp</strong> for best absorption</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Step Icon (optional file upload)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Daily Routine",
+      "blocks": [
+        {
+          "type": "routine_step",
+          "settings": {
+            "text": "<p>Start with a <strong>clean, dry scalp</strong> for best absorption</p>"
+          }
+        },
+        {
+          "type": "routine_step",
+          "settings": {
+            "text": "<p>Apply serum <strong>directly to affected areas</strong> — hairline, crown, partition</p>"
+          }
+        },
+        {
+          "type": "routine_step",
+          "settings": {
+            "text": "<p>Gently <strong>press or roll</strong> to activate micro-needle stimulation</p>"
+          }
+        },
+        {
+          "type": "routine_step",
+          "settings": {
+            "text": "<p>Leave it on — <strong>no washing required</strong></p>"
+          }
+        },
+        {
+          "type": "routine_step",
+          "settings": {
+            "text": "<p>Use <strong>consistently</strong> for best cumulative results</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

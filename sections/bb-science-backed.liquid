@@ -1,0 +1,492 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-science-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    
+    /* CSS Variables mapping for complete customization */
+    --sci-bg: {{ section.settings.background_color }};
+    --sci-max-width: {{ section.settings.container_max_width }}px;
+    
+    --sci-badge-bg: {{ section.settings.badge_bg_color }};
+    --sci-badge-text: {{ section.settings.badge_text_color }};
+    --sci-badge-border: {{ section.settings.badge_border_color }};
+    --sci-badge-radius: {{ section.settings.badge_border_radius }}px;
+    --sci-badge-size: {{ section.settings.badge_font_size }}px;
+    --sci-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    
+    --sci-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --sci-heading-weight: {{ section.settings.heading_weight }};
+    --sci-heading-color: {{ section.settings.heading_color }};
+    --sci-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    
+    --sci-gap: {{ section.settings.grid_gap }}px;
+    
+    --sci-card-bg: {{ section.settings.card_bg_color }};
+    --sci-card-border-color: {{ section.settings.card_border_color }};
+    --sci-card-radius: {{ section.settings.card_border_radius }}px;
+    --sci-card-padding: {{ section.settings.card_padding }}px;
+    
+    --sci-icon-size: {{ section.settings.icon_size }}px;
+    --sci-icon-bg: {{ section.settings.icon_bg_color }};
+    --sci-icon-symbol: {{ section.settings.icon_symbol_color }};
+    
+    --sci-text-size: {{ section.settings.card_text_size }}px;
+    --sci-text-weight: {{ section.settings.card_text_weight }}px;
+    --sci-text-color: {{ section.settings.text_color }};
+  }
+  @media (min-width: 768px) {
+    #bb-science-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-science-{{ section.id }} .bb-science-v2__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-science-{{ section.id }}"
+  class="bb-section bb-science-v2 {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-science-v2__inner bb-text-center">
+      
+      <!-- Subheading Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-science-v2__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-science-v2__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <!-- Checklist stack -->
+      <ul class="bb-science-v2__list">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'claim' -%}
+              <li class="bb-science-v2__card bb-fade-in" {{ block.shopify_attributes }}>
+                <span class="bb-science-v2__check-circle">
+                  {%- if block.settings.custom_icon != blank -%}
+                    <img src="{{ block.settings.custom_icon | image_url: width: 48 }}" alt="" loading="lazy">
+                  {%- else -%}
+                    {%- if section.settings.bullet_icon_type == 'checkmark' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    {%- elsif section.settings.bullet_icon_type == 'cross' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    {%- elsif section.settings.bullet_icon_type == 'dot' -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+                    {%- endif -%}
+                  {%- endif -%}
+                </span>
+                <p class="bb-science-v2__text">{{ block.settings.text }}</p>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign science_meta = product.metafields.custom.science_claims.value -%}
+          {%- if science_meta != blank -%}
+            {%- for item in science_meta -%}
+              <li class="bb-science-v2__card bb-fade-in">
+                <span class="bb-science-v2__check-circle">
+                  {%- if section.settings.bullet_icon_type == 'checkmark' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  {%- endif -%}
+                </span>
+                <p class="bb-science-v2__text">{{ item }}</p>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+      </ul>
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Science Backed",
+  "tag": "section",
+  "class": "bb-section-science",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "WHY BOOST & BLOOM™"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Science-backed, clinically tested"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "List Options"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between Cards",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Card Options"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Padding",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Checkmark Icon Options"
+    },
+    {
+      "type": "select",
+      "id": "bullet_icon_type",
+      "label": "Default Bullet Icon",
+      "default": "checkmark",
+      "options": [
+        { "value": "checkmark", "label": "Checkmark" },
+        { "value": "cross", "label": "Cross" },
+        { "value": "dot", "label": "Bullet Dot" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "icon_bg_color",
+      "label": "Icon Background Circle",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "icon_symbol_color",
+      "label": "Icon Symbol Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon Circle Size",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Card Typography"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Card Text Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Text Font Size",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "card_text_weight",
+      "label": "Card Text Weight",
+      "default": "500",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#FAF5F5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "claim",
+      "name": "Science Claim",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Claim Text",
+          "default": "Backed by science-driven formulation — not marketing claims"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Bullet Icon (optional file upload)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Science Backed",
+      "blocks": [
+        {
+          "type": "claim",
+          "settings": {
+            "text": "Backed by science-driven formulation — not marketing claims"
+          }
+        },
+        {
+          "type": "claim",
+          "settings": {
+            "text": "Korean patented micro-needle delivery technology"
+          }
+        },
+        {
+          "type": "claim",
+          "settings": {
+            "text": "Clinically tested for safety & efficacy"
+          }
+        },
+        {
+          "type": "claim",
+          "settings": {
+            "text": "High-performance actives only — no fillers"
+          }
+        },
+        {
+          "type": "claim",
+          "settings": {
+            "text": "Designed for visible, real-world results"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

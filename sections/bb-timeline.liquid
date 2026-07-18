@@ -1,0 +1,449 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-timeline-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    
+    /* CSS Variables mapping for complete customization */
+    --t-bg: {{ section.settings.background_color }};
+    --t-max-width: {{ section.settings.container_max_width }}px;
+    
+    --t-badge-bg: {{ section.settings.badge_bg_color }};
+    --t-badge-text: {{ section.settings.badge_text_color }};
+    --t-badge-border: {{ section.settings.badge_border_color }};
+    --t-badge-radius: {{ section.settings.badge_border_radius }}px;
+    --t-badge-size: {{ section.settings.badge_font_size }}px;
+    --t-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    
+    --t-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --t-heading-weight: {{ section.settings.heading_weight }};
+    --t-heading-color: {{ section.settings.heading_color }};
+    --t-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    
+    --t-padding-y: {{ section.settings.item_padding_y }}px;
+    
+    --t-divider-width: {{ section.settings.divider_width }}px;
+    --t-divider-style: {{ section.settings.divider_style }};
+    --t-divider-color: {{ section.settings.divider_color }};
+    
+    --t-text-size: {{ section.settings.card_text_size }}px;
+    --t-text-color: {{ section.settings.text_color }};
+    --t-highlight-color: {{ section.settings.highlight_color }};
+  }
+  @media (min-width: 768px) {
+    #bb-timeline-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-timeline-{{ section.id }} .bb-timeline-v2__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-timeline-{{ section.id }}"
+  class="bb-section bb-timeline-v2 {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-timeline-v2__inner bb-text-center">
+      
+      <!-- Subheading Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-timeline-v2__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-timeline-v2__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <!-- Timeline List -->
+      <ul class="bb-timeline-v2__list">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'timeline_item' -%}
+              <li class="bb-timeline-v2__item bb-fade-in" {{ block.shopify_attributes }}>
+                
+                <!-- Left Capsule Badge -->
+                {%- if block.settings.week != blank -%}
+                  <span class="bb-timeline-v2__week">{{ block.settings.week }}</span>
+                {%- endif -%}
+
+                <!-- Right Description -->
+                <div class="bb-timeline-v2__content">
+                  <p class="bb-timeline-v2__text">
+                    {%- if block.settings.title != blank -%}
+                      <strong>{{ block.settings.title }}</strong>
+                    {%- endif -%}
+                    {%- if block.settings.description != blank -%}
+                      {% if block.settings.title != blank %} — {% endif %}{{ block.settings.description }}
+                    {%- endif -%}
+                  </p>
+                </div>
+
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign timeline_meta = product.metafields.custom.timeline_items.value -%}
+          {%- if timeline_meta != blank -%}
+            {%- for item in timeline_meta -%}
+              <li class="bb-timeline-v2__item bb-fade-in">
+                <span class="bb-timeline-v2__week">{{ item.week }}</span>
+                <div class="bb-timeline-v2__content">
+                  <p class="bb-timeline-v2__text">
+                    <strong>{{ item.title }}</strong> — {{ item.description }}
+                  </p>
+                </div>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+      </ul>
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Timeline",
+  "tag": "section",
+  "class": "bb-section-timeline",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "WHEN TO EXPECT RESULTS"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your growth timeline"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Row Spacing & Divider Settings"
+    },
+    {
+      "type": "range",
+      "id": "item_padding_y",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Item Vertical Spacing",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "divider_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Divider Line Width",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "divider_style",
+      "label": "Divider Style",
+      "default": "solid",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "dashed", "label": "Dashed" },
+        { "value": "dotted", "label": "Dotted" },
+        { "value": "none", "label": "None" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Description Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Bold Highlight Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Text Font Size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Section Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#FAF5F5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "timeline_item",
+      "name": "Timeline Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "week",
+          "label": "Week Label",
+          "default": "Week 1–2"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step Title",
+          "default": "Reduced hair fall"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Step Description",
+          "default": "roots feel stronger, less shedding in the shower"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Timeline",
+      "blocks": [
+        {
+          "type": "timeline_item",
+          "settings": {
+            "week": "Week 1–2",
+            "title": "Reduced hair fall",
+            "description": "roots feel stronger, less shedding in the shower"
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "week": "Week 3–4",
+            "title": "Scalp feels healthier",
+            "description": "less dryness, irritation, and tightness"
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "week": "Week 4–8",
+            "title": "Visible baby hair growth",
+            "description": "in thinning areas as follicles reactivate"
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "week": "Week 8+",
+            "title": "Noticeable density improvement",
+            "description": "thicker, fuller-looking hair overall"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

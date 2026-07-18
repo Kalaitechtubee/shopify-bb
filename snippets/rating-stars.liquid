@@ -1,0 +1,41 @@
+{%- comment -%}
+  Snippet: rating-stars.liquid
+  Usage: {% render 'rating-stars', rating: 4.5, max: 5, show_count: true, count: 248 %}
+{%- endcomment -%}
+
+{%- assign rating_value = rating | default: 5 -%}
+{%- assign max_stars    = max    | default: 5 -%}
+{%- assign full_stars   = rating_value | floor -%}
+{%- assign has_half     = false -%}
+{%- assign half_check   = rating_value | minus: full_stars -%}
+{%- if half_check >= 0.4 and half_check < 0.8 -%}
+  {%- assign has_half = true -%}
+{%- elsif half_check >= 0.8 -%}
+  {%- assign full_stars = full_stars | plus: 1 -%}
+{%- endif -%}
+
+<span class="bb-stars" aria-label="Rating: {{ rating_value }} out of {{ max_stars }}">
+  {%- for i in (1..max_stars) -%}
+    {%- assign half_star_index = full_stars | plus: 1 -%}
+    {%- if i <= full_stars -%}
+      <svg class="bb-stars__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    {%- elsif has_half and i == half_star_index -%}
+      <svg class="bb-stars__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" style="clip-path:inset(0 50% 0 0);margin-right:-16px;position:relative;z-index:1;">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      <svg class="bb-stars__star bb-stars__star--empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    {%- else -%}
+      <svg class="bb-stars__star bb-stars__star--empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if show_count and count -%}
+    <span class="bb-stars__count">({{ count }})</span>
+  {%- endif -%}
+</span>

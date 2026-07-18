@@ -1,0 +1,22 @@
+{%- comment -%}
+  Snippet: product-badges.liquid
+  Usage: {% render 'product-badges', badges: 'Bestseller,New,Sale', style: 'accent' %}
+  Also accepts: badge_list (array of strings)
+{%- endcomment -%}
+
+{%- assign badge_style = style | default: 'accent' -%}
+
+{%- if badge_list -%}
+  {%- for badge in badge_list -%}
+    {%- unless badge == blank -%}
+      <span class="bb-badge bb-badge--{{ badge_style }}">{{ badge | strip }}</span>
+    {%- endunless -%}
+  {%- endfor -%}
+{%- elsif badges -%}
+  {%- assign badge_arr = badges | split: ',' -%}
+  {%- for badge in badge_arr -%}
+    {%- unless badge == blank -%}
+      <span class="bb-badge bb-badge--{{ badge_style }}">{{ badge | strip }}</span>
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endif -%}

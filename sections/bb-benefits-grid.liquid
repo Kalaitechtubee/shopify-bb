@@ -1,0 +1,494 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-benefits-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    
+    /* CSS Variables mapping for complete customization */
+    --results-bg: {{ section.settings.background_color }};
+    --results-max-width: {{ section.settings.container_max_width }}px;
+    
+    --results-badge-bg: {{ section.settings.badge_bg_color }};
+    --results-badge-text: {{ section.settings.badge_text_color }};
+    --results-badge-border: {{ section.settings.badge_border_color }};
+    --results-badge-radius: {{ section.settings.badge_border_radius }}px;
+    --results-badge-size: {{ section.settings.badge_font_size }}px;
+    --results-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    
+    --results-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --results-heading-weight: {{ section.settings.heading_weight }};
+    --results-heading-color: {{ section.settings.heading_color }};
+    --results-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    
+    --results-cols-desktop: {{ section.settings.columns_desktop }};
+    --results-gap: {{ section.settings.grid_gap }}px;
+    
+    --results-card-bg: {{ section.settings.card_bg_color }};
+    --results-card-border: {{ section.settings.card_border_color }};
+    --results-card-radius: {{ section.settings.card_border_radius }}px;
+    --results-card-padding: {{ section.settings.card_padding }}px;
+    
+    --results-bullet-size: {{ section.settings.bullet_size }}px;
+    --results-bullet-color: {{ section.settings.bullet_color }};
+    
+    --results-card-title-size: {{ section.settings.card_title_size }}px;
+    --results-card-title-weight: {{ section.settings.card_title_weight }};
+    --results-card-title-color: {{ section.settings.card_title_color }};
+    
+    --results-card-desc-size: {{ section.settings.card_desc_size }}px;
+    --results-card-desc-color: {{ section.settings.card_desc_color }};
+  }
+  @media (min-width: 768px) {
+    #bb-benefits-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-benefits-{{ section.id }} .bb-results-v2__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-benefits-{{ section.id }}"
+  class="bb-section bb-results-v2 {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-results-v2__inner bb-text-center">
+      
+      <!-- Subheading Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-results-v2__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-results-v2__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <!-- Benefits Grid (Using Results Grid styles) -->
+      <div class="bb-results-v2__grid">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'benefit' -%}
+              <div class="bb-results-v2__card bb-fade-in" {{ block.shopify_attributes }}>
+                
+                <!-- Title Row -->
+                <div class="bb-results-v2__card-title-wrap">
+                  <span class="bb-results-v2__card-bullet"></span>
+                  <h3 class="bb-results-v2__card-title">{{ block.settings.title }}</h3>
+                </div>
+
+                <!-- Description -->
+                {%- if block.settings.description != blank -%}
+                  <p class="bb-results-v2__card-desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign ben_meta = product.metafields.custom.benefit_items.value -%}
+          {%- if ben_meta != blank -%}
+            {%- for item in ben_meta -%}
+              <div class="bb-results-v2__card bb-fade-in">
+                <div class="bb-results-v2__card-title-wrap">
+                  <span class="bb-results-v2__card-bullet"></span>
+                  <h3 class="bb-results-v2__card-title">{{ item.title }}</h3>
+                </div>
+                {%- if item.description != blank -%}
+                  <p class="bb-results-v2__card-desc">{{ item.description }}</p>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Benefits Grid",
+  "tag": "section",
+  "class": "bb-section-benefits-grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1000
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "KEY BENEFITS"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Results women notice within 2–3 weeks"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Grid Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Columns — Desktop",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Grid Gap",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Card Options"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Padding",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Card Bullet Settings"
+    },
+    {
+      "type": "color",
+      "id": "bullet_color",
+      "label": "Bullet Dot Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "bullet_size",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Bullet Size",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Card Typography"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card Title Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Title Font Size",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "card_title_weight",
+      "label": "Card Title Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "card_desc_color",
+      "label": "Card Description Color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "card_desc_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Description Font Size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Section Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Benefit Title",
+          "default": "Removes Chlorine"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Eliminates up to 99.9% of chlorine that causes dry scalp, brittle hair and skin irritation."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Benefits Grid",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Removes Chlorine",
+            "description": "Eliminates up to 99.9% of chlorine that causes dry scalp, brittle hair and skin irritation."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Vitamin C Infused",
+            "description": "Releases Vitamin C and E with every shower, nourishing hair and skin naturally."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Reduces Hair Loss",
+            "description": "Customers report 40% less hair shedding within 4 weeks of switching to Splash."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

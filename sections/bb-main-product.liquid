@@ -1,0 +1,1231 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bb-theme.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign section_enabled = section.settings.enable_section
+  assign bg_color        = section.settings.background_color
+  assign heading_color   = section.settings.heading_color
+  assign text_color      = section.settings.text_color
+  assign pt_desktop      = section.settings.padding_top
+  assign pb_desktop      = section.settings.padding_bottom
+  assign pt_mobile       = section.settings.padding_top_mobile
+  assign pb_mobile       = section.settings.padding_bottom_mobile
+  assign custom_class    = section.settings.custom_class
+-%}
+
+{%- unless section_enabled == false -%}
+
+{%- style -%}
+  #bb-product-hero-{{ section.id }} {
+    background-color: {{ bg_color }};
+    padding-top: {{ pt_mobile }}px;
+    padding-bottom: {{ pb_mobile }}px;
+
+    /* Price and rating variables */
+    --price-size: {{ section.settings.price_size }}px;
+    --price-color: {{ section.settings.price_color }};
+    --compare-price-size: {{ section.settings.compare_price_size }}px;
+    --compare-price-color: {{ section.settings.compare_price_color }};
+    --rating-star-color: {{ section.settings.rating_star_color }};
+    --rating-star-size: {{ section.settings.rating_star_size }}px;
+
+    /* Description variables */
+    --desc-size: {{ section.settings.desc_size }}px;
+    --desc-line-height: {{ section.settings.desc_line_height }};
+    --desc-color: {{ section.settings.desc_color }};
+    --desc-margin-bottom: {{ section.settings.desc_margin_bottom }}px;
+
+    /* Highlight pills variables */
+    --pill-bg: {{ section.settings.pills_bg_color }};
+    --pill-text: {{ section.settings.pills_text_color }};
+    --pill-icon-color: {{ section.settings.pills_icon_color }};
+    --pill-size: {{ section.settings.pills_font_size }}px;
+    --pill-padding: {{ section.settings.pills_padding_y }}px {{ section.settings.pills_padding_x }}px;
+    --pill-radius: {{ section.settings.pills_border_radius }}px;
+    --pill-gap: {{ section.settings.pills_gap }}px;
+    --pills-gap-x: {{ section.settings.pills_gap_x }}px;
+    --pills-gap-y: {{ section.settings.pills_gap_y }}px;
+    --pills-margin-bottom: {{ section.settings.pills_margin_bottom }}px;
+    --pill-icon-size: {{ section.settings.pills_icon_size }}px;
+
+    /* CTA button variables */
+    --btn-bg: {{ section.settings.btn_bg_color }};
+    --btn-text: {{ section.settings.btn_text_color }};
+    --btn-hover-bg: {{ section.settings.btn_hover_bg_color }};
+    --btn-height: {{ section.settings.btn_height }}px;
+    --btn-font-size: {{ section.settings.btn_font_size }}px;
+    --btn-border-radius: {{ section.settings.btn_border_radius }}px;
+    --btn-padding-y: {{ section.settings.btn_padding_y }}px;
+    --btn-padding-x: {{ section.settings.btn_padding_x }}px;
+
+    /* Quantity variables */
+    --qty-bg: {{ section.settings.qty_bg_color }};
+    --qty-border-color: {{ section.settings.qty_border_color }};
+    --qty-text-color: {{ section.settings.qty_text_color }};
+    --qty-width: {{ section.settings.qty_width }}px;
+    --qty-height: {{ section.settings.qty_height }}px;
+    --qty-border-radius: {{ section.settings.qty_border_radius }}px;
+
+    /* Accordion variables */
+    --acc-border-color: {{ section.settings.acc_border_color }};
+    --acc-bg: {{ section.settings.acc_bg_color }};
+    --acc-trigger-color: {{ section.settings.acc_trigger_color }};
+    --acc-trigger-size: {{ section.settings.acc_trigger_size }}px;
+    --acc-trigger-weight: {{ section.settings.acc_trigger_weight }};
+    --acc-content-color: {{ section.settings.acc_content_color }};
+    --acc-content-size: {{ section.settings.acc_content_size }}px;
+    --acc-icon-bg: {{ section.settings.acc_icon_bg }};
+    --acc-icon-color: {{ section.settings.acc_icon_color }};
+    --acc-icon-size: {{ section.settings.acc_icon_size }}px;
+    --acc-border-radius: {{ section.settings.acc_border_radius }}px;
+    --acc-margin-bottom: {{ section.settings.acc_margin_bottom }}px;
+    --acc-trigger-padding: {{ section.settings.acc_trigger_padding_y }}px {{ section.settings.acc_trigger_padding_x }}px;
+    --acc-content-padding: 0 {{ section.settings.acc_trigger_padding_x }}px {{ section.settings.acc_trigger_padding_y }}px {{ section.settings.acc_trigger_padding_x }}px;
+
+    /* Gallery variables */
+    --gal-arrow-bg: {{ section.settings.gal_arrow_bg }};
+    --gal-arrow-hover-bg: {{ section.settings.gal_arrow_hover_bg }};
+    --gal-arrow-color: {{ section.settings.gal_arrow_color }};
+    --gal-arrow-size: {{ section.settings.gal_arrow_size }}px;
+  }
+  #bb-product-hero-{{ section.id }} .bb-product-info__title {
+    color: {{ heading_color }};
+    font-size: {{ section.settings.heading_size_desktop }}px;
+    font-weight: {{ section.settings.heading_weight }};
+  }
+  
+  /* Apply price styling overrides */
+  #bb-product-hero-{{ section.id }} .bb-product-info__price {
+    font-size: var(--price-size);
+    color: var(--price-color);
+  }
+  #bb-product-hero-{{ section.id }} .bb-product-info__compare-price {
+    font-size: var(--compare-price-size);
+    color: var(--compare-price-color);
+  }
+  #bb-product-hero-{{ section.id }} .bb-stars__star {
+    fill: var(--rating-star-color);
+    color: var(--rating-star-color);
+    width: var(--rating-star-size);
+    height: var(--rating-star-size);
+  }
+
+  /* Description style overrides */
+  #bb-product-hero-{{ section.id }} .bb-product-description-custom {
+    font-size: var(--desc-size);
+    line-height: var(--desc-line-height);
+    color: var(--desc-color);
+    margin-bottom: var(--desc-margin-bottom);
+  }
+
+  /* Quantity buttons style overrides */
+  #bb-product-hero-{{ section.id }} .bb-quantity {
+    background: var(--qty-bg);
+    border-color: var(--qty-border-color);
+    color: var(--qty-text-color);
+    width: var(--qty-width);
+    height: var(--qty-height);
+    border-radius: var(--qty-border-radius);
+  }
+  #bb-product-hero-{{ section.id }} .bb-quantity__btn,
+  #bb-product-hero-{{ section.id }} .bb-quantity__input {
+    color: var(--qty-text-color);
+  }
+
+  /* CTA buttons overrides */
+  #bb-product-hero-{{ section.id }} .bb-btn--primary-custom {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2px solid var(--btn-bg);
+    border-radius: var(--btn-border-radius);
+    height: var(--btn-height);
+    font-size: var(--btn-font-size);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+  #bb-product-hero-{{ section.id }} .bb-btn--primary-custom:hover {
+    background-color: #ffffff;
+    color: var(--btn-bg);
+    border-color: var(--btn-bg);
+  }
+
+  @media (min-width: 768px) {
+    #bb-product-hero-{{ section.id }} {
+      padding-top: {{ pt_desktop }}px;
+      padding-bottom: {{ pb_desktop }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-product-hero-{{ section.id }} .bb-product-info__title {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-product-hero-{{ section.id }}"
+  class="bb-section bb-product-hero {{ custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-product-hero__inner">
+
+      <!-- ===== GALLERY ===== -->
+      <div class="bb-product-gallery">
+        {%- assign featured_image = product.featured_image -%}
+        <div class="bb-product-gallery__main-wrap">
+          <div class="bb-product-gallery__main" style="margin-bottom:0;">
+            {%- if featured_image -%}
+              <img
+                src="{{ featured_image | image_url: width: 800 }}"
+                srcset="
+                  {{ featured_image | image_url: width: 400 }} 400w,
+                  {{ featured_image | image_url: width: 800 }} 800w,
+                  {{ featured_image | image_url: width: 1200 }} 1200w
+                "
+                sizes="(max-width: 900px) 100vw, 50vw"
+                alt="{{ featured_image.alt | escape | default: product.title | escape }}"
+                width="{{ featured_image.width }}"
+                height="{{ featured_image.height }}"
+                loading="eager"
+                fetchpriority="high"
+                id="bb-main-image-{{ section.id }}"
+              >
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.show_gal_arrows and product.images.size > 1 -%}
+            <button type="button" class="bb-product-gallery__arrow bb-product-gallery__arrow--prev" aria-label="Previous image">
+              <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+            <button type="button" class="bb-product-gallery__arrow bb-product-gallery__arrow--next" aria-label="Next image">
+              <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+          {%- endif -%}
+        </div>
+
+        {%- if product.images.size > 1 -%}
+          <div class="bb-product-gallery__thumbs">
+            {%- for image in product.images limit: 6 -%}
+              <button
+                class="bb-product-gallery__thumb{% if forloop.first %} is-active{% endif %}"
+                data-src="{{ image | image_url: width: 800 }}"
+                data-srcset="{{ image | image_url: width: 400 }} 400w, {{ image | image_url: width: 800 }} 800w"
+                aria-label="{{ image.alt | escape | default: product.title | escape }}"
+                type="button"
+              >
+                <img
+                  src="{{ image | image_url: width: 144 }}"
+                  alt="{{ image.alt | escape }}"
+                  width="72"
+                  height="72"
+                  loading="lazy"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <!-- /GALLERY -->
+
+      <!-- ===== PRODUCT INFO ===== -->
+      <div class="bb-product-info">
+
+
+
+        <!-- Title -->
+        <h1 class="bb-product-info__title">{{ product.title }}</h1>
+
+        <!-- Rating -->
+        <div class="bb-product-info__rating-row">
+          {%- assign review_rating  = section.settings.review_rating  | default: 4.8 -%}
+          {%- assign review_count   = section.settings.review_count   | default: 248 -%}
+          {% render 'rating-stars', rating: review_rating, max: 5, show_count: false %}
+          <span class="bb-product-info__review-count" style="text-decoration:none;cursor:default;color:var(--bb-text);font-weight:600;margin-left:4px;">
+            {{ review_rating }} stars &bull; ({{ review_count }} reviews)
+          </span>
+        </div>
+
+        <!-- Short Description -->
+        {%- if section.settings.short_description != blank -%}
+          <div class="bb-product-description-custom">{{ section.settings.short_description }}</div>
+        {%- elsif product.description != blank -%}
+          <div class="bb-product-description-custom">{{ product.description }}</div>
+        {%- endif -%}
+
+        <!-- Price -->
+        {%- assign current_variant = product.selected_or_first_available_variant -%}
+        <div class="bb-product-info__price-row" style="margin-bottom: 16px;">
+          <span class="bb-product-info__price">
+            {{ current_variant.price | money }}
+          </span>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="bb-product-info__compare-price">
+              {{ current_variant.compare_at_price | money }}
+            </span>
+            {%- assign saving = current_variant.compare_at_price | minus: current_variant.price -%}
+            {%- assign saving_pct = saving | times: 100 | divided_by: current_variant.compare_at_price -%}
+            <span class="bb-product-info__save">Save {{ saving_pct }}%</span>
+          {%- endif -%}
+        </div>
+
+        <!-- Highlight Badges (Pill style) -->
+        {%- if section.settings.highlight_badge_1 != blank or section.settings.highlight_badge_2 != blank or section.settings.highlight_badge_3 != blank -%}
+          <div class="bb-product-info__highlights-v2">
+            {%- if section.settings.highlight_badge_1 != blank -%}
+              <div class="bb-highlight-pill-v2">
+                <span class="bb-highlight-pill-v2__icon">
+                  {%- if section.settings.pill_icon_1 != blank -%}
+                    <img src="{{ section.settings.pill_icon_1 | image_url: width: 36 }}" alt="" width="14" height="14" loading="lazy">
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+                      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor"></circle>
+                      <path d="M8 12l3 3 5-6" stroke="currentColor"></path>
+                    </svg>
+                  {%- endif -%}
+                </span>
+                <span class="bb-highlight-pill-v2__text">{{ section.settings.highlight_badge_1 }}</span>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.highlight_badge_2 != blank -%}
+              <div class="bb-highlight-pill-v2">
+                <span class="bb-highlight-pill-v2__icon">
+                  {%- if section.settings.pill_icon_2 != blank -%}
+                    <img src="{{ section.settings.pill_icon_2 | image_url: width: 36 }}" alt="" width="14" height="14" loading="lazy">
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+                      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor"></circle>
+                      <path d="M8 12l3 3 5-6" stroke="currentColor"></path>
+                    </svg>
+                  {%- endif -%}
+                </span>
+                <span class="bb-highlight-pill-v2__text">{{ section.settings.highlight_badge_2 }}</span>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.highlight_badge_3 != blank -%}
+              <div class="bb-highlight-pill-v2">
+                <span class="bb-highlight-pill-v2__icon">
+                  {%- if section.settings.pill_icon_3 != blank -%}
+                    <img src="{{ section.settings.pill_icon_3 | image_url: width: 36 }}" alt="" width="14" height="14" loading="lazy">
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+                      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor"></circle>
+                      <path d="M8 12l3 3 5-6" stroke="currentColor"></path>
+                    </svg>
+                  {%- endif -%}
+                </span>
+                <span class="bb-highlight-pill-v2__text">{{ section.settings.highlight_badge_3 }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <!-- Form: Variant Picker + Quantity + Add to Cart -->
+        {%- assign bb_form_id = 'bb-product-form-' | append: section.id -%}
+        <product-form>
+          {%- form 'product', product, id: bb_form_id, novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+            {%- unless product.has_only_default_variant -%}
+              {%- for option in product.options_with_values -%}
+                <div class="bb-mb-20">
+                  <span class="bb-variant-label">{{ option.name }}</span>
+                  <div class="bb-variant-options">
+                    {%- for value in option.values -%}
+                      {%- assign is_selected = false -%}
+                      {%- if current_variant.options contains value -%}
+                        {%- assign is_selected = true -%}
+                      {%- endif -%}
+                      <button
+                        type="button"
+                        class="bb-variant-option{% if is_selected %} is-selected{% endif %}"
+                        data-option-index="{{ forloop.parentloop.index0 }}"
+                        data-value="{{ value | escape }}"
+                        aria-label="{{ option.name }}: {{ value | escape }}"
+                      >
+                        {{ value }}
+                      </button>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endunless -%}
+
+            <!-- Quantity -->
+            <div class="bb-quantity-row">
+              <div class="bb-quantity">
+                <button type="button" class="bb-quantity__btn bb-quantity__btn--plus" aria-label="Increase quantity">+</button>
+                <input
+                  class="bb-quantity__input"
+                  type="number"
+                  name="quantity"
+                  id="bb-qty-{{ section.id }}"
+                  value="1"
+                  min="1"
+                  aria-label="Quantity"
+                >
+                <button type="button" class="bb-quantity__btn bb-quantity__btn--minus" aria-label="Decrease quantity">−</button>
+              </div>
+            </div>
+
+            <!-- Add to Cart -->
+            <div class="bb-product-cta">
+              <button
+                type="submit"
+                name="add"
+                class="bb-btn bb-btn--primary-custom bb-btn--full"
+                {% if current_variant.available == false %}disabled{% endif %}
+                style="display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;"
+              >
+                {%- if current_variant.available -%}
+                  {{ section.settings.add_to_cart_text | default: 'Add to Cart' }}
+                {%- else -%}
+                  Sold Out
+                {%- endif -%}
+              </button>
+            </div>
+
+          {%- endform -%}
+        </product-form>
+
+
+
+        <!-- Accordions -->
+        {%- assign accordion_blocks = section.blocks | where: "type", "accordion_item" -%}
+        {%- if accordion_blocks.size > 0 -%}
+          <div class="bb-accordion-v2">
+            {%- for block in accordion_blocks -%}
+              <div class="bb-accordion-v2__item" {{ block.shopify_attributes }}>
+                <button type="button" class="bb-accordion-v2__trigger" aria-expanded="false">
+                  <span style="display:flex;align-items:center;gap:12px;">
+                    {%- if block.settings.icon_image != blank -%}
+                      <img src="{{ block.settings.icon_image | image_url: width: 48 }}" alt="" width="20" height="20" loading="lazy">
+                    {%- endif -%}
+                    {{ block.settings.title }}
+                  </span>
+                  <span class="bb-accordion-v2__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                      <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                  </span>
+                </button>
+                <div class="bb-accordion-v2__content bb-rte">
+                  {{ block.settings.content }}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+      </div>
+      <!-- /PRODUCT INFO -->
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Product Hero",
+  "tag": "section",
+  "class": "bb-section-product-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "header",
+      "content": "Gallery Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gal_arrows",
+      "label": "Show Slider Arrows",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "gal_arrow_bg",
+      "label": "Arrow Background Color",
+      "default": "rgba(255, 255, 255, 0.7)"
+    },
+    {
+      "type": "color",
+      "id": "gal_arrow_hover_bg",
+      "label": "Arrow Hover Background Color",
+      "default": "rgba(255, 255, 255, 0.9)"
+    },
+    {
+      "type": "color",
+      "id": "gal_arrow_color",
+      "label": "Arrow Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "gal_arrow_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Arrow Size",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Product Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text (comma-separated)",
+      "default": "Bestseller,#1 Rated"
+    },
+    {
+      "type": "textarea",
+      "id": "short_description",
+      "label": "Short Description (overrides product description)"
+    },
+    {
+      "type": "range",
+      "id": "review_rating",
+      "min": 1,
+      "max": 5,
+      "step": 0.1,
+      "label": "Review Rating",
+      "default": 4.8
+    },
+    {
+      "type": "number",
+      "id": "review_count",
+      "label": "Review Count",
+      "default": 248
+    },
+    {
+      "type": "color",
+      "id": "rating_star_color",
+      "label": "Rating Star Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "rating_star_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Rating Star Size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Price Settings"
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 18,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Price Size",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "compare_price_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Compare Price Size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare Price Color",
+      "default": "#888888"
+    },
+    {
+      "type": "header",
+      "content": "Description Styling"
+    },
+    {
+      "type": "range",
+      "id": "desc_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "desc_line_height",
+      "min": 1.0,
+      "max": 2.5,
+      "step": 0.1,
+      "label": "Description Line Height",
+      "default": 1.7
+    },
+    {
+      "type": "color",
+      "id": "desc_color",
+      "label": "Description Color",
+      "default": "#444444"
+    },
+    {
+      "type": "range",
+      "id": "desc_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Description Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Highlight Pills Settings"
+    },
+    {
+      "type": "text",
+      "id": "highlight_badge_1",
+      "label": "Highlight Pill 1",
+      "default": "MICRO-STIMULATION"
+    },
+    {
+      "type": "image_picker",
+      "id": "pill_icon_1",
+      "label": "Pill 1 Custom Icon (optional file upload)"
+    },
+    {
+      "type": "text",
+      "id": "highlight_badge_2",
+      "label": "Highlight Pill 2",
+      "default": "DEEP DELIVERY"
+    },
+    {
+      "type": "image_picker",
+      "id": "pill_icon_2",
+      "label": "Pill 2 Custom Icon (optional file upload)"
+    },
+    {
+      "type": "text",
+      "id": "highlight_badge_3",
+      "label": "Highlight Pill 3",
+      "default": "FOLLICLE REACTIVATION"
+    },
+    {
+      "type": "image_picker",
+      "id": "pill_icon_3",
+      "label": "Pill 3 Custom Icon (optional file upload)"
+    },
+    {
+      "type": "color",
+      "id": "pills_bg_color",
+      "label": "Pills Background Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "pills_text_color",
+      "label": "Pills Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pills_icon_color",
+      "label": "Pills Icon Checkmark Color",
+      "default": "#A3FE01"
+    },
+    {
+      "type": "range",
+      "id": "pills_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Pills Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "pills_icon_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Pills Icon Size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "pills_padding_y",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Pills Padding Vertical",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "pills_padding_x",
+      "min": 4,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Pills Padding Horizontal",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "pills_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Pills Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "pills_gap",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Pill Inside Gap (Icon to Text)",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "pills_gap_x",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Pills Horizontal Spacing",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "pills_gap_y",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Pills Vertical Spacing",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "pills_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Pills Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Quantity Selector Settings"
+    },
+    {
+      "type": "color",
+      "id": "qty_bg_color",
+      "label": "Quantity Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "qty_border_color",
+      "label": "Quantity Border Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "color",
+      "id": "qty_text_color",
+      "label": "Quantity Text Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "qty_width",
+      "min": 80,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Quantity Selector Width",
+      "default": 132
+    },
+    {
+      "type": "range",
+      "id": "qty_height",
+      "min": 30,
+      "max": 70,
+      "step": 2,
+      "unit": "px",
+      "label": "Quantity Selector Height",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "qty_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Quantity Border Radius",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "CTA Buttons Settings"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to Cart Text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bg_color",
+      "label": "Button Hover Background Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "btn_height",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Button Height",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "btn_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Border Radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_y",
+      "min": 4,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Padding Vertical",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_x",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Padding Horizontal",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_cta",
+      "label": "Show Secondary CTA",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary CTA Text",
+      "default": "Subscribe & Save 15%"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_url",
+      "label": "Secondary CTA URL"
+    },
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_1",
+      "label": "Trust Badge 1",
+      "default": "Free Shipping over $50"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_2",
+      "label": "Trust Badge 2",
+      "default": "30-Day Money Back"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_3",
+      "label": "Trust Badge 3",
+      "default": "Clinically Tested"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_4",
+      "label": "Trust Badge 4",
+      "default": "Cruelty Free"
+    },
+    {
+      "type": "header",
+      "content": "Colors (General)"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#444444"
+    },
+    {
+      "type": "header",
+      "content": "Typography (General)"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size — Mobile",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Body Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_line_height",
+      "min": 1.0,
+      "max": 2.0,
+      "step": 0.1,
+      "label": "Body Line Height",
+      "default": 1.7
+    },
+    {
+      "type": "header",
+      "content": "Accordions Custom Styling"
+    },
+    {
+      "type": "color",
+      "id": "acc_border_color",
+      "label": "Accordion Border Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "color",
+      "id": "acc_bg_color",
+      "label": "Accordion Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "acc_trigger_color",
+      "label": "Accordion Header Text Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "acc_trigger_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Accordion Header Text Size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "acc_trigger_weight",
+      "label": "Accordion Header Font Weight",
+      "default": "700",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "acc_content_color",
+      "label": "Accordion Content Text Color",
+      "default": "#444444"
+    },
+    {
+      "type": "range",
+      "id": "acc_content_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Accordion Content Text Size",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "acc_icon_bg",
+      "label": "Accordion Icon Circle Background Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "acc_icon_color",
+      "label": "Accordion Icon Chevron Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "acc_icon_size",
+      "min": 16,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Accordion Icon Circle Size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "acc_border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Accordion Border Radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "acc_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Accordion Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "acc_trigger_padding_y",
+      "min": 8,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Accordion Trigger Padding Vertical",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "acc_trigger_padding_x",
+      "min": 8,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Accordion Trigger Padding Horizontal",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Spacing (General)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion_item",
+      "name": "Accordion Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Accordion Title",
+          "default": "Accordion Header"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Accordion Content",
+          "default": "<p>Accordion panel detailed content description goes here.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Accordion Custom Icon (optional file upload)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Product Hero",
+      "blocks": [
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Description",
+            "content": "<p>Meet Boost & Bloom, your scalp's new best friend. This 15ml micro-needling hair booster serum combines the power of targeted delivery with a built-in roller-ball applicator.</p>"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shipping & return",
+            "content": "<p>Free shipping on all orders over $50. Standard shipping takes 3-5 business days. 30-day hassle-free returns.</p>"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Chlorine Test",
+            "content": "<p>Our formula is clinically tested to remain stable and active even in environments with hard water and chlorine residues.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

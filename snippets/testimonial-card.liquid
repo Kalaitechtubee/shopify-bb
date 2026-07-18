@@ -1,0 +1,42 @@
+{%- comment -%}
+  Snippet: testimonial-card.liquid
+  Usage: {% render 'testimonial-card',
+            name: block.settings.name,
+            text: block.settings.text,
+            rating: block.settings.rating,
+            image: block.settings.image,
+            verified: block.settings.verified %}
+{%- endcomment -%}
+
+{%- assign card_rating = rating | default: 5 -%}
+{%- assign initials    = name | split: ' ' | map: 'first' | join: '' | upcase | truncate: 2, '' -%}
+
+<article class="bb-testimonial-card">
+  <header class="bb-testimonial-card__header">
+    {%- if image != blank -%}
+      <img
+        class="bb-testimonial-card__avatar"
+        src="{{ image | image_url: width: 88 }}"
+        alt="{{ name | escape }}"
+        width="44"
+        height="44"
+        loading="lazy"
+      >
+    {%- else -%}
+      <div class="bb-testimonial-card__avatar bb-testimonial-card__avatar--placeholder" aria-hidden="true">
+        {{ initials }}
+      </div>
+    {%- endif -%}
+
+    <div class="bb-testimonial-card__meta">
+      <p class="bb-testimonial-card__name">{{ name }}</p>
+      {%- if verified -%}
+        <p class="bb-testimonial-card__verified">✓ Verified Purchase</p>
+      {%- endif -%}
+    </div>
+  </header>
+
+  {%- render 'rating-stars', rating: card_rating, max: 5 -%}
+
+  <p class="bb-testimonial-card__text">{{ text }}</p>
+</article>

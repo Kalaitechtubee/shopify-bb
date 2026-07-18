@@ -1,0 +1,23 @@
+{%- comment -%}
+  Snippet: icon-check.liquid
+  Usage: {% render 'icon-check', color: '#A3FE01', size: 20 %}
+{%- endcomment -%}
+
+{%- assign icon_color = color | default: '#A3FE01' -%}
+{%- assign icon_size  = size  | default: 20 -%}
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="{{ icon_size }}"
+  height="{{ icon_size }}"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="{{ icon_color }}"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  class="bb-checklist__icon"
+>
+  <polyline points="20 6 9 17 4 12"/>
+</svg>

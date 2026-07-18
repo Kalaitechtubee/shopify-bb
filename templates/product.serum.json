@@ -1,0 +1,384 @@
+{
+  "sections": {
+    "bb-main-product": {
+      "type": "bb-main-product",
+      "settings": {
+        "enable_section": true,
+        "badge_text": "Bestseller,Clinically Tested",
+        "short_description": "",
+        "review_rating": 4.8,
+        "review_count": 248,
+        "highlight_badge_1": "MICRO-STIMULATION",
+        "highlight_badge_2": "DEEP DELIVERY",
+        "highlight_badge_3": "FOLLICLE REACTIVATION",
+        "add_to_cart_text": "Add to Cart",
+        "show_secondary_cta": true,
+        "secondary_cta_text": "Subscribe & Save 15%",
+        "trust_badge_1": "Free Shipping over £40",
+        "trust_badge_2": "30-Day Money Back Guarantee",
+        "trust_badge_3": "Clinically Tested Formula",
+        "trust_badge_4": "Cruelty Free & Vegan",
+        "background_color": "#ffffff",
+        "heading_color": "#1a1a1a",
+        "text_color": "#444444",
+        "heading_size_desktop": 40,
+        "heading_size_mobile": 28,
+        "heading_weight": "800",
+        "body_font_size": 16,
+        "body_line_height": 1.7,
+        "padding_top": 48,
+        "padding_bottom": 64,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 40
+      },
+      "blocks": {
+        "desc": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Description",
+            "content": "<p>Meet Boost & Bloom, your scalp's new best friend. This 15ml micro-needling hair booster serum combines the power of targeted delivery with a built-in roller-ball applicator — designed to stimulate the scalp while channelling actives deep into the hair follicle. Unlike regular serums that sit on the surface, Boost & Bloom works at the source. The stainless steel roller tip gently primes the scalp, improving absorption so every drop counts. Whether you're dealing with thinning, slow growth, or a scalp that needs waking up — this serum is built to deliver results you can actually see. Compact, travel-friendly, and clinical-grade. 15ml of concentrated care in one sleek pen.</p>"
+          }
+        },
+        "ship": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shipping & return",
+            "content": "<p>Free shipping on all orders over £40. Standard shipping takes 3-5 business days. 30-day hassle-free returns.</p>"
+          }
+        },
+        "chlorine": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Chlorine Test",
+            "content": "<p>Our formula is clinically tested to remain stable and active even in environments with hard water and chlorine residues.</p>"
+          }
+        }
+      },
+      "block_order": ["desc", "ship", "chlorine"]
+    },
+    "bb-stats": {
+      "type": "bb-stats",
+      "settings": {
+        "enable_section": true,
+        "style_preset": "light",
+        "background_color": "#ffffff",
+        "number_color": "#622229",
+        "label_color": "#777777",
+        "border_width": 1,
+        "border_color": "#efefef",
+        "divider_width": 1,
+        "divider_color": "#efefef"
+      },
+      "blocks": {
+        "stat-1": {
+          "type": "stat",
+          "settings": {
+            "number": "Korean",
+            "label": "Patented tech"
+          }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": {
+            "number": "4.9★",
+            "label": "Avg. rating"
+          }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": {
+            "number": "Week 2",
+            "label": "Results begin"
+          }
+        }
+      },
+      "block_order": ["stat-1", "stat-2", "stat-3"]
+    },
+    "bb-problem": {
+      "type": "bb-problem",
+      "settings": {
+        "enable_section": true,
+        "subheading": "THE REAL PROBLEM",
+        "heading": "Hair fall isn't about weak hair. It's a lazy scalp.",
+        "quote_text": "\"You're applying oils, serums, and treatments — but nothing is actually reaching where growth begins.\"",
+        "alert_text": "<p>The fix isn't a better serum. It's <strong>getting actives to where growth actually starts</strong> — deep in the follicle.</p>",
+        "section_background_color": "#FAF5F5",
+        "panel_bg_color": "#000000",
+        "item_text_color": "#ffffff",
+        "bullet_icon_type": "cross",
+        "icon_bg_color": "#622229",
+        "icon_symbol_color": "#ffffff"
+      },
+      "blocks": {
+        "p1": { "type": "problem_item", "settings": { "text": "Poor blood circulation starves your follicles of nutrients" } },
+        "p2": { "type": "problem_item", "settings": { "text": "Dormant follicles stop responding to surface-level products" } },
+        "p3": { "type": "problem_item", "settings": { "text": "Regular serums sit on the scalp — they never penetrate deep enough" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "bb-technology": {
+      "type": "bb-technology",
+      "settings": {
+        "enable_section": true,
+        "subheading": "THE SOLUTION",
+        "heading": "Micro-Needling Serum Technology",
+        "panel_title": "Boost & Bloom™ Micro-Needling Serum",
+        "panel_subtitle": "A breakthrough Korean-formulated serum with patented micro-needle delivery that goes where regular serums can't.",
+        "footer_text": "<p>This isn't just a serum. It's <strong>activation therapy for your scalp.</strong></p>",
+        "section_background_color": "#ffffff",
+        "panel_bg_color": "#000000",
+        "item_text_color": "#ffffff",
+        "bullet_icon_type": "checkmark",
+        "icon_bg_color": "#A3FE01",
+        "icon_symbol_color": "#000000"
+      },
+      "blocks": {
+        "t1": { "type": "tech_bullet", "settings": { "text": "Gently stimulates the scalp surface" } },
+        "t2": { "type": "tech_bullet", "settings": { "text": "Boosts blood circulation to hair roots" } },
+        "t3": { "type": "tech_bullet", "settings": { "text": "Enhances deep absorption of active ingredients" } },
+        "t4": { "type": "tech_bullet", "settings": { "text": "Reactivates dormant follicles for new growth" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"]
+    },
+    "bb-activation-steps": {
+      "type": "bb-activation-steps",
+      "settings": {
+        "enable_section": true,
+        "subheading": "HOW IT WORKS",
+        "heading": "Four steps to real follicle activation",
+        "background_color": "#FAF5F5",
+        "accent_color": "#622229",
+        "num_text_color": "#ffffff",
+        "divider_color": "#efefef"
+      },
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Micro-Stimulation",
+            "description": "Tiny dissolvable micro-needles create controlled stimulation on the scalp surface — painless, precise, effective."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Increased Blood Flow",
+            "description": "Stimulation boosts oxygen and nutrient delivery to hair roots — waking up the environment growth needs."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Deep Delivery",
+            "description": "Actives penetrate beyond the surface level — unlike normal serums that sit on top and wash away."
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "title": "Follicle Reactivation",
+            "description": "Dormant follicles get triggered, initiating a new growth cycle from within."
+          }
+        }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"]
+    },
+    "bb-results-grid": {
+      "type": "bb-results-grid",
+      "settings": {
+        "enable_section": true,
+        "subheading": "Real Results",
+        "heading": "Results women & man see within weeks",
+        "body_text": "<p>Documented outcomes from customers using Boost & Bloom daily.</p>",
+        "alignment": "left",
+        "columns_desktop": 3,
+        "columns_mobile": 1,
+        "background_color": "#f8f8f8",
+        "heading_color": "#1a1a1a",
+        "text_color": "#444444",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48
+      },
+      "blocks": {
+        "r1": { "type": "result_card", "settings": { "week_label": "Week 1–2", "title": "Less Shedding", "description": "Noticeable reduction in hair on pillow, in shower drain, and on brush." } },
+        "r2": { "type": "result_card", "settings": { "week_label": "Week 3–4", "title": "Scalp Health Improves", "description": "Reduced itching and flakiness as the scalp microbiome begins to rebalance." } },
+        "r3": { "type": "result_card", "settings": { "week_label": "Week 6–8", "title": "New Growth Visible", "description": "Baby hairs appear at the hairline and crown. Existing hair feels thicker and stronger." } }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    },
+    "bb-recognise-problems": {
+      "type": "bb-recognise-problems",
+      "settings": {
+        "enable_section": true,
+        "subheading": "Is This You?",
+        "heading": "Perfect if you recognise any of these",
+        "background_color": "#ffffff",
+        "heading_color": "#1a1a1a",
+        "text_color": "#1a1a1a",
+        "accent_color": "#622229",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48
+      },
+      "blocks": {
+        "pr1": { "type": "problem", "settings": { "text": "Noticeable hair thinning on the crown" } },
+        "pr2": { "type": "problem", "settings": { "text": "Hair falling out in the shower or on pillow" } },
+        "pr3": { "type": "problem", "settings": { "text": "Receding hairline or temple thinning" } },
+        "pr4": { "type": "problem", "settings": { "text": "Ponytail getting noticeably thinner" } },
+        "pr5": { "type": "problem", "settings": { "text": "Scalp visible through hair in bright light" } },
+        "pr6": { "type": "problem", "settings": { "text": "Tried other products with little or no results" } },
+        "pr7": { "type": "problem", "settings": { "text": "Postpartum or stress-related hair loss" } },
+        "pr8": { "type": "problem", "settings": { "text": "Want to prevent further thinning before it gets worse" } }
+      },
+      "block_order": ["pr1", "pr2", "pr3", "pr4", "pr5", "pr6", "pr7", "pr8"]
+    },
+    "bb-comparison": {
+      "type": "bb-comparison",
+      "settings": {
+        "enable_section": true,
+        "subheading": "WHAT MAKES IT DIFFERENT",
+        "heading": "Why regular serums keep failing you",
+        "left_title": "✕ REGULAR SERUMS",
+        "left_header": "Surface-level only",
+        "left_desc": "<p>Sit on top of the scalp. Limited absorption. Washed away before they can work. No follicle activation.</p>",
+        "right_title": "✓ BOOST & BLOOM™",
+        "right_header": "Deep follicle activation",
+        "right_desc": "<p>Micro-needles create channels for <strong>real penetration</strong>. Actives reach the follicle. <strong>Growth cycle restarts.</strong></p>",
+        "background_color": "#ffffff",
+        "left_bg_color": "#FAF0F0",
+        "left_title_color": "#622229",
+        "left_heading_color": "#622229",
+        "left_text_color": "#622229",
+        "right_bg_color": "#000000",
+        "right_title_color": "#FF808B",
+        "right_heading_color": "#ffffff",
+        "right_text_color": "rgba(255,255,255,0.85)",
+        "right_highlight_color": "#A3FE01",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48
+      }
+    },
+    "bb-science-backed": {
+      "type": "bb-science-backed",
+      "settings": {
+        "enable_section": true,
+        "subheading": "WHY BOOST & BLOOM™",
+        "heading": "Science-backed, clinically tested",
+        "background_color": "#FAF5F5",
+        "heading_color": "#1a1a1a",
+        "text_color": "#1a1a1a",
+        "icon_bg_color": "#622229",
+        "icon_symbol_color": "#ffffff",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48
+      },
+      "blocks": {
+        "c1": { "type": "claim", "settings": { "text": "Backed by science-driven formulation — not marketing claims" } },
+        "c2": { "type": "claim", "settings": { "text": "Korean patented micro-needle delivery technology" } },
+        "c3": { "type": "claim", "settings": { "text": "Clinically tested for safety & efficacy" } },
+        "c4": { "type": "claim", "settings": { "text": "High-performance actives only — no fillers" } },
+        "c5": { "type": "claim", "settings": { "text": "Designed for visible, real-world results" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5"]
+    },
+    "bb-daily-routine": {
+      "type": "bb-daily-routine",
+      "settings": {
+        "enable_section": true,
+        "subheading": "HOW TO USE",
+        "heading": "Simple 5-step daily routine",
+        "background_color": "#ffffff",
+        "heading_color": "#1a1a1a",
+        "num_bg_color": "#000000",
+        "num_text_color": "#ffffff",
+        "divider_color": "#efefef",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48
+      },
+      "blocks": {
+        "rs1": { "type": "routine_step", "settings": { "text": "<p>Start with a <strong>clean, dry scalp</strong> for best absorption</p>" } },
+        "rs2": { "type": "routine_step", "settings": { "text": "<p>Apply serum <strong>directly to affected areas</strong> — hairline, crown, partition</p>" } },
+        "rs3": { "type": "routine_step", "settings": { "text": "<p>Gently <strong>press or roll</strong> to activate micro-needle stimulation</p>" } },
+        "rs4": { "type": "routine_step", "settings": { "text": "<p>Leave it on — <strong>no washing required</strong></p>" } },
+        "rs5": { "type": "routine_step", "settings": { "text": "<p>Use <strong>consistently</strong> for best cumulative results</p>" } }
+      },
+      "block_order": ["rs1", "rs2", "rs3", "rs4", "rs5"]
+    },
+    "bb-timeline": {
+      "type": "bb-timeline",
+      "settings": {
+        "enable_section": true,
+        "subheading": "WHEN TO EXPECT RESULTS",
+        "heading": "Your growth timeline",
+        "background_color": "#FAF5F5"
+      },
+      "blocks": {
+        "tl1": { "type": "timeline_item", "settings": { "week": "Week 1–2", "title": "Reduced hair fall", "description": "roots feel stronger, less shedding in the shower" } },
+        "tl2": { "type": "timeline_item", "settings": { "week": "Week 3–4", "title": "Scalp feels healthier", "description": "less dryness, irritation, and tightness" } },
+        "tl3": { "type": "timeline_item", "settings": { "week": "Week 4–8", "title": "Visible baby hair growth", "description": "in thinning areas as follicles reactivate" } },
+        "tl4": { "type": "timeline_item", "settings": { "week": "Week 8+", "title": "Noticeable density improvement", "description": "thicker, fuller-looking hair overall" } }
+      },
+      "block_order": ["tl1", "tl2", "tl3", "tl4"]
+    },
+    "bb-faq": {
+      "type": "bb-faq",
+      "settings": {
+        "enable_section": true,
+        "subheading": "FAQ",
+        "heading": "Your questions, answered",
+        "background_color": "#ffffff"
+      },
+      "blocks": {
+        "faq1": { "type": "faq_item", "settings": { "question": "How quickly will I see results?", "answer": "<p>Most customers report noticeable reduction in shedding within 2 weeks. Visible new growth typically appears within 4–8 weeks of consistent daily use.</p>", "open_by_default": false } },
+        "faq2": { "type": "faq_item", "settings": { "question": "How do I apply the serum correctly?", "answer": "<p>Apply 8–10 drops directly to the scalp on damp (not wet) hair. Massage in circular motions for 2 minutes. No rinse needed — style as normal.</p>", "open_by_default": false } },
+        "faq3": { "type": "faq_item", "settings": { "question": "Is Boost & Bloom suitable for men and women?", "answer": "<p>Yes. Our formula is designed for both men and women experiencing any type of hair thinning, including androgenetic alopecia, telogen effluvium, and stress-related loss.</p>", "open_by_default": false } },
+        "faq4": { "type": "faq_item", "settings": { "question": "What if it doesn't work for me?", "answer": "<p>We offer a 30-day money-back guarantee. If you're not happy with your results, contact us for a full refund — no questions asked.</p>", "open_by_default": false } },
+        "faq5": { "type": "faq_item", "settings": { "question": "How long does one bottle last?", "answer": "<p>One 50ml bottle lasts approximately 4–6 weeks with daily use (8–10 drops per application). We recommend subscribing for uninterrupted results.</p>", "open_by_default": false } }
+      },
+      "block_order": ["faq1", "faq2", "faq3", "faq4", "faq5"]
+    },
+    "bb-testimonials": {
+      "type": "bb-testimonials",
+      "settings": {
+        "enable_section": true,
+        "subheading": "Hear from some of our amazing customers who are building faster.",
+        "heading": "Listen to what our customers Say",
+        "use_slider": true,
+        "columns_desktop": 3,
+        "background_color": "#ffffff",
+        "stripe_text": ""
+      },
+      "blocks": {
+        "tm1": { "type": "testimonial", "settings": { "name": "Priya M", "text": "I was honestly skeptical because I've tried so many serums that did absolutely nothing. But after about 3 weeks of using Boost & Bloom consistently, I started noticing these tiny baby hairs along my hairline. I've never had that before. The roller tip feels really satisfying to use too, almost like a mini scalp massage every morning.", "rating": 5, "is_active": false } },
+        "tm2": { "type": "testimonial", "settings": { "name": "Karthik R", "text": "My hair has been thinning since my early 20s and I'd kind of just accepted it. My sister got me this as a birthday gift and I didn't expect much honestly. Two months in and my barber actually asked me what I've been doing differently. That was the moment I knew it was working.", "rating": 5, "is_active": false } },
+        "tm3": { "type": "testimonial", "settings": { "name": "Ananya S", "text": "Post-pregnancy hair fall was brutal for me. I tried everything, oils, supplements, the works. Boost & Bloom is the only thing that's felt like it actually does something. I love that the applicator means I'm not wasting product, it goes exactly where it needs to go. Will 100% repurchase.", "rating": 5, "is_active": true } },
+        "tm4": { "type": "testimonial", "settings": { "name": "Divya K", "text": "I was nervous about the microneedling part but it doesn't hurt at all, it's more like a light tingle. I use it every other night before bed and my scalp feels so much healthier. Less flakiness and itching after the shower. Three weeks in and I'm not stopping anytime soon.", "rating": 5, "is_active": false } }
+      },
+      "block_order": ["tm1", "tm2", "tm3", "tm4"]
+    }
+  },
+  "order": [
+    "bb-main-product",
+    "bb-stats",
+    "bb-problem",
+    "bb-technology",
+    "bb-activation-steps",
+    "bb-results-grid",
+    "bb-recognise-problems",
+    "bb-comparison",
+    "bb-science-backed",
+    "bb-daily-routine",
+    "bb-timeline",
+    "bb-faq",
+    "bb-testimonials"
+  ]
+}

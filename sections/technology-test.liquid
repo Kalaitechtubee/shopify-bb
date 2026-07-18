@@ -1,0 +1,64 @@
+{% if product.type == "Hair Growth Serum" %}
+
+<section class="technology-test">
+  <div class="page-width">
+    <div class="technology-box">
+      <h2>🧬 Hair Growth Technology</h2>
+
+      <p>
+        This section is visible only for products with
+        <strong>Product Type = Hair Growth Serum</strong>.
+      </p>
+
+      <p>
+        Current Product:
+        <strong>{{ product.title }}</strong>
+      </p>
+
+      <p>
+        Product Type:
+        <strong>{{ product.type }}</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+.technology-test{
+  padding:60px 20px;
+  background:#f8f2f3;
+}
+
+.technology-box{
+  max-width:900px;
+  margin:auto;
+  background:#fff;
+  padding:40px;
+  border-radius:12px;
+  border:2px solid #7d1f2d;
+}
+
+.technology-box h2{
+  margin-bottom:20px;
+  color:#7d1f2d;
+}
+
+.technology-box p{
+  font-size:18px;
+  margin:10px 0;
+}
+</style>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Technology Test",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Technology Test"
+    }
+  ]
+}
+{% endschema %}

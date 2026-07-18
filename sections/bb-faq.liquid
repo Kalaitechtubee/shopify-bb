@@ -1,0 +1,550 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-faq-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    
+    /* CSS Variables mapping for complete customization */
+    --faq-bg: {{ section.settings.background_color }};
+    --faq-max-width: {{ section.settings.container_max_width }}px;
+    
+    --faq-badge-bg: {{ section.settings.badge_bg_color }};
+    --faq-badge-text: {{ section.settings.badge_text_color }};
+    --faq-badge-border: {{ section.settings.badge_border_color }};
+    --faq-badge-radius: {{ section.settings.badge_border_radius }}px;
+    --faq-badge-size: {{ section.settings.badge_font_size }}px;
+    --faq-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    
+    --faq-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --faq-heading-weight: {{ section.settings.heading_weight }};
+    --faq-heading-color: {{ section.settings.heading_color }};
+    --faq-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    
+    --faq-gap: {{ section.settings.grid_gap }}px;
+    
+    --faq-card-bg: {{ section.settings.card_bg_color }};
+    --faq-card-border-color: {{ section.settings.card_border_color }};
+    --faq-card-border-width: {{ section.settings.card_border_width }}px;
+    --faq-card-radius: {{ section.settings.card_border_radius }}px;
+    --faq-card-padding: {{ section.settings.card_padding }}px;
+    --faq-card-active-border: {{ section.settings.card_active_border }};
+    
+    --faq-icon-size: {{ section.settings.icon_size }}px;
+    --faq-icon-bg: {{ section.settings.icon_bg_color }};
+    --faq-icon-color: {{ section.settings.icon_symbol_color }};
+    --faq-icon-border: {{ section.settings.icon_border_color }};
+    
+    --faq-q-size: {{ section.settings.question_size }}px;
+    --faq-q-weight: {{ section.settings.question_weight }};
+    --faq-q-color: {{ section.settings.question_color }};
+    
+    --faq-a-size: {{ section.settings.answer_size }}px;
+    --faq-a-color: {{ section.settings.answer_color }};
+  }
+  @media (min-width: 768px) {
+    #bb-faq-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-faq-{{ section.id }} .bb-faq-v2__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-faq-{{ section.id }}"
+  class="bb-section bb-faq-v2 {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-faq-v2__inner bb-text-center">
+      
+      <!-- Subheading Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-faq-v2__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-faq-v2__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <!-- Accordion List -->
+      <div class="bb-faq-v2__list">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'faq_item' -%}
+              {%- assign is_open = block.settings.open_by_default -%}
+              {%- assign item_id = 'bb-faq-item-' | append: block.id -%}
+              <div class="bb-faq-v2__card bb-accordion-v2__item {% if is_open %}bb-accordion-v2__item--open bb-faq-v2__card--open{% endif %}" {{ block.shopify_attributes }}>
+                <button
+                  class="bb-faq-v2__trigger bb-accordion-v2__trigger"
+                  aria-expanded="{{ is_open }}"
+                  aria-controls="{{ item_id }}"
+                  type="button"
+                >
+                  <span class="bb-faq-v2__trigger-text">{{ block.settings.question }}</span>
+                  <span class="bb-faq-v2__icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </span>
+                </button>
+                <div class="bb-faq-v2__content" id="{{ item_id }}" role="region">
+                  {{ block.settings.answer }}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign faq_meta = product.metafields.custom.faq_items.value -%}
+          {%- if faq_meta != blank -%}
+            {%- for item in faq_meta -%}
+              {%- assign item_id = 'bb-faq-meta-' | append: forloop.index -%}
+              <div class="bb-faq-v2__card bb-accordion-v2__item" {{ block.shopify_attributes }}>
+                <button
+                  class="bb-faq-v2__trigger bb-accordion-v2__trigger"
+                  aria-expanded="false"
+                  aria-controls="{{ item_id }}"
+                  type="button"
+                >
+                  <span class="bb-faq-v2__trigger-text">{{ item.question }}</span>
+                  <span class="bb-faq-v2__icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </span>
+                </button>
+                <div class="bb-faq-v2__content" id="{{ item_id }}" role="region">
+                  <p>{{ item.answer }}</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB FAQ",
+  "tag": "section",
+  "class": "bb-section-faq",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "FAQ"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your questions, answered"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Accordion Grid spacing"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 4,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between cards",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Card Options"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Padding",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "card_active_border",
+      "label": "Active Border Color",
+      "default": "#622229"
+    },
+    {
+      "type": "header",
+      "content": "Plus / Toggle Icon Options"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 16,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon Circle Size",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "icon_bg_color",
+      "label": "Icon Background Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "color",
+      "id": "icon_symbol_color",
+      "label": "Icon Symbol Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "icon_border_color",
+      "label": "Icon Border Color",
+      "default": "#efefef"
+    },
+    {
+      "type": "header",
+      "content": "Question Styling"
+    },
+    {
+      "type": "color",
+      "id": "question_color",
+      "label": "Question Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "question_size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Question Font Size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "question_weight",
+      "label": "Question Font Weight",
+      "default": "700",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Answer Styling"
+    },
+    {
+      "type": "color",
+      "id": "answer_color",
+      "label": "Answer Color",
+      "default": "#444444"
+    },
+    {
+      "type": "range",
+      "id": "answer_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Answer Font Size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Section Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How quickly will I see results?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Most customers report noticeable reduction in shedding within the first 2 weeks. Visible new growth typically appears within 4–8 weeks with daily use.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by Default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB FAQ",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How quickly will I see results?",
+            "answer": "<p>Most customers report noticeable reduction in shedding within the first 2 weeks. Visible new growth typically appears within 4–8 weeks of daily use.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I apply the serum correctly?",
+            "answer": "<p>Apply 8–10 drops directly to the scalp on damp (not wet) hair. Massage in circular motions for 2 minutes. No rinse needed.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is it suitable for men and women?",
+            "answer": "<p>Yes! Boost & Bloom is formulated for both men and women experiencing any type of hair thinning or loss.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What if it doesn't work for me?",
+            "answer": "<p>We offer a 30-day money-back guarantee. If you don't see results, contact us for a full refund — no questions asked.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

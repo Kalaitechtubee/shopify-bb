@@ -1,0 +1,210 @@
+{
+  "sections": {
+    "bb-main-product": {
+      "type": "bb-main-product",
+      "settings": {
+        "enable_section": true,
+        "badge_text": "New,Award Winning",
+        "short_description": "",
+        "review_rating": 4.9,
+        "review_count": 18,
+        "highlight_badge_1": "FILTRATION",
+        "highlight_badge_2": "VITAMIN INFUSION",
+        "highlight_badge_3": "SCALP PATHWAY",
+        "add_to_cart_text": "Add to Cart",
+        "show_secondary_cta": false,
+        "secondary_cta_text": "",
+        "trust_badge_1": "Free Shipping over £40",
+        "trust_badge_2": "30-Day Money Back Guarantee",
+        "trust_badge_3": "Fits All Shower Heads",
+        "trust_badge_4": "Easy 60-Second Install",
+        "background_color": "#ffffff",
+        "heading_color": "#1a1a1a",
+        "text_color": "#444444",
+        "heading_size_desktop": 40,
+        "heading_size_mobile": 28,
+        "heading_weight": "800",
+        "body_font_size": 16,
+        "body_line_height": 1.7,
+        "padding_top": 48,
+        "padding_bottom": 64,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 40
+      },
+      "blocks": {
+        "desc": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Description",
+            "content": "<p>Splash & Flow is a vitamin-infused shower filter that removes impurities like chlorine and hard water minerals, helping reduce hair fall, dryness, and scalp irritation from the root cause.</p>"
+          }
+        },
+        "ship": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shipping & return",
+            "content": "<p>Free shipping on orders above ₹1,000. 15-day return policy on unused items.</p>"
+          }
+        },
+        "chlorine": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Chlorine Test",
+            "content": "<p>Removes 99.9% of chlorine. Test kit included to verify results at home.</p>"
+          }
+        }
+      },
+      "block_order": ["desc", "ship", "chlorine"]
+    },
+    "bb-stats": {
+      "type": "bb-stats",
+      "settings": {
+        "enable_section": true,
+        "style_preset": "light",
+        "background_color": "#ffffff",
+        "number_color": "#622229",
+        "label_color": "#777777",
+        "border_width": 1,
+        "border_color": "#efefef",
+        "divider_width": 1,
+        "divider_color": "#efefef",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 24
+      },
+      "blocks": {
+        "stat-1": { "type": "stat", "settings": { "number": "2,140+", "label": "Happy customers" } },
+        "stat-2": { "type": "stat", "settings": { "number": "4.9★", "label": "Avg. rating" } },
+        "stat-3": { "type": "stat", "settings": { "number": "3 min", "label": "Install time" } }
+      },
+      "block_order": ["stat-1", "stat-2", "stat-3"]
+    },
+    "bb-problem": {
+      "type": "bb-problem",
+      "settings": {
+        "enable_section": true,
+        "subheading": "THE REAL PROBLEM",
+        "heading": "Why your routine isn't working like it should",
+        "quote_text": "\"You could spend ₹10,000 on the best serums and oils — and your water will undo it every single morning.\"",
+        "alert_text": "<p>Splash & Flow removes the problem <strong>before it reaches your hair</strong> — so everything you already use finally works the way it should.</p>",
+        "section_background_color": "#FAF5F5",
+        "panel_bg_color": "#000000",
+        "item_text_color": "#ffffff",
+        "bullet_icon_type": "cross",
+        "icon_bg_color": "#622229",
+        "icon_symbol_color": "#ffffff"
+      },
+      "blocks": {
+        "p1": { "type": "problem_item", "settings": { "text": "Chlorine strips your scalp's moisture barrier with every shower" } },
+        "p2": { "type": "problem_item", "settings": { "text": "Hard water minerals clog follicles and cause breakage at the root" } },
+        "p3": { "type": "problem_item", "settings": { "text": "Damaged pH prevents any treatment from actually absorbing" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "bb-benefits-grid": {
+      "type": "bb-benefits-grid",
+      "settings": {
+        "enable_section": true,
+        "subheading": "KEY BENEFITS",
+        "heading": "Results women notice within 2–3 weeks",
+        "columns_desktop": 2,
+        "background_color": "#FAF5F5",
+        "card_bg_color": "#ffffff",
+        "bullet_color": "#622229",
+        "bullet_size": 8
+      },
+      "blocks": {
+        "b1": { "type": "benefit", "settings": { "title": "• Less hair fall", "description": "Mineral buildup that weakens roots is removed — shedding visibly reduces" } },
+        "b2": { "type": "benefit", "settings": { "title": "• Softer, shinier hair", "description": "Chlorine-free water lets your natural oils protect your hair properly" } },
+        "b3": { "type": "benefit", "settings": { "title": "• Scalp hydration", "description": "Vitamin C & E infusion nourishes directly at the source every shower" } },
+        "b4": { "type": "benefit", "settings": { "title": "• Frizz reduction", "description": "Hard water is the #1 overlooked cause of frizz no styling product can fix" } },
+        "b5": { "type": "benefit", "settings": { "title": "• Treatments absorb properly", "description": "Clean water means serums, masks, and oils can finally penetrate" } },
+        "b6": { "type": "benefit", "settings": { "title": "• Skin clarity too", "description": "Filtered water reduces body dryness and irritation all over" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"]
+    },
+    "bb-activation-steps": {
+      "type": "bb-activation-steps",
+      "settings": {
+        "enable_section": true,
+        "subheading": "HOW IT WORKS",
+        "heading": "Three-layer filtration, one simple install",
+        "background_color": "#FAF5F5",
+        "accent_color": "#622229",
+        "num_text_color": "#ffffff",
+        "divider_color": "#efefef"
+      },
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Filtration layer",
+            "description": "Traps chlorine, heavy metals, and dissolved hard water minerals before water touches your hair."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Vitamin infusion",
+            "description": "Enriches water with Vitamin C & E for cumulative scalp and follicle benefits every shower."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Scalp protection",
+            "description": "Balances pH to reduce irritation and create the conditions healthy hair growth needs."
+          }
+        }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "bb-banner": {
+      "type": "bb-banner",
+      "settings": {
+        "enable_section": true,
+        "heading": "Transform your shower. Transform your hair.",
+        "subtext": "Join 50,000+ customers who've made the switch to cleaner, vitamin-infused shower water.",
+        "button_text": "Shop Splash Now",
+        "button_text_color": "#000000",
+        "overlay_color": "#622229",
+        "overlay_opacity": 85,
+        "heading_color": "#ffffff",
+        "text_color": "#eeeeee",
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "padding_top_mobile": 72,
+        "padding_bottom_mobile": 72
+      }
+    },
+    "bb-testimonials": {
+      "type": "bb-testimonials",
+      "settings": {
+        "enable_section": true,
+        "subheading": "Hear from some of our amazing customers who are building faster.",
+        "heading": "Listen to what our customers Say",
+        "use_slider": true,
+        "columns_desktop": 3,
+        "background_color": "#ffffff",
+        "stripe_text": "one filter, long hair, zero hair problems"
+      },
+      "blocks": {
+        "tm1": { "type": "testimonial", "settings": { "name": "Meera S.", "text": "My scalp used to itch constantly and I blamed every shampoo I tried. Turns out it was the water all along. This filter made such a difference — no more flakiness and my hair actually feels clean now.", "rating": 5, "is_active": false } },
+        "tm2": { "type": "testimonial", "settings": { "name": "Divya K.", "text": "Installing it took me less than 5 minutes and I have zero plumbing experience. My hair feels softer and looks shinier, and the tangerine scent during the shower is such a nice little bonus!", "rating": 5, "is_active": false } },
+        "tm3": { "type": "testimonial", "settings": { "name": "Ananya T.", "text": "I've been coloring my hair for years and always struggled with the color fading too fast. Since using this filter, my color lasts noticeably longer between salon visits. My hairdresser even noticed the difference!", "rating": 5, "is_active": true } },
+        "tm4": { "type": "testimonial", "settings": { "name": "Priya R.", "text": "I was skeptical at first, but after two weeks my hair stopped falling out in the shower. I didn't realize how much the hard water was damaging it until I made the switch. Honestly wish I'd found this sooner!", "rating": 5, "is_active": false } }
+      },
+      "block_order": ["tm1", "tm2", "tm3", "tm4"]
+    }
+  },
+  "order": [
+    "bb-main-product",
+    "bb-stats",
+    "bb-problem",
+    "bb-benefits-grid",
+    "bb-activation-steps",
+    "bb-banner",
+    "bb-testimonials"
+  ]
+}

@@ -1,0 +1,582 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-technology-{{ section.id }} {
+    background-color: {{ section.settings.section_background_color }};
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    
+    /* Map CSS custom variables for complete customizability */
+    --tech-max-width: {{ section.settings.container_max_width }}px;
+    --tech-badge-bg: {{ section.settings.badge_bg_color }};
+    --tech-badge-text: {{ section.settings.badge_text_color }};
+    --tech-badge-border: {{ section.settings.badge_border_color }};
+    --tech-badge-radius: {{ section.settings.badge_border_radius }}px;
+    --tech-badge-size: {{ section.settings.badge_font_size }}px;
+    --tech-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    
+    --tech-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --tech-heading-weight: {{ section.settings.heading_weight }};
+    --tech-heading-color: {{ section.settings.heading_color }};
+    --tech-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    
+    --tech-panel-bg: {{ section.settings.panel_bg_color }};
+    --tech-panel-radius: {{ section.settings.panel_border_radius }}px;
+    --tech-panel-padding-desktop: {{ section.settings.panel_padding_desktop }}px;
+    
+    --tech-panel-title-size: {{ section.settings.panel_title_font_size }}px;
+    --tech-panel-title-color: {{ section.settings.panel_title_color }};
+    --tech-panel-title-margin: {{ section.settings.panel_title_margin_bottom }}px;
+    
+    --tech-panel-sub-size: {{ section.settings.panel_sub_font_size }}px;
+    --tech-panel-sub-color: {{ section.settings.panel_sub_color }};
+    --tech-panel-sub-margin: {{ section.settings.panel_sub_margin_bottom }}px;
+    
+    --tech-list-gap: {{ section.settings.list_gap }}px;
+    --tech-item-size: {{ section.settings.item_font_size }}px;
+    --tech-item-color: {{ section.settings.item_text_color }};
+    
+    --tech-icon-size: {{ section.settings.icon_size }}px;
+    --tech-icon-bg: {{ section.settings.icon_bg_color }};
+    --tech-icon-color: {{ section.settings.icon_symbol_color }};
+    
+    --tech-panel-list-margin: {{ section.settings.list_margin_bottom }}px;
+    --tech-footer-size: {{ section.settings.footer_font_size }}px;
+    --tech-footer-color: {{ section.settings.footer_text_color }};
+    --tech-footer-highlight-color: {{ section.settings.footer_highlight_color }};
+  }
+  @media (min-width: 768px) {
+    #bb-technology-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media (max-width: 768px) {
+    #bb-technology-{{ section.id }} .bb-tech-v2__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+    #bb-technology-{{ section.id }} .bb-tech-v2__panel {
+      padding: {{ section.settings.panel_padding_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-technology-{{ section.id }}"
+  class="bb-section bb-technology-section-wrapper {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-tech-v2">
+      
+      <!-- Subheading Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-tech-v2__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading — navy line 1, maroon line 2 -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-tech-v2__heading">
+          Micro-Needling<span class="bb-heading-maroon">Serum Technology</span>
+        </h2>
+      {%- endif -%}
+
+      <!-- Dark Panel Box -->
+      <div class="bb-tech-v2__panel bb-fade-in">
+        
+        <!-- Panel Title -->
+        {%- if section.settings.panel_title != blank -%}
+          <h3 class="bb-tech-v2__panel-title">{{ section.settings.panel_title }}</h3>
+        {%- endif -%}
+
+        <!-- Panel Subtitle -->
+        {%- if section.settings.panel_subtitle != blank -%}
+          <p class="bb-tech-v2__panel-sub">{{ section.settings.panel_subtitle }}</p>
+        {%- endif -%}
+
+        <!-- Technology Checklist Items -->
+        {%- if section.blocks.size > 0 -%}
+          <ul class="bb-tech-v2__list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'tech_bullet' -%}
+                <li class="bb-tech-v2__list-item" {{ block.shopify_attributes }}>
+                  <span class="bb-tech-v2__icon">
+                    {%- if block.settings.custom_icon != blank -%}
+                      <img src="{{ block.settings.custom_icon | image_url: width: 48 }}" alt="" loading="lazy">
+                    {%- else -%}
+                      {%- if section.settings.bullet_icon_type == 'cross' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      {%- else -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </span>
+                  <span>{{ block.settings.text }}</span>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <!-- Divider -->
+        <div class="bb-tech-v2__divider"></div>
+
+        <!-- Footer Highlight Text -->
+        {%- if section.settings.footer_text != blank -%}
+          <div class="bb-tech-v2__footer-text">{{ section.settings.footer_text }}</div>
+        {%- endif -%}
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+
+{% schema %}
+{
+  "name": "BB Technology",
+  "tag": "section",
+  "class": "bb-section-technology",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "THE SOLUTION"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#F5DFDF"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Micro-Needling Serum Technology"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Panel Options"
+    },
+    {
+      "type": "color",
+      "id": "panel_bg_color",
+      "label": "Panel Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "panel_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Panel Border Radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "panel_padding_desktop",
+      "min": 10,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Panel Padding — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "panel_padding_mobile",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Panel Padding — Mobile",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Panel Titles & Subtitles"
+    },
+    {
+      "type": "text",
+      "id": "panel_title",
+      "label": "Panel Title",
+      "default": "Boost & Bloom™ Micro-Needling Serum"
+    },
+    {
+      "type": "color",
+      "id": "panel_title_color",
+      "label": "Panel Title Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "panel_title_font_size",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Panel Title Font Size",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "panel_title_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Panel Title Margin Bottom",
+      "default": 8
+    },
+    {
+      "type": "textarea",
+      "id": "panel_subtitle",
+      "label": "Panel Subtitle / Description",
+      "default": "A breakthrough Korean-formulated serum with patented micro-needle delivery that goes where regular serums can't."
+    },
+    {
+      "type": "color",
+      "id": "panel_sub_color",
+      "label": "Panel Subtitle Color",
+      "default": "rgba(255, 255, 255, 0.7)"
+    },
+    {
+      "type": "range",
+      "id": "panel_sub_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Panel Subtitle Font Size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "panel_sub_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Panel Subtitle Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Checklist Settings"
+    },
+    {
+      "type": "color",
+      "id": "item_text_color",
+      "label": "List Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "item_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "List Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "list_gap",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "List Item Gap",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "list_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "List Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "bullet_icon_type",
+      "label": "Default Bullet Icon Style",
+      "default": "checkmark",
+      "options": [
+        { "value": "checkmark", "label": "Checkmark" },
+        { "value": "cross", "label": "Cross (X)" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "icon_bg_color",
+      "label": "Bullet Icon Background Circle",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "icon_symbol_color",
+      "label": "Bullet Symbol (SVG) Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Bullet Icon Size",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Panel Footer Settings"
+    },
+    {
+      "type": "richtext",
+      "id": "footer_text",
+      "label": "Panel Footer Text",
+      "default": "<p>This isn't just a serum. It's <strong>activation therapy for your scalp.</strong></p>"
+    },
+    {
+      "type": "color",
+      "id": "footer_text_color",
+      "label": "Panel Footer Text Color",
+      "default": "#B8B8B8"
+    },
+    {
+      "type": "color",
+      "id": "footer_highlight_color",
+      "label": "Panel Footer Highlighted Color",
+      "default": "#D98B95"
+    },
+    {
+      "type": "range",
+      "id": "footer_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Panel Footer Font Size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "General Spacing"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tech_bullet",
+      "name": "Technology Bullet",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Bullet Text",
+          "default": "Gently stimulates the scalp surface"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Bullet Icon (optional file upload)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Technology",
+      "blocks": [
+        { "type": "tech_bullet", "settings": { "text": "Gently stimulates the scalp surface" } },
+        { "type": "tech_bullet", "settings": { "text": "Boosts blood circulation to hair roots" } },
+        { "type": "tech_bullet", "settings": { "text": "Enhances deep absorption of active ingredients" } },
+        { "type": "tech_bullet", "settings": { "text": "Reactivates dormant follicles for new growth" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
