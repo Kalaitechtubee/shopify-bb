@@ -22,7 +22,9 @@
         "pills_icon_color": "#A3FE01",
         "qty_border_color": "#622229",
         "qty_text_color": "#622229",
-        "qty_border_radius": 4,
+        "qty_border_radius": 0,
+        "acc_border_radius": 0,
+        "acc_border_color": "#622229",
         "btn_hover_bg_color": "#622229",
         "heading_color": "#1a1a1a",
         "text_color": "#444444",
@@ -31,10 +33,27 @@
         "heading_weight": "800",
         "body_font_size": 16,
         "body_line_height": 1.7,
-        "padding_top": 48,
-        "padding_bottom": 64,
-        "padding_top_mobile": 24,
-        "padding_bottom_mobile": 40
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48,
+        "btn_bg_color": "#000000",
+        "enable_neobrutalist_btn": true,
+        "btn_offset": 6,
+        "btn_text_color": "#FFFFFF",
+        "btn_height": 68,
+        "btn_font_size": 16,
+        "btn_border_radius": 0,
+        "pills_font_size": 13,
+        "pills_icon_size": 24,
+        "pills_padding_y": 10,
+        "pills_padding_x": 19,
+        "pills_border_radius": 50,
+        "pills_gap": 8,
+        "pills_gap_x": 12,
+        "pills_gap_y": 8,
+        "show_badges": false,
+        "show_trust_badges": false
       },
       "blocks": {
         "desc": {
@@ -59,7 +78,11 @@
           }
         }
       },
-      "block_order": ["desc", "ship", "chlorine"]
+      "block_order": [
+        "desc",
+        "ship",
+        "chlorine"
+      ]
     },
     "bb-stats": {
       "type": "bb-stats",
@@ -73,17 +96,39 @@
         "border_color": "#efefef",
         "divider_width": 1,
         "divider_color": "#efefef",
-        "padding_top": 36,
-        "padding_bottom": 36,
-        "padding_top_mobile": 24,
-        "padding_bottom_mobile": 24
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48
       },
       "blocks": {
-        "stat-1": { "type": "stat", "settings": { "number": "2,140+", "label": "Happy customers" } },
-        "stat-2": { "type": "stat", "settings": { "number": "4.9★", "label": "Avg. rating" } },
-        "stat-3": { "type": "stat", "settings": { "number": "3 min", "label": "Install time" } }
+        "stat-1": {
+          "type": "stat",
+          "settings": {
+            "number": "2,140+",
+            "label": "Happy customers"
+          }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": {
+            "number": "4.9★",
+            "label": "Avg. rating"
+          }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": {
+            "number": "3 min",
+            "label": "Install time"
+          }
+        }
       },
-      "block_order": ["stat-1", "stat-2", "stat-3"]
+      "block_order": [
+        "stat-1",
+        "stat-2",
+        "stat-3"
+      ]
     },
     "bb-problem": {
       "type": "bb-problem",
@@ -93,26 +138,91 @@
         "heading": "Why your routine isn't working like it should",
         "quote_text": "\"You could spend ₹10,000 on the best serums and oils — and your water will undo it every single morning.\"",
         "alert_text": "<p>Splash & Flow removes the problem <strong>before it reaches your hair</strong> — so everything you already use finally works the way it should.</p>",
-        "section_background_color": "#ffffff",
-        "panel_bg_color": "#FAF0F0",
-        "item_text_color": "#17123B",
-        "bullet_icon_type": "cross",
-        "icon_bg_color": "#E23E57",
-        "icon_symbol_color": "#ffffff",
-        "quote_color": "#17123B",
-        "heading_color": "#17123B",
+        "section_background_color": "#FFFFFF",
+        "panel_bg_color": "#F5DFDF",
+        "item_text_color": "#1A1A1A",
+        "bullet_icon_type": "checkmark",
+        "icon_bg_color": "#FE2301",
+        "icon_symbol_color": "#FE2301",
+        "quote_color": "#1A1A1A",
+        "heading_color": "#1A1A1A",
         "alert_bg_color": "#A3FE01",
         "alert_text_color": "#000000",
         "alert_highlight_color": "#000000",
         "alert_border_width": 0,
-        "full_width": false
+        "full_width": true,
+        "badge_bg_color": "#F5DFDF",
+        "badge_text_color": "#622229",
+        "badge_border_color": "#FAF0F0",
+        "badge_border_radius": 50,
+        "badge_font_size": 10,
+        "badge_margin_bottom": 8,
+        "heading_size_desktop": 48,
+        "heading_size_mobile": 28,
+        "heading_weight": "800",
+        "heading_margin_bottom": 12,
+        "panel_border_radius": 10,
+        "panel_padding_desktop": 30,
+        "panel_padding_mobile": 20,
+        "panel_title_color": "#FFFFFF",
+        "panel_title_font_size": 22,
+        "panel_title_margin_bottom": 8,
+        "panel_sub_color": "#FFFFFF",
+        "panel_sub_font_size": 20,
+        "panel_sub_margin_bottom": 20,
+        "item_font_size": 18,
+        "list_gap": 16,
+        "list_margin_bottom": 24,
+        "icon_size": 20,
+        "footer_text_color": "#B8B8B8",
+        "footer_highlight_color": "#D98B95",
+        "footer_font_size": 17,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_left": 80,
+        "padding_right": 80,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48,
+        "padding_left_mobile": 20,
+        "padding_right_mobile": 20,
+        "margin_top": 8,
+        "margin_bottom": 8,
+        "margin_top_mobile": 8,
+        "margin_bottom_mobile": 8,
+        "panel_margin_bottom": 24,
+        "quote_size": 20,
+        "quote_margin_bottom": 24,
+        "alert_border_color": "#622229",
+        "alert_font_size": 17,
+        "alert_padding_y": 6,
+        "alert_padding_x": 20,
+        "alert_border_radius": 0
       },
       "blocks": {
-        "p1": { "type": "problem_item", "settings": { "text": "Chlorine strips your scalp's moisture barrier with every shower" } },
-        "p2": { "type": "problem_item", "settings": { "text": "Hard water minerals clog follicles and cause breakage at the root" } },
-        "p3": { "type": "problem_item", "settings": { "text": "Damaged pH prevents any treatment from actually absorbing" } }
+        "p1": {
+          "type": "problem_item",
+          "settings": {
+            "text": "Chlorine strips your scalp's moisture barrier with every shower"
+          }
+        },
+        "p2": {
+          "type": "problem_item",
+          "settings": {
+            "text": "Hard water minerals clog follicles and cause breakage at the root"
+          }
+        },
+        "p3": {
+          "type": "problem_item",
+          "settings": {
+            "text": "Damaged pH prevents any treatment from actually absorbing"
+          }
+        }
       },
-      "block_order": ["p1", "p2", "p3"]
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
     },
     "bb-benefits-grid": {
       "type": "bb-benefits-grid",
@@ -121,31 +231,151 @@
         "subheading": "KEY BENEFITS",
         "heading": "Results women notice within 2–3 weeks",
         "columns_desktop": 2,
-        "background_color": "#FAF5F5",
-        "card_bg_color": "#ffffff",
+        "background_color": "#FFFFFF",
+        "card_bg_color": "#FFFFFF",
         "bullet_color": "#622229",
-        "bullet_size": 8
+        "bullet_size": 8,
+        "margin_x": 108,
+        "margin_x_mobile": 12,
+        "section_border_radius": 0,
+        "container_max_width": 1200,
+        "badge_bg_color": "#FAF0F0",
+        "badge_text_color": "#622229",
+        "badge_border_color": "#FAF0F0",
+        "badge_border_radius": 50,
+        "badge_font_size": 12,
+        "badge_margin_bottom": 14,
+        "heading_color": "#1A1A1A",
+        "heading_size_desktop": 48,
+        "heading_size_mobile": 28,
+        "heading_weight": "800",
+        "heading_margin_bottom": 32,
+        "grid_gap": 30,
+        "card_border_color": "#EFEFEF",
+        "card_border_hover_color": "#622229",
+        "card_border_radius": 12,
+        "card_padding": 24,
+        "card_title_color": "#1A1A1A",
+        "card_title_size": 20,
+        "card_title_weight": "800",
+        "card_desc_color": "#666666",
+        "card_desc_size": 16,
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_top_mobile": 28,
+        "padding_bottom_mobile": 28,
+        "alignment": "left",
+        "padding_left": 40,
+        "padding_right": 40,
+        "padding_left_mobile": 20,
+        "padding_right_mobile": 20,
+        "margin_top": 8,
+        "margin_bottom": 8,
+        "margin_top_mobile": 8,
+        "margin_bottom_mobile": 8
       },
       "blocks": {
-        "b1": { "type": "benefit", "settings": { "title": "• Less hair fall", "description": "Mineral buildup that weakens roots is removed — shedding visibly reduces" } },
-        "b2": { "type": "benefit", "settings": { "title": "• Softer, shinier hair", "description": "Chlorine-free water lets your natural oils protect your hair properly" } },
-        "b3": { "type": "benefit", "settings": { "title": "• Scalp hydration", "description": "Vitamin C & E infusion nourishes directly at the source every shower" } },
-        "b4": { "type": "benefit", "settings": { "title": "• Frizz reduction", "description": "Hard water is the #1 overlooked cause of frizz no styling product can fix" } },
-        "b5": { "type": "benefit", "settings": { "title": "• Treatments absorb properly", "description": "Clean water means serums, masks, and oils can finally penetrate" } },
-        "b6": { "type": "benefit", "settings": { "title": "• Skin clarity too", "description": "Filtered water reduces body dryness and irritation all over" } }
+        "b1": {
+          "type": "benefit",
+          "settings": {
+            "title": "• Less hair fall",
+            "description": "Mineral buildup that weakens roots is removed — shedding visibly reduces"
+          }
+        },
+        "b2": {
+          "type": "benefit",
+          "settings": {
+            "title": "• Softer, shinier hair",
+            "description": "Chlorine-free water lets your natural oils protect your hair properly"
+          }
+        },
+        "b3": {
+          "type": "benefit",
+          "settings": {
+            "title": "• Scalp hydration",
+            "description": "Vitamin C & E infusion nourishes directly at the source every shower"
+          }
+        },
+        "b4": {
+          "type": "benefit",
+          "settings": {
+            "title": "• Frizz reduction",
+            "description": "Hard water is the #1 overlooked cause of frizz no styling product can fix"
+          }
+        },
+        "b5": {
+          "type": "benefit",
+          "settings": {
+            "title": "• Treatments absorb properly",
+            "description": "Clean water means serums, masks, and oils can finally penetrate"
+          }
+        },
+        "b6": {
+          "type": "benefit",
+          "settings": {
+            "title": "• Skin clarity too",
+            "description": "Filtered water reduces body dryness and irritation all over"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"]
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6"
+      ]
     },
     "bb-activation-steps": {
       "type": "bb-activation-steps",
       "settings": {
         "enable_section": true,
         "subheading": "HOW IT WORKS",
-        "heading": "Three-layer filtration, one simple install",
+        "heading": "Four steps to real follicle activation",
         "background_color": "#FAF5F5",
         "accent_color": "#622229",
-        "num_text_color": "#ffffff",
-        "divider_color": "#efefef"
+        "num_text_color": "#FFFFFF",
+        "divider_color": "#EFEFEF",
+        "badge_bg_color": "#FAF0F0",
+        "badge_text_color": "#622229",
+        "badge_border_color": "#FAF0F0",
+        "badge_border_radius": 50,
+        "badge_font_size": 10,
+        "badge_margin_bottom": 8,
+        "heading_color": "#1A1A1A",
+        "heading_size_desktop": 48,
+        "heading_size_mobile": 28,
+        "heading_weight": "800",
+        "heading_margin_bottom": 20,
+        "item_padding_y": 22,
+        "num_circle_size": 44,
+        "num_circle_radius": 50,
+        "num_font_size": 20,
+        "divider_width": 2,
+        "divider_style": "solid",
+        "title_color": "#1A1A1A",
+        "title_font_size": 18,
+        "title_font_weight": "700",
+        "desc_color": "#887677",
+        "desc_font_size": 15,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_left": 40,
+        "padding_right": 40,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48,
+        "padding_left_mobile": 20,
+        "padding_right_mobile": 20,
+        "margin_top": 8,
+        "margin_bottom": 8,
+        "margin_top_mobile": 8,
+        "margin_bottom_mobile": 8,
+        "margin_x": 108,
+        "margin_x_mobile": 12,
+        "section_border_radius": 0,
+        "full_width": true
       },
       "blocks": {
         "s1": {
@@ -170,7 +400,11 @@
           }
         }
       },
-      "block_order": ["s1", "s2", "s3"]
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ]
     },
     "bb-testimonials": {
       "type": "bb-testimonials",
@@ -180,15 +414,84 @@
         "heading": "Listen to what our customers Say",
         "use_slider": true,
         "columns_desktop": 3,
-        "background_color": "#ffffff"
+        "background_color": "#FFFFFF",
+        "container_max_width": 1280,
+        "heading_color": "#17123B",
+        "heading_size_desktop": 48,
+        "heading_size_mobile": 28,
+        "heading_weight": "800",
+        "heading_alignment": "center",
+        "heading_margin_bottom": 36,
+        "subheading_color": "#1A1A1A",
+        "subheading_size": 16,
+        "scroll_speed": 35,
+        "card_bg_color": "#FFFFFF",
+        "card_border_color": "#EEEEEE",
+        "card_border_width": 0,
+        "card_border_radius": 16,
+        "card_padding": 40,
+        "card_width": 380,
+        "card_gap": 24,
+        "card_hover_border_color": "#622229",
+        "star_color": "#622229",
+        "star_size": 18,
+        "text_color": "#333333",
+        "text_size": 15,
+        "name_color": "#17123B",
+        "name_size": 14,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48,
+        "padding_left": 80,
+        "padding_right": 80,
+        "margin_top": 8,
+        "margin_bottom": 8
       },
       "blocks": {
-        "tm1": { "type": "testimonial", "settings": { "name": "Meera S.", "text": "My scalp used to itch constantly and I blamed every shampoo I tried. Turns out it was the water all along. This filter made such a difference — no more flakiness and my hair actually feels clean now.", "rating": 5, "is_active": false } },
-        "tm2": { "type": "testimonial", "settings": { "name": "Divya K.", "text": "Installing it took me less than 5 minutes and I have zero plumbing experience. My hair feels softer and looks shinier, and the tangerine scent during the shower is such a nice little bonus!", "rating": 5, "is_active": false } },
-        "tm3": { "type": "testimonial", "settings": { "name": "Ananya T.", "text": "I've been coloring my hair for years and always struggled with the color fading too fast. Since using this filter, my color lasts noticeably longer between salon visits. My hairdresser even noticed the difference!", "rating": 5, "is_active": true } },
-        "tm4": { "type": "testimonial", "settings": { "name": "Priya R.", "text": "I was skeptical at first, but after two weeks my hair stopped falling out in the shower. I didn't realize how much the hard water was damaging it until I made the switch. Honestly wish I'd found this sooner!", "rating": 5, "is_active": false } }
+        "tm1": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Meera S.",
+            "text": "My scalp used to itch constantly and I blamed every shampoo I tried. Turns out it was the water all along. This filter made such a difference — no more flakiness and my hair actually feels clean now.",
+            "rating": 5,
+            "is_active": false
+          }
+        },
+        "tm2": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Divya K.",
+            "text": "Installing it took me less than 5 minutes and I have zero plumbing experience. My hair feels softer and looks shinier, and the tangerine scent during the shower is such a nice little bonus!",
+            "rating": 5,
+            "is_active": false
+          }
+        },
+        "tm3": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Ananya T.",
+            "text": "I've been coloring my hair for years and always struggled with the color fading too fast. Since using this filter, my color lasts noticeably longer between salon visits. My hairdresser even noticed the difference!",
+            "rating": 5,
+            "is_active": true
+          }
+        },
+        "tm4": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Priya R.",
+            "text": "I was skeptical at first, but after two weeks my hair stopped falling out in the shower. I didn't realize how much the hard water was damaging it until I made the switch. Honestly wish I'd found this sooner!",
+            "rating": 5,
+            "is_active": false
+          }
+        }
       },
-      "block_order": ["tm1", "tm2", "tm3", "tm4"]
+      "block_order": [
+        "tm1",
+        "tm2",
+        "tm3",
+        "tm4"
+      ]
     },
     "bb-stripe-banner": {
       "type": "bb-stripe-banner",
@@ -201,26 +504,60 @@
         "text_size_mobile": 18
       }
     },
-    "bb-recognise-problems": {
-      "type": "bb-recognise-problems",
+    "bb-blog": {
+      "type": "bb-blog",
       "settings": {
         "enable_section": true,
-        "subheading": "Is This You?",
-        "heading": "Perfect if you recognise any of these",
-        "background_color": "#ffffff",
-        "text_color": "#17123B",
-        "bullet_color": "#6B2430",
-        "full_width": false
-      },
-      "blocks": {
-        "pr1": { "type": "problem", "settings": { "text": "Hair fall in the shower or on the floor" } },
-        "pr2": { "type": "problem", "settings": { "text": "Dry, itchy, or flakey scalp after washing" } },
-        "pr3": { "type": "problem", "settings": { "text": "Frizzy, dry hair that resists styling" } },
-        "pr4": { "type": "problem", "settings": { "text": "Salon color fading much too quickly" } },
-        "pr5": { "type": "problem", "settings": { "text": "Skin feeling dry, tight, or irritated after bathing" } },
-        "pr6": { "type": "problem", "settings": { "text": "Tried expensive hair products with no visible results" } }
-      },
-      "block_order": ["pr1", "pr2", "pr3", "pr4", "pr5", "pr6"]
+        "container_max_width": 1200,
+        "alignment": "center",
+        "subheading": "BLOG AND ARTICLE",
+        "badge_bg_color": "transparent",
+        "badge_text_color": "#1A1A1A",
+        "badge_border_color": "transparent",
+        "badge_border_radius": 50,
+        "badge_font_size": 12,
+        "badge_margin_bottom": 12,
+        "heading": "Read our latest blog and articles",
+        "heading_color": "#1A1A1A",
+        "heading_highlight_color": "#FF5A1F",
+        "heading_size_desktop": 48,
+        "heading_size_mobile": 28,
+        "heading_weight": "800",
+        "heading_margin_bottom": 40,
+        "columns_desktop": 3,
+        "grid_gap": 24,
+        "card_bg_color": "#FFFFFF",
+        "card_border_color": "#EFEFEF",
+        "card_border_hover_color": "#FF5A1F",
+        "card_border_radius": 16,
+        "card_padding": 24,
+        "card_image_aspect": "16/10",
+        "read_time_color": "#666666",
+        "read_time_size": 12,
+        "read_time_margin_bottom": 12,
+        "article_title_color": "#1A1A1A",
+        "article_title_size": 22,
+        "article_title_weight": "800",
+        "article_title_margin_bottom": 12,
+        "article_excerpt_color": "#666666",
+        "article_excerpt_size": 15,
+        "background_color": "#FAF5F5",
+        "margin_x": 108,
+        "margin_x_mobile": 12,
+        "section_border_radius": 0,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40,
+        "padding_left": 40,
+        "padding_right": 40,
+        "padding_left_mobile": 20,
+        "padding_right_mobile": 20,
+        "margin_top": 8,
+        "margin_bottom": 8,
+        "margin_top_mobile": 8,
+        "margin_bottom_mobile": 8
+      }
     }
   },
   "order": [
@@ -229,8 +566,8 @@
     "bb-problem",
     "bb-benefits-grid",
     "bb-activation-steps",
-    "bb-recognise-problems",
     "bb-stripe-banner",
+    "bb-blog",
     "bb-testimonials"
   ]
 }

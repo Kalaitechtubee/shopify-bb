@@ -101,13 +101,14 @@
   /* ── Marquee Scroller ── */
   #bb-testimonials-{{ section.id }} .bb-marquee-wrapper {
     width: 100%;
-    padding: 12px 0;      /* lets hover shadow + lift be visible */
     position: relative;
   }
   #bb-testimonials-{{ section.id }} .bb-marquee-clip {
     overflow: hidden;     /* horizontal clip for the marquee */
     width: 100%;
     position: relative;
+    padding: 24px 0;      /* lets hover shadow + lift be visible */
+    margin: -12px 0;      /* counteract vertical padding for layout consistency */
   }
   #bb-testimonials-{{ section.id }} .bb-marquee-clip::before,
   #bb-testimonials-{{ section.id }} .bb-marquee-clip::after {
@@ -364,10 +365,22 @@
       "label": "Heading Weight",
       "default": "800",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        }
       ]
     },
     {
@@ -376,9 +389,18 @@
       "label": "Heading Alignment",
       "default": "center",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
       ]
     },
     {
@@ -389,7 +411,7 @@
       "step": 4,
       "unit": "px",
       "label": "Space Below Heading",
-      "default": 48
+      "default": 36
     },
     {
       "type": "header",
@@ -405,7 +427,7 @@
       "type": "color",
       "id": "subheading_color",
       "label": "Subtitle Color",
-      "default": "#6B2430"
+      "default": "#1A1A1A"
     },
     {
       "type": "range",
@@ -439,19 +461,19 @@
       "type": "color",
       "id": "background_color",
       "label": "Section Background",
-      "default": "#ffffff"
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
       "id": "card_bg_color",
       "label": "Card Background",
-      "default": "#ffffff"
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
       "id": "card_border_color",
       "label": "Card Border Color",
-      "default": "#eeeeee"
+      "default": "#EEEEEE"
     },
     {
       "type": "range",
@@ -461,7 +483,7 @@
       "step": 1,
       "unit": "px",
       "label": "Card Border Width",
-      "default": 1
+      "default": 0
     },
     {
       "type": "range",
@@ -481,7 +503,7 @@
       "step": 4,
       "unit": "px",
       "label": "Card Padding",
-      "default": 28
+      "default": 40
     },
     {
       "type": "range",
@@ -491,7 +513,7 @@
       "step": 10,
       "unit": "px",
       "label": "Card Width",
-      "default": 320
+      "default": 380
     },
     {
       "type": "range",
@@ -581,7 +603,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Top — Desktop",
-      "default": 80
+      "default": 40
     },
     {
       "type": "range",
@@ -591,7 +613,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Bottom — Desktop",
-      "default": 80
+      "default": 40
     },
     {
       "type": "range",
@@ -621,7 +643,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Left — Desktop",
-      "default": 0
+      "default": 80
     },
     {
       "type": "range",
@@ -631,7 +653,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Right — Desktop",
-      "default": 0
+      "default": 80
     },
     {
       "type": "range",
@@ -641,7 +663,7 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Top — Desktop",
-      "default": 0
+      "default": 8
     },
     {
       "type": "range",
@@ -651,7 +673,7 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Bottom — Desktop",
-      "default": 0
+      "default": 8
     }
   ],
   "blocks": [

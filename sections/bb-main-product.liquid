@@ -38,7 +38,7 @@
     /* Highlight pills variables */
     --pill-bg: {{ section.settings.pills_bg_color }};
     --pill-text: {{ section.settings.pills_text_color }};
-    --pill-icon-color: {{ section.settings.pills_icon_color }};
+    --pill-icon-color: #A3FE01;
     --pill-size: {{ section.settings.pills_font_size }}px;
     --pill-padding: {{ section.settings.pills_padding_y }}px {{ section.settings.pills_padding_x }}px;
     --pill-radius: {{ section.settings.pills_border_radius }}px;
@@ -69,6 +69,7 @@
 
     /* Accordion variables */
     --acc-border-color: {{ section.settings.acc_border_color }};
+    --acc-divider-color: {{ section.settings.acc_border_color }};
     --acc-bg: {{ section.settings.acc_bg_color }};
     --acc-trigger-color: {{ section.settings.acc_trigger_color }};
     --acc-trigger-size: {{ section.settings.acc_trigger_size }}px;
@@ -131,10 +132,6 @@
   #bb-product-hero-{{ section.id }} .bb-quantity__btn,
   #bb-product-hero-{{ section.id }} .bb-quantity__input {
     color: var(--qty-text-color);
-  }
-  #bb-product-hero-{{ section.id }} .bb-quantity__input {
-    border-left: 1.5px solid var(--qty-border-color);
-    border-right: 1.5px solid var(--qty-border-color);
   }
 
   /* CTA buttons overrides */
@@ -264,27 +261,44 @@
 
       <!-- ===== PRODUCT INFO ===== -->
       <div class="bb-product-info">
-
-
+        {%- if section.settings.show_badges and section.settings.badge_text != blank -%}
+          <div class="bb-product-info__badges">
+            {%- assign badge_array = section.settings.badge_text | split: ',' -%}
+            {%- for badge_item in badge_array -%}
+              {%- if badge_item != blank -%}
+                <span class="bb-badge" style="
+                  background-color: {{ section.settings.badge_bg_color | default: 'transparent' }};
+                  color: {{ section.settings.badge_text_color | default: '#622229' }};
+                  border: 1.5px solid {{ section.settings.badge_text_color | default: '#622229' }};
+                  border-radius: {{ section.settings.badge_border_radius | default: 50 }}px;
+                ">{{ badge_item | strip }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
 
         <!-- Title -->
         <h1 class="bb-product-info__title">{{ product.title }}</h1>
 
         <!-- Rating -->
-        <div class="bb-product-info__rating-row">
-          {%- assign review_rating  = section.settings.review_rating  | default: 4.8 -%}
-          {%- assign review_count   = section.settings.review_count   | default: 248 -%}
-          {% render 'rating-stars', rating: review_rating, max: 5, show_count: false %}
-          <span class="bb-product-info__review-count" style="text-decoration:none;cursor:default;color:var(--bb-text);font-weight:600;margin-left:4px;">
-            {{ review_rating }} stars &bull; ({{ review_count }} reviews)
-          </span>
-        </div>
+        {%- if section.settings.show_rating -%}
+          <div class="bb-product-info__rating-row">
+            {%- assign review_rating  = section.settings.review_rating  | default: 4.8 -%}
+            {%- assign review_count   = section.settings.review_count   | default: 248 -%}
+            {% render 'rating-stars', rating: review_rating, max: 5, show_count: false %}
+            <span class="bb-product-info__review-count" style="text-decoration:none;cursor:default;color:var(--bb-text);font-weight:600;margin-left:4px;">
+              {{ review_rating }} stars &bull; ({{ review_count }} reviews)
+            </span>
+          </div>
+        {%- endif -%}
 
         <!-- Short Description -->
-        {%- if section.settings.short_description != blank -%}
-          <div class="bb-product-description-custom">{{ section.settings.short_description }}</div>
-        {%- elsif product.description != blank -%}
-          <div class="bb-product-description-custom">{{ product.description }}</div>
+        {%- if section.settings.show_short_description -%}
+          {%- if section.settings.short_description != blank -%}
+            <div class="bb-product-description-custom">{{ section.settings.short_description }}</div>
+          {%- elsif product.description != blank -%}
+            <div class="bb-product-description-custom">{{ product.description }}</div>
+          {%- endif -%}
         {%- endif -%}
 
         <!-- Price -->
@@ -421,10 +435,54 @@
               </div>
             </div>
 
+            {%- if section.settings.show_secondary_cta and section.settings.secondary_cta_text != blank -%}
+              <div class="bb-product-cta-secondary" style="margin-top: 16px;">
+                <a
+                  href="{{ section.settings.secondary_cta_url | default: '#' }}"
+                  class="bb-btn bb-btn--outline bb-btn--full"
+                  style="display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;height:var(--btn-height);border-radius:var(--btn-border-radius);font-size:var(--btn-font-size);"
+                >
+                  {{ section.settings.secondary_cta_text }}
+                </a>
+              </div>
+            {%- endif -%}
+
           {%- endform -%}
         </product-form>
 
-
+        <!-- Trust Badges -->
+        {%- if section.settings.show_trust_badges -%}
+          {%- if section.settings.trust_badge_1 != blank or section.settings.trust_badge_2 != blank or section.settings.trust_badge_3 != blank or section.settings.trust_badge_4 != blank -%}
+            <div class="bb-product-trust-badges" style="margin: 24px 0 32px; padding: 16px 0; border-top: 1px solid #E7E3E3; border-bottom: 1px solid #E7E3E3;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px;">
+                {%- if section.settings.trust_badge_1 != blank -%}
+                  <div style="display: flex; align-items: center; gap: 8px; font-family: var(--bb-font-body); font-size: 13px; font-weight: 600; color: #1a1a1a;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#622229" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>{{ section.settings.trust_badge_1 }}</span>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.trust_badge_2 != blank -%}
+                  <div style="display: flex; align-items: center; gap: 8px; font-family: var(--bb-font-body); font-size: 13px; font-weight: 600; color: #1a1a1a;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#622229" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>{{ section.settings.trust_badge_2 }}</span>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.trust_badge_3 != blank -%}
+                  <div style="display: flex; align-items: center; gap: 8px; font-family: var(--bb-font-body); font-size: 13px; font-weight: 600; color: #1a1a1a;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#622229" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>{{ section.settings.trust_badge_3 }}</span>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.trust_badge_4 != blank -%}
+                  <div style="display: flex; align-items: center; gap: 8px; font-family: var(--bb-font-body); font-size: 13px; font-weight: 600; color: #1a1a1a;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#622229" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink:0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>{{ section.settings.trust_badge_4 }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
 
         <!-- Accordions -->
         {%- assign accordion_blocks = section.blocks | where: "type", "accordion_item" -%}
@@ -574,10 +632,50 @@
       "content": "Product Content"
     },
     {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show Badges",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show Star Rating",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_short_description",
+      "label": "Show Short Description",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "badge_text",
       "label": "Badge Text (comma-separated)",
       "default": "Bestseller,#1 Rated"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text/Border Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
     },
     {
       "type": "textarea",
@@ -668,7 +766,7 @@
     {
       "type": "range",
       "id": "desc_line_height",
-      "min": 1.0,
+      "min": 1,
       "max": 2.5,
       "step": 0.1,
       "label": "Description Line Height",
@@ -695,10 +793,10 @@
       "content": "Highlight Pills Settings"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "highlight_badge_1",
       "label": "Highlight Pill 1",
-      "default": "MICRO-STIMULATION"
+      "default": "MICRO-<br>STIMULATION"
     },
     {
       "type": "image_picker",
@@ -706,10 +804,10 @@
       "label": "Pill 1 Custom Icon (optional file upload)"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "highlight_badge_2",
       "label": "Highlight Pill 2",
-      "default": "DEEP DELIVERY"
+      "default": "DEEP<br>DELIVERY"
     },
     {
       "type": "image_picker",
@@ -717,10 +815,10 @@
       "label": "Pill 2 Custom Icon (optional file upload)"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "highlight_badge_3",
       "label": "Highlight Pill 3",
-      "default": "FOLLICLE REACTIVATION"
+      "default": "FOLLICLE<br>REACTIVATION"
     },
     {
       "type": "image_picker",
@@ -753,7 +851,7 @@
       "step": 1,
       "unit": "px",
       "label": "Pills Font Size",
-      "default": 12
+      "default": 13
     },
     {
       "type": "range",
@@ -763,7 +861,7 @@
       "step": 1,
       "unit": "px",
       "label": "Pills Icon Size",
-      "default": 14
+      "default": 24
     },
     {
       "type": "range",
@@ -773,7 +871,7 @@
       "step": 1,
       "unit": "px",
       "label": "Pills Padding Vertical",
-      "default": 8
+      "default": 10
     },
     {
       "type": "range",
@@ -783,7 +881,7 @@
       "step": 1,
       "unit": "px",
       "label": "Pills Padding Horizontal",
-      "default": 18
+      "default": 19
     },
     {
       "type": "range",
@@ -885,7 +983,7 @@
       "step": 1,
       "unit": "px",
       "label": "Quantity Border Radius",
-      "default": 50
+      "default": 0
     },
     {
       "type": "header",
@@ -907,7 +1005,7 @@
       "type": "color",
       "id": "btn_hover_bg_color",
       "label": "Button Hover Background Color",
-      "default": "#333333"
+      "default": "#622229"
     },
     {
       "type": "checkbox",
@@ -939,7 +1037,7 @@
       "step": 2,
       "unit": "px",
       "label": "Button Height",
-      "default": 56
+      "default": 68
     },
     {
       "type": "range",
@@ -959,7 +1057,7 @@
       "step": 1,
       "unit": "px",
       "label": "Button Border Radius",
-      "default": 4
+      "default": 0
     },
     {
       "type": "range",
@@ -1001,6 +1099,12 @@
     {
       "type": "header",
       "content": "Trust Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show Trust Badges",
+      "default": false
     },
     {
       "type": "text",
@@ -1078,11 +1182,26 @@
       "label": "Heading Weight",
       "default": "800",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" },
-        { "value": "900", "label": "Black" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        },
+        {
+          "value": "900",
+          "label": "Black"
+        }
       ]
     },
     {
@@ -1098,8 +1217,8 @@
     {
       "type": "range",
       "id": "body_line_height",
-      "min": 1.0,
-      "max": 2.0,
+      "min": 1,
+      "max": 2,
       "step": 0.1,
       "label": "Body Line Height",
       "default": 1.7
@@ -1112,7 +1231,7 @@
       "type": "color",
       "id": "acc_border_color",
       "label": "Accordion Border Color",
-      "default": "#efefef"
+      "default": "#622229"
     },
     {
       "type": "color",
@@ -1142,11 +1261,26 @@
       "label": "Accordion Header Font Weight",
       "default": "700",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "500", "label": "Medium" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        }
       ]
     },
     {
@@ -1195,7 +1329,7 @@
       "step": 1,
       "unit": "px",
       "label": "Accordion Border Radius",
-      "default": 8
+      "default": 0
     },
     {
       "type": "range",
@@ -1239,7 +1373,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Top — Desktop",
-      "default": 48
+      "default": 40
     },
     {
       "type": "range",
@@ -1249,7 +1383,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Bottom — Desktop",
-      "default": 64
+      "default": 40
     },
     {
       "type": "range",
@@ -1259,7 +1393,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Top — Mobile",
-      "default": 32
+      "default": 48
     },
     {
       "type": "range",
@@ -1269,7 +1403,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Bottom — Mobile",
-      "default": 40
+      "default": 48
     }
   ],
   "blocks": [
@@ -1300,10 +1434,22 @@
           "label": "Video Type",
           "default": "auto",
           "options": [
-            { "value": "auto", "label": "Auto-detect (Recommended)" },
-            { "value": "hosted", "label": "Hosted Video (Upload)" },
-            { "value": "youtube", "label": "YouTube / Vimeo" },
-            { "value": "none", "label": "None (Hide Video)" }
+            {
+              "value": "auto",
+              "label": "Auto-detect (Recommended)"
+            },
+            {
+              "value": "hosted",
+              "label": "Hosted Video (Upload)"
+            },
+            {
+              "value": "youtube",
+              "label": "YouTube / Vimeo"
+            },
+            {
+              "value": "none",
+              "label": "None (Hide Video)"
+            }
           ]
         },
         {
@@ -1315,7 +1461,10 @@
           "type": "video_url",
           "id": "video_url",
           "label": "Video URL (YouTube or Vimeo)",
-          "accept": ["youtube", "vimeo"]
+          "accept": [
+            "youtube",
+            "vimeo"
+          ]
         }
       ]
     }

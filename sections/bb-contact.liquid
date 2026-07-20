@@ -1,0 +1,849 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile | default: 48 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 48 }}px;
+    --contact-pt: {{ section.settings.padding_top }}px;
+    --contact-pb: {{ section.settings.padding_bottom }}px;
+    --contact-heading-color: {{ section.settings.heading_color }};
+    --contact-subtitle-color: {{ section.settings.subtitle_color }};
+    --contact-heading-size-desktop: {{ section.settings.heading_size_desktop }}px;
+    --contact-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
+    
+    /* Spacings */
+    --contact-heading-margin-bottom: {{ section.settings.heading_margin_bottom }}px;
+    --contact-subtitle-margin-bottom: {{ section.settings.subtitle_margin_bottom }}px;
+    --contact-socials-margin-bottom: {{ section.settings.socials_margin_bottom }}px;
+    
+    /* Sizes */
+    --contact-subtitle-size: {{ section.settings.subtitle_size }}px;
+    --contact-badge-title-size: {{ section.settings.badge_title_size }}px;
+    --contact-badge-label-size: {{ section.settings.badge_label_size }}px;
+    --contact-badge-icon-size: {{ section.settings.badge_icon_size }}px;
+    --contact-social-icon-size: {{ section.settings.social_icon_size }}px;
+    
+    /* Alignment */
+    --contact-align: {{ section.settings.content_alignment }};
+    --contact-justify: {% if section.settings.content_alignment == 'center' %}center{% else %}flex-start{% endif %};
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Section CSS */
+  .bb-contact-section {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .bb-contact-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .bb-contact-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    text-align: var(--contact-align, left);
+    align-items: var(--contact-justify, flex-start);
+  }
+  .bb-contact-heading {
+    font-family: var(--bb-font-heading);
+    font-size: var(--contact-heading-size-desktop, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--contact-heading-color, #000000);
+    margin: 0 0 var(--contact-heading-margin-bottom, 24px) 0;
+  }
+  .bb-contact-subtitle {
+    font-family: var(--bb-font-body);
+    font-size: var(--contact-subtitle-size, 16px);
+    color: var(--contact-subtitle-color, #444444);
+    margin: 0 0 var(--contact-subtitle-margin-bottom, 32px) 0;
+    line-height: 1.5;
+  }
+  .bb-contact-socials {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: var(--contact-socials-margin-bottom, 60px);
+    justify-content: var(--contact-justify, flex-start);
+    width: 100%;
+  }
+  .bb-contact-socials-label {
+    font-family: var(--bb-font-body);
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .bb-contact-socials-divider {
+    color: #d9d9d9;
+    font-weight: 300;
+  }
+  .bb-contact-socials-icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .bb-contact-socials-icons a {
+    color: #622229;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+  .bb-contact-socials-icons a svg {
+    width: var(--contact-social-icon-size, 18px);
+    height: var(--contact-social-icon-size, 18px);
+  }
+  .bb-contact-socials-icons a:hover {
+    opacity: 0.7;
+  }
+
+  /* Bottom highlight features */
+  .bb-contact-bottom-row {
+    display: flex;
+    gap: 60px;
+    margin-top: auto;
+    border-top: 1px solid #E7E3E3;
+    padding-top: 32px;
+    justify-content: var(--contact-justify, flex-start);
+    width: 100%;
+  }
+  .bb-contact-bottom-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: var(--contact-justify, flex-start);
+  }
+  .bb-contact-bottom-col-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bb-contact-bottom-col-title {
+    font-family: var(--bb-font-heading);
+    font-size: var(--contact-badge-title-size, 32px);
+    font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1;
+  }
+  .bb-contact-bottom-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--contact-badge-icon-size, 20px);
+    height: var(--contact-badge-icon-size, 20px);
+    border-radius: 50%;
+    background-color: #FAF0F0;
+    color: #622229;
+  }
+  .bb-contact-bottom-icon-wrap svg {
+    width: 65%;
+    height: 65%;
+  }
+  .bb-contact-bottom-col-label {
+    font-family: var(--bb-font-body);
+    font-size: var(--contact-badge-label-size, 13px);
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* Right Column (Form Card) */
+  .bb-contact-card {
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    border: 1px solid #E7E3E3;
+    box-sizing: border-box;
+  }
+  .bb-contact-form-el {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .bb-contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bb-contact-field-label {
+    font-family: var(--bb-font-body);
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .bb-contact-input,
+  .bb-contact-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E7E3E3;
+    border-radius: 4px;
+    background-color: #ffffff;
+    font-family: var(--bb-font-body);
+    font-size: 14px;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+  .bb-contact-input:focus,
+  .bb-contact-textarea:focus {
+    border-color: #622229;
+  }
+  .bb-contact-textarea {
+    resize: vertical;
+  }
+  .bb-contact-submit-btn {
+    width: 100%;
+    height: 48px;
+    border: none;
+    font-family: var(--bb-font-body);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bb-contact-submit-btn:hover {
+    opacity: 0.9;
+  }
+
+  /* Responsive styling */
+  @media (max-width: 1024px) {
+    .bb-contact-grid {
+      gap: 40px;
+    }
+    .bb-contact-heading {
+      font-size: 38px;
+    }
+  }
+  @media (max-width: 768px) {
+    .bb-contact-grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .bb-contact-heading {
+      font-size: var(--contact-heading-size-mobile, 32px);
+    }
+    .bb-contact-bottom-row {
+      margin-top: 30px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .bb-contact-card {
+      padding: 24px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="bb-contact-section section-{{ section.id }}-padding" style="background-color: {{ section.settings.section_bg }};">
+  <div class="bb-container">
+    <div class="bb-contact-grid">
+      <!-- Left Column -->
+      <div class="bb-contact-info">
+        <h2 class="bb-contact-heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <p class="bb-contact-subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+        
+        {% if section.settings.enable_socials %}
+          {%- assign insta_link = section.settings.instagram_link | default: settings.social_instagram_link -%}
+          {%- assign fb_link = section.settings.facebook_link | default: settings.social_facebook_link -%}
+          {%- assign linkedin_link = section.settings.linkedin_link | default: settings.social_linkedin_link -%}
+          {%- assign twitter_link = section.settings.twitter_link | default: settings.social_twitter_link -%}
+          {%- assign youtube_link = section.settings.youtube_link | default: settings.social_youtube_link -%}
+
+          {% if insta_link != blank or fb_link != blank or linkedin_link != blank or twitter_link != blank or youtube_link != blank %}
+            <div class="bb-contact-socials">
+              <span class="bb-contact-socials-label">{{ section.settings.socials_label }}</span>
+              <span class="bb-contact-socials-divider">|</span>
+              <div class="bb-contact-socials-icons">
+                {% if insta_link != blank %}
+                  <a href="{{ insta_link }}" target="_blank" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+                  </a>
+                {% endif %}
+                {% if fb_link != blank %}
+                  <a href="{{ fb_link }}" target="_blank" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                  </a>
+                {% endif %}
+                {% if linkedin_link != blank %}
+                  <a href="{{ linkedin_link }}" target="_blank" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                  </a>
+                {% endif %}
+                {% if twitter_link != blank %}
+                  <a href="{{ twitter_link }}" target="_blank" aria-label="Twitter/X">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                  </a>
+                {% endif %}
+                {% if youtube_link != blank %}
+                  <a href="{{ youtube_link }}" target="_blank" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+
+        <!-- Bottom Cards Grid -->
+        <div class="bb-contact-bottom-row">
+          {% if section.settings.sub_col1_title != blank %}
+            <div class="bb-contact-bottom-col">
+              <div class="bb-contact-bottom-col-header">
+                <span class="bb-contact-bottom-col-title">{{ section.settings.sub_col1_title }}</span>
+                {%- assign show_icon1 = true -%}
+                {%- if section.settings.icon1 == 'none' and section.settings.custom_icon1 == blank -%}
+                  {%- assign show_icon1 = false -%}
+                {%- endif -%}
+                {%- if show_icon1 -%}
+                  <span class="bb-contact-bottom-icon-wrap">
+                    {%- if section.settings.custom_icon1 != blank -%}
+                      <img src="{{ section.settings.custom_icon1 | image_url: width: 40 }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: contain;">
+                    {%- else -%}
+                      {%- case section.settings.icon1 -%}
+                        {%- when 'clock' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        {%- when 'question' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        {%- when 'phone' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        {%- when 'mail' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                        {%- when 'map-pin' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        {%- when 'chat' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                      {%- endcase -%}
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              </div>
+              <span class="bb-contact-bottom-col-label">{{ section.settings.sub_col1_label }}</span>
+            </div>
+          {% endif %}
+          {% if section.settings.sub_col2_title != blank %}
+            <div class="bb-contact-bottom-col">
+              <div class="bb-contact-bottom-col-header">
+                <span class="bb-contact-bottom-col-title">{{ section.settings.sub_col2_title }}</span>
+                {%- assign show_icon2 = true -%}
+                {%- if section.settings.icon2 == 'none' and section.settings.custom_icon2 == blank -%}
+                  {%- assign show_icon2 = false -%}
+                {%- endif -%}
+                {%- if show_icon2 -%}
+                  <span class="bb-contact-bottom-icon-wrap">
+                    {%- if section.settings.custom_icon2 != blank -%}
+                      <img src="{{ section.settings.custom_icon2 | image_url: width: 40 }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: contain;">
+                    {%- else -%}
+                      {%- case section.settings.icon2 -%}
+                        {%- when 'clock' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        {%- when 'question' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        {%- when 'phone' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        {%- when 'mail' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                        {%- when 'map-pin' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        {%- when 'chat' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                      {%- endcase -%}
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              </div>
+              <span class="bb-contact-bottom-col-label">{{ section.settings.sub_col2_label }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right Column (Form Card) -->
+      <div class="bb-contact-card" style="background-color: {{ section.settings.card_bg }}; border-radius: {{ section.settings.card_radius }}px;">
+        {%- form 'contact', id: 'ContactForm', class: 'bb-contact-form-el' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="form-status form-status-list form__message" tabindex="-1" autofocus style="color: #622229; font-weight: bold; margin-bottom: 20px;">
+              Thanks for contacting us. We'll get back to you as soon as possible.
+            </div>
+          {%- elsif form.errors -%}
+            <div class="form__message" style="color: #ff0000; margin-bottom: 20px;">
+              Please adjust the fields and try again.
+            </div>
+          {%- endif -%}
+
+          <div class="bb-contact-field">
+            <label class="bb-contact-field-label" for="ContactForm-name">Your Name*</label>
+            <input
+              type="text"
+              id="ContactForm-name"
+              name="contact[name]"
+              placeholder="Enter your name"
+              required
+              class="bb-contact-input"
+            >
+          </div>
+
+          <div class="bb-contact-field">
+            <label class="bb-contact-field-label" for="ContactForm-email">Your Email*</label>
+            <input
+              type="email"
+              id="ContactForm-email"
+              name="contact[email]"
+              placeholder="Enter your email"
+              required
+              class="bb-contact-input"
+            >
+          </div>
+
+          <div class="bb-contact-field">
+            <label class="bb-contact-field-label" for="ContactForm-body">Your Message*</label>
+            <textarea
+              rows="5"
+              id="ContactForm-body"
+              name="contact[body]"
+              placeholder="Example Text"
+              required
+              class="bb-contact-textarea"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="bb-contact-submit-btn" style="background-color: {{ section.settings.button_bg }}; color: {{ section.settings.button_text_color }}; border-radius: {{ section.settings.button_radius }}px;">
+            {{ section.settings.button_text }}
+          </button>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "BB Contact Section",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Spacing & Background"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background",
+      "default": "#F7F5F0"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Alignment & Spacing"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "subtitle_margin_bottom",
+      "min": 0,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Subtitle Margin Bottom",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "socials_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Socials Margin Bottom",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Typography & Sizes"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Have questions?<br>Sent us an email"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Desktop)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle Text",
+      "default": "Our experts will give you the right solution"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color",
+      "default": "#444444"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle Font Size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Social Links Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_socials",
+      "label": "Show Social Links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "socials_label",
+      "label": "Socials Prefix Label",
+      "default": "Follow our socials"
+    },
+    {
+      "type": "text",
+      "id": "instagram_link",
+      "label": "Instagram Link URL",
+      "default": "#"
+    },
+    {
+      "type": "text",
+      "id": "facebook_link",
+      "label": "Facebook Link URL",
+      "default": "#"
+    },
+    {
+      "type": "text",
+      "id": "linkedin_link",
+      "label": "LinkedIn Link URL",
+      "default": "#"
+    },
+    {
+      "type": "text",
+      "id": "twitter_link",
+      "label": "Twitter/X Link URL"
+    },
+    {
+      "type": "text",
+      "id": "youtube_link",
+      "label": "YouTube Link URL"
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Social Icon Size",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Bottom Highlight Badges"
+    },
+    {
+      "type": "text",
+      "id": "sub_col1_title",
+      "label": "Badge 1 Title",
+      "default": "24/7"
+    },
+    {
+      "type": "text",
+      "id": "sub_col1_label",
+      "label": "Badge 1 Label",
+      "default": "Support Center"
+    },
+    {
+      "type": "select",
+      "id": "icon1",
+      "label": "Badge 1 Preset Icon",
+      "default": "clock",
+      "options": [
+        {
+          "value": "clock",
+          "label": "Clock"
+        },
+        {
+          "value": "question",
+          "label": "Question Mark"
+        },
+        {
+          "value": "phone",
+          "label": "Phone"
+        },
+        {
+          "value": "mail",
+          "label": "Mail"
+        },
+        {
+          "value": "map-pin",
+          "label": "Map Pin"
+        },
+        {
+          "value": "chat",
+          "label": "Chat Bubble"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_icon1",
+      "label": "Badge 1 Custom Icon (Upload Image/SVG)"
+    },
+    {
+      "type": "text",
+      "id": "sub_col2_title",
+      "label": "Badge 2 Title",
+      "default": "FAQs"
+    },
+    {
+      "type": "text",
+      "id": "sub_col2_label",
+      "label": "Badge 2 Label",
+      "default": "Read all FAQs"
+    },
+    {
+      "type": "select",
+      "id": "icon2",
+      "label": "Badge 2 Preset Icon",
+      "default": "question",
+      "options": [
+        {
+          "value": "clock",
+          "label": "Clock"
+        },
+        {
+          "value": "question",
+          "label": "Question Mark"
+        },
+        {
+          "value": "phone",
+          "label": "Phone"
+        },
+        {
+          "value": "mail",
+          "label": "Mail"
+        },
+        {
+          "value": "map-pin",
+          "label": "Map Pin"
+        },
+        {
+          "value": "chat",
+          "label": "Chat Bubble"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_icon2",
+      "label": "Badge 2 Custom Icon (Upload Image/SVG)"
+    },
+    {
+      "type": "range",
+      "id": "badge_title_size",
+      "min": 10,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Title Size",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "badge_label_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Label Size",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "badge_icon_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Icon Size",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Right Column Card Form"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Submit Button Text",
+      "default": "Submit"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Submit Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Submit Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Button Border Radius",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Contact Section"
+    }
+  ]
+}
+{% endschema %}

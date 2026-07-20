@@ -44,6 +44,12 @@
     padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
     margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
     margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
+    margin-left: {{ section.settings.margin_x_mobile | default: 0 }}px;
+    margin-right: {{ section.settings.margin_x_mobile | default: 0 }}px;
+    {%- assign _mx_mob2 = section.settings.margin_x_mobile | default: 0 | times: 2 -%}
+    width: calc(100% - {{ _mx_mob2 }}px);
+    box-sizing: border-box;
+    border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
     
     /* CSS Variables mapping for complete customization */
     --comp-bg: {{ section.settings.background_color }};
@@ -90,17 +96,19 @@
   }
   @media (min-width: 768px) {
     #bb-comparison-{{ section.id }} {
+      {%- assign _mx = section.settings.margin_x | default: 0 -%}
+      {%- assign _mx2 = _mx | times: 2 -%}
       padding-top: {{ section.settings.padding_top | default: 0 }}px;
       padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
       padding-left: {{ section.settings.padding_left | default: 0 }}px;
       padding-right: {{ section.settings.padding_right | default: 0 }}px;
       margin-top: {{ section.settings.margin_top | default: 0 }}px;
       margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
-      {%- unless section.settings.full_width -%}
-        max-width: var(--page-width, 1200px);
-        margin-left: auto;
-        margin-right: auto;
-      {%- endunless -%}
+      margin-left: {{ _mx }}px;
+      margin-right: {{ _mx }}px;
+      width: calc(100% - {{ _mx2 }}px);
+      box-sizing: border-box;
+      border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
     }
   }
   @media (max-width: 768px) {
@@ -124,6 +132,7 @@
       margin-right: 0;
     {%- endif -%}
   }
+
 
   #bb-comparison-{{ section.id }} .bb-comparison-v2__inner {
     max-width: var(--comp-max-width);
@@ -292,7 +301,7 @@
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 1280
+      "default": 1600
     },
     {
       "type": "select",
@@ -300,9 +309,18 @@
       "label": "Section Alignment",
       "default": "left",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
       ]
     },
     {
@@ -351,7 +369,7 @@
       "step": 1,
       "unit": "px",
       "label": "Badge Font Size",
-      "default": 12
+      "default": 10
     },
     {
       "type": "range",
@@ -361,7 +379,7 @@
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 26
+      "default": 8
     },
     {
       "type": "header",
@@ -377,7 +395,7 @@
       "type": "color",
       "id": "heading_color",
       "label": "Heading Color",
-      "default": "#1a1a1a"
+      "default": "#1A1A1A"
     },
     {
       "type": "range",
@@ -387,7 +405,7 @@
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 72
+      "default": 48
     },
     {
       "type": "range",
@@ -397,7 +415,7 @@
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 42
+      "default": 28
     },
     {
       "type": "select",
@@ -405,11 +423,26 @@
       "label": "Heading Weight",
       "default": "800",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" },
-        { "value": "900", "label": "Black (Heavy)" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        },
+        {
+          "value": "900",
+          "label": "Black (Heavy)"
+        }
       ]
     },
     {
@@ -420,7 +453,7 @@
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 48
+      "default": 8
     },
     {
       "type": "header",
@@ -528,10 +561,22 @@
       "label": "Card 1 Sub-Heading Weight",
       "default": "800",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        }
       ]
     },
     {
@@ -583,7 +628,7 @@
       "type": "color",
       "id": "right_title_color",
       "label": "Card 2 Title Color",
-      "default": "#24B14C"
+      "default": "#FF808B"
     },
     {
       "type": "range",
@@ -599,7 +644,7 @@
       "type": "color",
       "id": "right_heading_color",
       "label": "Card 2 Sub-Heading Color",
-      "default": "#17123B"
+      "default": "#1A1A1A"
     },
     {
       "type": "range",
@@ -617,23 +662,35 @@
       "label": "Card 2 Sub-Heading Weight",
       "default": "800",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        }
       ]
     },
     {
       "type": "color",
       "id": "right_text_color",
       "label": "Card 2 Description Color",
-      "default": "#17123B"
+      "default": "#1A1A1A"
     },
     {
       "type": "color",
       "id": "right_highlight_color",
       "label": "Card 2 Highlight Text Color",
-      "default": "#24B14C"
+      "default": "#A3FE01"
     },
     {
       "type": "image_picker",
@@ -662,13 +719,43 @@
       "type": "color",
       "id": "background_color",
       "label": "Section Background Color",
-      "default": "#ffffff"
+      "default": "#FFFFFF"
     },
     {
       "type": "checkbox",
       "id": "full_width",
       "label": "Make Section Full Width",
-      "default": false
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "margin_x",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Side Margin - Desktop (equal left and right)",
+      "default": 108
+    },
+    {
+      "type": "range",
+      "id": "margin_x_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Side Margin - Mobile (equal left and right)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Section Corner Radius",
+      "default": 0
     },
     {
       "type": "range",
@@ -678,7 +765,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Top — Desktop",
-      "default": 80
+      "default": 40
     },
     {
       "type": "range",
@@ -688,7 +775,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Bottom — Desktop",
-      "default": 80
+      "default": 40
     },
     {
       "type": "range",
@@ -718,7 +805,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Left — Desktop",
-      "default": 40
+      "default": 32
     },
     {
       "type": "range",
@@ -728,7 +815,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Right — Desktop",
-      "default": 40
+      "default": 32
     },
     {
       "type": "range",
@@ -758,7 +845,7 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Top — Desktop",
-      "default": 0
+      "default": 8
     },
     {
       "type": "range",
@@ -768,7 +855,7 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Bottom — Desktop",
-      "default": 0
+      "default": 8
     },
     {
       "type": "range",
@@ -778,7 +865,7 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Top — Mobile",
-      "default": 0
+      "default": 8
     },
     {
       "type": "range",
@@ -788,7 +875,7 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Bottom — Mobile",
-      "default": 0
+      "default": 8
     }
   ],
   "presets": [

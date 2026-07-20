@@ -2,13 +2,27 @@
 
 {%- unless section.settings.enable_section == false -%}
 {%- assign _bb_meta = product.metafields.custom.timeline_items.value -%}
-{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- assign _has_items = false -%}
+{%- for i in (1..4) -%}
+  {%- capture week_id -%}item_{{ i }}_week{%- endcapture -%}
+  {%- assign week_val = section.settings[week_id] -%}
+  {%- if week_val != blank -%}
+    {%- assign _has_items = true -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if _has_items == false and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
 {%- unless _skip_section -%}
 
 {%- style -%}
   #bb-timeline-{{ section.id }} {
     padding-top: {{ section.settings.padding_top_mobile }}px;
     padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    margin-left: {{ section.settings.margin_x_mobile | default: 0 }}px;
+    margin-right: {{ section.settings.margin_x_mobile | default: 0 }}px;
+    {%- assign _mx_mob2 = section.settings.margin_x_mobile | default: 0 | times: 2 -%}
+    width: calc(100% - {{ _mx_mob2 }}px);
+    box-sizing: border-box;
+    border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
     
     /* CSS Variables mapping for complete customization */
     --t-bg: {{ section.settings.background_color }};
@@ -35,20 +49,37 @@
     --t-text-size: {{ section.settings.card_text_size }}px;
     --t-text-color: {{ section.settings.text_color }};
     --t-highlight-color: {{ section.settings.highlight_color }};
+
+    /* Pill (Week Label) common styling */
+    --t-pill-bg: {{ section.settings.pill_bg_color }};
+    --t-pill-text: {{ section.settings.pill_text_color }};
+    --t-pill-radius: {{ section.settings.pill_radius }}px;
+    --t-pill-size: {{ section.settings.pill_font_size }}px;
+
+    /* Title common styling */
+    --t-title-color: {{ section.settings.item_title_color }};
+    --t-title-size: {{ section.settings.item_title_size }}px;
+    --t-title-weight: {{ section.settings.item_title_weight }};
+
+    /* Description common styling */
+    --t-desc-color: {{ section.settings.item_desc_color }};
+    --t-desc-size: {{ section.settings.item_desc_size }}px;
   }
   @media (min-width: 768px) {
     #bb-timeline-{{ section.id }} {
+      {%- assign _mx = section.settings.margin_x | default: 0 -%}
+      {%- assign _mx2 = _mx | times: 2 -%}
       padding-top: {{ section.settings.padding_top | default: 0 }}px;
       padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
       padding-left: {{ section.settings.padding_left | default: 0 }}px;
       padding-right: {{ section.settings.padding_right | default: 0 }}px;
       margin-top: {{ section.settings.margin_top | default: 0 }}px;
       margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
-      {%- unless section.settings.full_width -%}
-        max-width: var(--page-width, 1200px);
-        margin-left: auto;
-        margin-right: auto;
-      {%- endunless -%}
+      margin-left: {{ _mx }}px;
+      margin-right: {{ _mx }}px;
+      width: calc(100% - {{ _mx2 }}px);
+      box-sizing: border-box;
+      border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
     }
   }
   @media (max-width: 768px) {
@@ -69,7 +100,7 @@
     {%- if section.settings.alignment == 'left' -%}align-items: flex-start; text-align: left;
     {%- elsif section.settings.alignment == 'center' -%}align-items: center; text-align: center;
     {%- elsif section.settings.alignment == 'right' -%}align-items: flex-end; text-align: right;
-    {%- else -%}align-items: flex-start; text-align: left;{%- endif -%}
+    {%- endif -%}
   }
   #bb-timeline-{{ section.id }} .bb-timeline-v2__heading {
     font-size: var(--t-heading-size, 72px);
@@ -121,47 +152,50 @@
 
       <!-- Timeline List -->
       <ul class="bb-timeline-v2__list">
-        {%- if section.blocks.size > 0 -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'timeline_item' -%}
-              {%- assign pill_bg     = block.settings.pill_bg_color -%}
-              {%- assign pill_text   = block.settings.pill_text_color -%}
-              {%- assign pill_radius = block.settings.pill_radius | default: 50 -%}
-              {%- assign pill_size   = block.settings.pill_font_size | default: 12 -%}
-              {%- assign title_size  = block.settings.title_font_size | default: 16 -%}
-              {%- assign title_col   = block.settings.title_color -%}
-              {%- assign desc_size   = block.settings.desc_font_size | default: 16 -%}
-              {%- assign desc_col    = block.settings.desc_color -%}
-              <li class="bb-timeline-v2__item bb-fade-in" {{ block.shopify_attributes }}>
-
-                <!-- Left Capsule Badge -->
-                {%- if block.settings.week != blank -%}
+        {%- if _has_items -%}
+          {%- for i in (1..4) -%}
+            {%- capture week_id -%}item_{{ i }}_week{%- endcapture -%}
+            {%- capture title_id -%}item_{{ i }}_title{%- endcapture -%}
+            {%- capture desc_id -%}item_{{ i }}_desc{%- endcapture -%}
+            
+            {%- assign week_val = section.settings[week_id] -%}
+            {%- assign title_val = section.settings[title_id] -%}
+            {%- assign desc_val = section.settings[desc_id] -%}
+            
+            {%- if week_val != blank or title_val != blank or desc_val != blank -%}
+              <li class="bb-timeline-v2__item bb-fade-in">
+                <!-- Left Capsule / Week Badge -->
+                {%- if week_val != blank -%}
                   <span class="bb-timeline-v2__week" style="
-                    {%- if pill_bg != blank -%}background-color:{{ pill_bg }};border-color:{{ pill_bg }};{%- endif -%}
-                    {%- if pill_text != blank -%}color:{{ pill_text }};{%- endif -%}
-                    border-radius:{{ pill_radius }}px;
-                    font-size:{{ pill_size }}px;
-                  ">{{ block.settings.week }}</span>
+                    background-color: var(--t-pill-bg, #FAF0F0);
+                    color: var(--t-pill-text, #622229);
+                    border-color: var(--t-pill-bg, #FAF0F0);
+                    border-radius: var(--t-pill-radius, 50px);
+                    font-size: var(--t-pill-size, 12px);
+                  ">{{ week_val }}</span>
                 {%- endif -%}
 
                 <!-- Right Description -->
                 <div class="bb-timeline-v2__content">
                   <p class="bb-timeline-v2__text">
-                    {%- if block.settings.title != blank -%}
+                    {%- if title_val != blank -%}
                       <strong style="
-                        {%- if title_col != blank -%}color:{{ title_col }};{%- endif -%}
-                        font-size:{{ title_size }}px;
-                      ">{{ block.settings.title }}</strong>
+                        color: var(--t-title-color, #1A1A1A);
+                        font-size: var(--t-title-size, 16px);
+                        font-weight: var(--t-title-weight, 700);
+                      ">{{ title_val }}</strong>
                     {%- endif -%}
-                    {%- if block.settings.description != blank -%}
+                    {%- if desc_val != blank -%}
                       <span style="
-                        {%- if desc_col != blank -%}color:{{ desc_col }};{%- endif -%}
-                        font-size:{{ desc_size }}px;
-                      ">{% if block.settings.title != blank %} — {% endif %}{{ block.settings.description }}</span>
+                        color: var(--t-desc-color, #555555);
+                        font-size: var(--t-desc-size, 16px);
+                      ">
+                        {%- if title_val != blank -%} — {%- endif -%}
+                        {{ desc_val }}
+                      </span>
                     {%- endif -%}
                   </p>
                 </div>
-
               </li>
             {%- endif -%}
           {%- endfor -%}
@@ -186,7 +220,7 @@
   </div>
 </section>
 
-{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
+{%- endunless -%}
 {%- endunless -%}
 
 {% schema %}
@@ -219,6 +253,174 @@
       "unit": "px",
       "label": "Container Max Width",
       "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Timeline Items (Common Editor)"
+    },
+    {
+      "type": "text",
+      "id": "item_1_week",
+      "label": "Item 1 Week / Time",
+      "default": "Week 1–2"
+    },
+    {
+      "type": "text",
+      "id": "item_1_title",
+      "label": "Item 1 Title",
+      "default": "Reduced hair fall"
+    },
+    {
+      "type": "text",
+      "id": "item_1_desc",
+      "label": "Item 1 Description",
+      "default": "roots feel stronger, less shedding in the shower"
+    },
+    {
+      "type": "text",
+      "id": "item_2_week",
+      "label": "Item 2 Week / Time",
+      "default": "Week 3–4"
+    },
+    {
+      "type": "text",
+      "id": "item_2_title",
+      "label": "Item 2 Title",
+      "default": "Scalp feels healthier"
+    },
+    {
+      "type": "text",
+      "id": "item_2_desc",
+      "label": "Item 2 Description",
+      "default": "less dryness, irritation, and tightness"
+    },
+    {
+      "type": "text",
+      "id": "item_3_week",
+      "label": "Item 3 Week / Time",
+      "default": "Week 4–8"
+    },
+    {
+      "type": "text",
+      "id": "item_3_title",
+      "label": "Item 3 Title",
+      "default": "Visible baby hair growth"
+    },
+    {
+      "type": "text",
+      "id": "item_3_desc",
+      "label": "Item 3 Description",
+      "default": "in thinning areas as follicles reactivate"
+    },
+    {
+      "type": "text",
+      "id": "item_4_week",
+      "label": "Item 4 Week / Time",
+      "default": "Week 8+"
+    },
+    {
+      "type": "text",
+      "id": "item_4_title",
+      "label": "Item 4 Title",
+      "default": "Noticeable density improvement"
+    },
+    {
+      "type": "text",
+      "id": "item_4_desc",
+      "label": "Item 4 Description",
+      "default": "thicker, fuller-looking hair overall"
+    },
+    {
+      "type": "header",
+      "content": "Item Styling — Applied to All 4 Items"
+    },
+    {
+      "type": "color",
+      "id": "pill_bg_color",
+      "label": "Week Pill Background Color",
+      "default": "#F6E8E8"
+    },
+    {
+      "type": "color",
+      "id": "pill_text_color",
+      "label": "Week Pill Text Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "pill_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Week Pill Border Radius (0=square, 50=pill)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "pill_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Week Pill Font Size",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "item_title_color",
+      "label": "Item Title Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "item_title_size",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Item Title Font Size",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "item_title_weight",
+      "label": "Item Title Font Weight",
+      "default": "700",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "item_desc_color",
+      "label": "Item Description Color",
+      "default": "#555555"
+    },
+    {
+      "type": "range",
+      "id": "item_desc_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Item Description Font Size",
+      "default": 20
     },
     {
       "type": "header",
@@ -266,7 +468,7 @@
       "step": 1,
       "unit": "px",
       "label": "Badge Font Size",
-      "default": 12
+      "default": 10
     },
     {
       "type": "range",
@@ -276,7 +478,7 @@
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 8
     },
     {
       "type": "header",
@@ -302,17 +504,17 @@
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 72
+      "default": 48
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
+      "min": 16,
       "max": 60,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 40
+      "default": 28
     },
     {
       "type": "select",
@@ -320,10 +522,26 @@
       "label": "Heading Weight",
       "default": "800",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "600",
+          "label": "Semi-Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        },
+        {
+          "value": "900",
+          "label": "Black (Heavy)"
+        }
       ]
     },
     {
@@ -334,7 +552,7 @@
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 48
+      "default": 32
     },
     {
       "type": "header",
@@ -358,7 +576,7 @@
       "step": 1,
       "unit": "px",
       "label": "Divider Line Width",
-      "default": 1
+      "default": 2
     },
     {
       "type": "select",
@@ -366,17 +584,29 @@
       "label": "Divider Style",
       "default": "solid",
       "options": [
-        { "value": "solid", "label": "Solid" },
-        { "value": "dashed", "label": "Dashed" },
-        { "value": "dotted", "label": "Dotted" },
-        { "value": "none", "label": "None" }
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "dashed",
+          "label": "Dashed"
+        },
+        {
+          "value": "dotted",
+          "label": "Dotted"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
       ]
     },
     {
       "type": "color",
       "id": "divider_color",
       "label": "Divider Color",
-      "default": "#efefef"
+      "default": "#EFEFEF"
     },
     {
       "type": "header",
@@ -386,7 +616,7 @@
       "type": "color",
       "id": "text_color",
       "label": "Text Description Color",
-      "default": "#1a1a1a"
+      "default": "#1A1A1A"
     },
     {
       "type": "color",
@@ -412,13 +642,43 @@
       "type": "color",
       "id": "background_color",
       "label": "Section Background Color",
-      "default": "#FAF0F0"
+      "default": "#FAF5F5"
+    },
+        {
+      "type": "range",
+      "id": "margin_x",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Side Margin — Desktop (equal left & right)",
+      "default": 108
+    },
+    {
+      "type": "range",
+      "id": "margin_x_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Side Margin — Mobile (equal left & right)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Section Corner Radius",
+      "default": 0
     },
     {
       "type": "checkbox",
       "id": "full_width",
       "label": "Make Section Full Width",
-      "default": false
+      "default": true
     },
     {
       "type": "range",
@@ -428,7 +688,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Top — Desktop",
-      "default": 80
+      "default": 40
     },
     {
       "type": "range",
@@ -438,7 +698,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Bottom — Desktop",
-      "default": 80
+      "default": 40
     },
     {
       "type": "range",
@@ -466,9 +726,18 @@
       "label": "Section Alignment",
       "default": "left",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
       ]
     },
     {
@@ -479,7 +748,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Left — Desktop",
-      "default": 40
+      "default": 80
     },
     {
       "type": "range",
@@ -489,7 +758,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Right — Desktop",
-      "default": 40
+      "default": 80
     },
     {
       "type": "range",
@@ -519,7 +788,7 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Top — Desktop",
-      "default": 0
+      "default": 8
     },
     {
       "type": "range",
@@ -529,168 +798,32 @@
       "step": 4,
       "unit": "px",
       "label": "Margin Bottom — Desktop",
-      "default": 0
+      "default": 8
     },
     {
       "type": "range",
       "id": "margin_top_mobile",
       "min": 0,
-      "max": 80,
+      "max": 120,
       "step": 4,
       "unit": "px",
       "label": "Margin Top — Mobile",
-      "default": 0
+      "default": 8
     },
     {
       "type": "range",
       "id": "margin_bottom_mobile",
       "min": 0,
-      "max": 80,
+      "max": 120,
       "step": 4,
       "unit": "px",
       "label": "Margin Bottom — Mobile",
-      "default": 0
-    }
-  ],
-  "blocks": [
-    {
-      "type": "timeline_item",
-      "name": "Timeline Item",
-      "settings": [
-        {
-          "type": "header",
-          "content": "Week Pill"
-        },
-        {
-          "type": "text",
-          "id": "week",
-          "label": "Week Label Text",
-          "default": "Week 1–2"
-        },
-        {
-          "type": "color",
-          "id": "pill_bg_color",
-          "label": "Pill Background Color",
-          "default": "#FAF0F0"
-        },
-        {
-          "type": "color",
-          "id": "pill_text_color",
-          "label": "Pill Text Color",
-          "default": "#622229"
-        },
-        {
-          "type": "range",
-          "id": "pill_radius",
-          "min": 0,
-          "max": 50,
-          "step": 2,
-          "unit": "px",
-          "label": "Pill Border Radius (0=square, 50=pill)",
-          "default": 50
-        },
-        {
-          "type": "range",
-          "id": "pill_font_size",
-          "min": 8,
-          "max": 20,
-          "step": 1,
-          "unit": "px",
-          "label": "Pill Font Size",
-          "default": 12
-        },
-        {
-          "type": "header",
-          "content": "Step Title"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title Text",
-          "default": "Reduced hair fall"
-        },
-        {
-          "type": "color",
-          "id": "title_color",
-          "label": "Title Color",
-          "default": "#17123B"
-        },
-        {
-          "type": "range",
-          "id": "title_font_size",
-          "min": 10,
-          "max": 28,
-          "step": 1,
-          "unit": "px",
-          "label": "Title Font Size",
-          "default": 16
-        },
-        {
-          "type": "header",
-          "content": "Step Description"
-        },
-        {
-          "type": "text",
-          "id": "description",
-          "label": "Description Text",
-          "default": "roots feel stronger, less shedding in the shower"
-        },
-        {
-          "type": "color",
-          "id": "desc_color",
-          "label": "Description Color",
-          "default": "#555555"
-        },
-        {
-          "type": "range",
-          "id": "desc_font_size",
-          "min": 10,
-          "max": 24,
-          "step": 1,
-          "unit": "px",
-          "label": "Description Font Size",
-          "default": 16
-        }
-      ]
+      "default": 8
     }
   ],
   "presets": [
     {
-      "name": "BB Timeline",
-      "blocks": [
-        {
-          "type": "timeline_item",
-          "settings": {
-            "week": "Week 1–2",
-            "title": "Reduced hair fall",
-            "description": "roots feel stronger, less shedding in the shower"
-          }
-        },
-        {
-          "type": "timeline_item",
-          "settings": {
-            "week": "Week 3–4",
-            "title": "Scalp feels healthier",
-            "description": "less dryness, irritation, and tightness"
-          }
-        },
-        {
-          "type": "timeline_item",
-          "settings": {
-            "week": "Week 4–8",
-            "title": "Visible baby hair growth",
-            "description": "in thinning areas as follicles reactivate"
-          }
-        },
-        {
-          "type": "timeline_item",
-          "settings": {
-            "week": "Week 8+",
-            "title": "Noticeable density improvement",
-            "description": "thicker, fuller-looking hair overall"
-          }
-        }
-      ]
+      "name": "BB Timeline"
     }
   ]
 }

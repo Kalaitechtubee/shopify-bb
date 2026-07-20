@@ -1,0 +1,941 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-blog-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile | default: 40 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 40 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 20 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 20 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 8 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 8 }}px;
+    margin-left: {{ section.settings.margin_x_mobile | default: 12 }}px;
+    margin-right: {{ section.settings.margin_x_mobile | default: 12 }}px;
+    {%- assign _mx_mob2 = section.settings.margin_x_mobile | default: 12 | times: 2 -%}
+    width: calc(100% - {{ _mx_mob2 }}px);
+    box-sizing: border-box;
+    background-color: {{ section.settings.background_color | default: '#FAF5F5' }};
+    border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
+    
+    --blog-max-width: {{ section.settings.container_max_width | default: 1200 }}px;
+    --blog-badge-bg: {{ section.settings.badge_bg_color | default: 'transparent' }};
+    --blog-badge-text: {{ section.settings.badge_text_color | default: '#1A1A1A' }};
+    --blog-badge-border: {{ section.settings.badge_border_color | default: 'transparent' }};
+    --blog-badge-radius: {{ section.settings.badge_border_radius | default: 50 }}px;
+    --blog-badge-size: {{ section.settings.badge_font_size | default: 12 }}px;
+    --blog-badge-margin: {{ section.settings.badge_margin_bottom | default: 12 }}px;
+
+    --blog-heading-size: {{ section.settings.heading_size_desktop | default: 48 }}px;
+    --blog-heading-weight: {{ section.settings.heading_weight | default: '800' }};
+    --blog-heading-color: {{ section.settings.heading_color | default: '#1A1A1A' }};
+    --blog-heading-margin: {{ section.settings.heading_margin_bottom | default: 40 }}px;
+
+    --blog-cols-desktop: {{ section.settings.columns_desktop | default: 3 }};
+    --blog-gap: {{ section.settings.grid_gap | default: 24 }}px;
+
+    --blog-card-bg: {{ section.settings.card_bg_color | default: '#FFFFFF' }};
+    --blog-card-border: {{ section.settings.card_border_color | default: '#EFEFEF' }};
+    --blog-card-hover-border: {{ section.settings.card_border_hover_color | default: '#FF5A1F' }};
+    --blog-card-radius: {{ section.settings.card_border_radius | default: 16 }}px;
+    --blog-card-padding: {{ section.settings.card_padding | default: 24 }}px;
+
+    --blog-readtime-color: {{ section.settings.read_time_color | default: '#666666' }};
+    --blog-readtime-size: {{ section.settings.read_time_size | default: 12 }}px;
+    --blog-readtime-margin: {{ section.settings.read_time_margin_bottom | default: 12 }}px;
+
+    --blog-title-color: {{ section.settings.article_title_color | default: '#1A1A1A' }};
+    --blog-title-size: {{ section.settings.article_title_size | default: 22 }}px;
+    --blog-title-weight: {{ section.settings.article_title_weight | default: '800' }};
+    --blog-title-margin: {{ section.settings.article_title_margin_bottom | default: 12 }}px;
+
+    --blog-excerpt-color: {{ section.settings.article_excerpt_color | default: '#666666' }};
+    --blog-excerpt-size: {{ section.settings.article_excerpt_size | default: 15 }}px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-blog-{{ section.id }} {
+      {%- assign _mx = section.settings.margin_x | default: 108 -%}
+      {%- assign _mx2 = _mx | times: 2 -%}
+      padding-top: {{ section.settings.padding_top | default: 60 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+      padding-left: {{ section.settings.padding_left | default: 40 }}px;
+      padding-right: {{ section.settings.padding_right | default: 40 }}px;
+      margin-top: {{ section.settings.margin_top | default: 8 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 8 }}px;
+      margin-left: {{ _mx }}px;
+      margin-right: {{ _mx }}px;
+      width: calc(100% - {{ _mx2 }}px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    #bb-blog-{{ section.id }} .bb-blog__heading {
+      font-size: {{ section.settings.heading_size_mobile | default: 28 }}px;
+    }
+  }
+
+  #bb-blog-{{ section.id }} .bb-container {
+    max-width: var(--blog-max-width);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__inner {
+    width: 100%;
+    {%- if section.settings.alignment == 'left' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__badge {
+    display: inline-block;
+    background-color: var(--blog-badge-bg);
+    color: var(--blog-badge-text);
+    border: 1px solid var(--blog-badge-border);
+    border-radius: var(--blog-badge-radius);
+    font-size: var(--blog-badge-size);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 6px 16px;
+    margin-bottom: var(--blog-badge-margin);
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__heading {
+    font-size: var(--blog-heading-size);
+    font-weight: var(--blog-heading-weight);
+    color: var(--blog-heading-color);
+    margin: 0 0 var(--blog-heading-margin) 0;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    text-align: inherit;
+    width: 100%;
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--blog-cols-desktop), 1fr);
+    gap: var(--blog-gap);
+    width: 100%;
+    text-align: left;
+  }
+
+  @media (max-width: 990px) {
+    #bb-blog-{{ section.id }} .bb-blog__grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    #bb-blog-{{ section.id }} .bb-blog__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__card {
+    background-color: var(--blog-card-bg);
+    border: 1px solid var(--blog-card-border);
+    border-radius: var(--blog-card-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__card:hover {
+    border-color: var(--blog-card-hover-border);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__media {
+    width: 100%;
+    aspect-ratio: {{ section.settings.card_image_aspect | default: '16/10' }};
+    overflow: hidden;
+    background-color: #f0f0f0;
+    position: relative;
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__card:hover .bb-blog__media img {
+    transform: scale(1.04);
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__content {
+    padding: var(--blog-card-padding);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__read-time {
+    font-size: var(--blog-readtime-size);
+    color: var(--blog-readtime-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--blog-readtime-margin);
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__title {
+    font-size: var(--blog-title-size);
+    font-weight: var(--blog-title-weight);
+    color: var(--blog-title-color);
+    margin: 0 0 var(--blog-title-margin) 0;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+  }
+
+  #bb-blog-{{ section.id }} .bb-blog__excerpt {
+    font-size: var(--blog-excerpt-size);
+    color: var(--blog-excerpt-color);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-blog-{{ section.id }}"
+  class="bb-section bb-blog {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    <div class="bb-blog__inner">
+
+      <!-- Subheading / Badge -->
+      {%- if section.settings.subheading != blank -%}
+        <div class="bb-blog__badge">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+
+      <!-- Main Heading with Highlight Support -->
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-blog__heading">
+          {%- assign h_text = section.settings.heading -%}
+          {%- assign h_highlight = section.settings.heading_highlight_color | default: '#FF5A1F' -%}
+          {%- if section.settings.heading_highlight_words != blank -%}
+            {%- assign words = section.settings.heading_highlight_words | split: "," -%}
+            {%- for w in words -%}
+              {%- assign clean_w = w | strip -%}
+              {%- assign span_w = '<span style="color:' | append: h_highlight | append: ';">' | append: clean_w | append: '</span>' -%}
+              {%- assign h_text = h_text | replace: clean_w, span_w -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign span_latest = '<span style="color:' | append: h_highlight | append: ';">latest</span>' -%}
+            {%- assign span_blog = '<span style="color:' | append: h_highlight | append: ';">blog</span>' -%}
+            {%- assign h_text = h_text | replace: "latest", span_latest | replace: "Latest", span_latest | replace: "blog", span_blog | replace: "Blog", span_blog -%}
+          {%- endif -%}
+          {{ h_text }}
+        </h2>
+      {%- endif -%}
+
+      <!-- Grid of Articles -->
+      <div class="bb-blog__grid">
+        {%- assign sel_blog = blogs[section.settings.blog] -%}
+        
+        {%- if sel_blog != blank and sel_blog.articles_count > 0 -%}
+          <!-- 1. DYNAMIC SHOPIFY BLOG ARTICLES -->
+          {%- for article in sel_blog.articles limit: section.settings.articles_to_show -%}
+            <a href="{{ article.url }}" class="bb-blog__card">
+              <div class="bb-blog__media">
+                {%- if article.image != blank -%}
+                  <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title | escape }}" loading="lazy">
+                {%- else -%}
+                  <div class="bb-placeholder-bg" style="width:100%;height:100%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;color:#888;">No Image</div>
+                {%- endif -%}
+              </div>
+              <div class="bb-blog__content">
+                <div class="bb-blog__read-time">
+                  {%- assign words_count = article.content | strip_html | split: ' ' | size -%}
+                  {%- assign read_mins = words_count | divided_by: 200 | at_least: 1 -%}
+                  {{ read_mins }} MINS READ
+                </div>
+                <h3 class="bb-blog__title">{{ article.title }}</h3>
+                {%- if article.excerpt != blank -%}
+                  <p class="bb-blog__excerpt">{{ article.excerpt | strip_html }}</p>
+                {%- else -%}
+                  <p class="bb-blog__excerpt">{{ article.content | strip_html | truncatewords: 20 }}</p>
+                {%- endif -%}
+              </div>
+            </a>
+          {%- endfor -%}
+
+        {%- elsif section.blocks.size > 0 -%}
+          <!-- 2. MANUAL BLOCKS -->
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'article_card' -%}
+              <a href="{{ block.settings.url | default: '#' }}" class="bb-blog__card" {{ block.shopify_attributes }}>
+                <div class="bb-blog__media">
+                  {%- if block.settings.image != blank -%}
+                    <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+                  {%- elsif block.settings.image_url_fallback != blank -%}
+                    <img src="{{ block.settings.image_url_fallback }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+                  {%- else -%}
+                    <div style="width:100%;height:100%;background:#E8E8E8;display:flex;align-items:center;justify-content:center;color:#999;font-weight:600;">Blog Image</div>
+                  {%- endif -%}
+                </div>
+                <div class="bb-blog__content">
+                  {%- if block.settings.read_time != blank -%}
+                    <div class="bb-blog__read-time">{{ block.settings.read_time }}</div>
+                  {%- endif -%}
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="bb-blog__title">{{ block.settings.title }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.excerpt != blank -%}
+                    <p class="bb-blog__excerpt">{{ block.settings.excerpt }}</p>
+                  {%- endif -%}
+                </div>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+
+        {%- else -%}
+          <!-- 3. REFERENCE DEFAULT FALLBACK CARDS -->
+          <a href="#" class="bb-blog__card">
+            <div class="bb-blog__media">
+              <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop" alt="Rethinking modern haircare" loading="lazy">
+            </div>
+            <div class="bb-blog__content">
+              <div class="bb-blog__read-time">2 MINS READ</div>
+              <h3 class="bb-blog__title">Rethinking modern haircare</h3>
+              <p class="bb-blog__excerpt">Haircare shouldn't feel like a complicated ritual. At Hair Dare You, we believe the future belongs to simple, effective science.</p>
+            </div>
+          </a>
+
+          <a href="#" class="bb-blog__card">
+            <div class="bb-blog__media">
+              <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=800&auto=format&fit=crop" alt="Rethinking modern haircare" loading="lazy">
+            </div>
+            <div class="bb-blog__content">
+              <div class="bb-blog__read-time">2 MINS READ</div>
+              <h3 class="bb-blog__title">Rethinking modern haircare</h3>
+              <p class="bb-blog__excerpt">Haircare shouldn't feel like a complicated ritual. At Hair Dare You, we believe the future belongs to simple, effective science.</p>
+            </div>
+          </a>
+
+          <a href="#" class="bb-blog__card">
+            <div class="bb-blog__media">
+              <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop" alt="Rethinking modern haircare" loading="lazy">
+            </div>
+            <div class="bb-blog__content">
+              <div class="bb-blog__read-time">2 MINS READ</div>
+              <h3 class="bb-blog__title">Rethinking modern haircare</h3>
+              <p class="bb-blog__excerpt">Haircare shouldn't feel like a complicated ritual. At Hair Dare You, we believe the future belongs to simple, effective science.</p>
+            </div>
+          </a>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Blog Section",
+  "tag": "section",
+  "class": "bb-section-blog",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Select Shopify Blog (Dynamic)",
+      "info": "If selected, recent articles will automatically pull from this Shopify blog."
+    },
+    {
+      "type": "range",
+      "id": "articles_to_show",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Articles to Show (Dynamic Mode)",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1200
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Subheading Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Badge Text",
+      "default": "BLOG AND ARTICLE"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Read our latest blog and articles"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight_words",
+      "label": "Custom Highlight Words (comma separated)",
+      "info": "Leave blank to auto-highlight 'latest' and 'blog'."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "heading_highlight_color",
+      "label": "Heading Highlight Color",
+      "default": "#FF5A1F"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Grid & Card Options"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Columns — Desktop",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Grid Gap",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#EFEFEF"
+    },
+    {
+      "type": "color",
+      "id": "card_border_hover_color",
+      "label": "Card Border Color (Hover)",
+      "default": "#FF5A1F"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Padding",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "card_image_aspect",
+      "label": "Card Image Aspect Ratio",
+      "default": "16/10",
+      "options": [
+        { "value": "16/10", "label": "Landscape (16:10)" },
+        { "value": "4/3", "label": "Standard (4:3)" },
+        { "value": "1/1", "label": "Square (1:1)" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Read Time / Category Badge Options"
+    },
+    {
+      "type": "color",
+      "id": "read_time_color",
+      "label": "Read Time Text Color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "read_time_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Read Time Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "read_time_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Read Time Margin Bottom",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Article Typography"
+    },
+    {
+      "type": "color",
+      "id": "article_title_color",
+      "label": "Article Title Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "article_title_size",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Article Title Font Size",
+      "default": 22
+    },
+    {
+      "type": "select",
+      "id": "article_title_weight",
+      "label": "Article Title Weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "article_title_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Article Title Margin Bottom",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "article_excerpt_color",
+      "label": "Article Excerpt Color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "article_excerpt_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Article Excerpt Font Size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Section Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#FAF5F5"
+    },
+    {
+      "type": "range",
+      "id": "margin_x",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Side Margin - Desktop (equal left and right)",
+      "default": 108
+    },
+    {
+      "type": "range",
+      "id": "margin_x_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Side Margin - Mobile (equal left and right)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Section Corner Radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article_card",
+      "name": "Custom Article Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Article Image"
+        },
+        {
+          "type": "text",
+          "id": "image_url_fallback",
+          "label": "Optional Image URL Fallback"
+        },
+        {
+          "type": "text",
+          "id": "read_time",
+          "label": "Read Time / Badge",
+          "default": "2 MINS READ"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Article Title",
+          "default": "Rethinking modern haircare"
+        },
+        {
+          "type": "textarea",
+          "id": "excerpt",
+          "label": "Article Excerpt",
+          "default": "Haircare shouldn't feel like a complicated ritual. At Hair Dare You, we believe the future belongs to simple, effective science."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Article Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Blog Section",
+      "blocks": [
+        {
+          "type": "article_card",
+          "settings": {
+            "read_time": "2 MINS READ",
+            "title": "Rethinking modern haircare",
+            "excerpt": "Haircare shouldn't feel like a complicated ritual. At Hair Dare You, we believe the future belongs to simple, effective science."
+          }
+        },
+        {
+          "type": "article_card",
+          "settings": {
+            "read_time": "2 MINS READ",
+            "title": "Rethinking modern haircare",
+            "excerpt": "Haircare shouldn't feel like a complicated ritual. At Hair Dare You, we believe the future belongs to simple, effective science."
+          }
+        },
+        {
+          "type": "article_card",
+          "settings": {
+            "read_time": "2 MINS READ",
+            "title": "Rethinking modern haircare",
+            "excerpt": "Haircare shouldn't feel like a complicated ritual. At Hair Dare You, we believe the future belongs to simple, effective science."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -115,38 +115,186 @@
   "tag": "section",
   "class": "bb-section-filtration",
   "settings": [
-    { "type": "header", "content": "Section Control" },
-    { "type": "checkbox", "id": "enable_section", "label": "Enable Section", "default": true },
-    { "type": "text", "id": "custom_class", "label": "Custom CSS Class" },
-    { "type": "header", "content": "Content" },
-    { "type": "text", "id": "subheading", "label": "Subheading", "default": "How It Works" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Multi-Stage Filtration Technology" },
-    { "type": "richtext", "id": "body_text", "label": "Body Text", "default": "<p>Splash uses a 5-stage filtration process to remove chlorine, heavy metals, and bacteria — while infusing your shower water with skin-loving vitamins.</p>" },
-    { "type": "image_picker", "id": "image", "label": "Filtration Image / Diagram" },
-    { "type": "text", "id": "button_text", "label": "Button Text" },
-    { "type": "url", "id": "button_url", "label": "Button URL" },
-    { "type": "header", "content": "Layout" },
-    { "type": "select", "id": "image_position", "label": "Image Position", "default": "left", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}] },
-    { "type": "header", "content": "Colors" },
-    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#f8f8f8" },
-    { "type": "color", "id": "heading_color", "label": "Heading Color", "default": "#1a1a1a" },
-    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#444444" },
-    { "type": "color", "id": "accent_color", "label": "Accent Color", "default": "#622229" },
-    { "type": "header", "content": "Typography" },
-    { "type": "range", "id": "heading_size_desktop", "min": 20, "max": 64, "step": 2, "unit": "px", "label": "Heading Size — Desktop", "default": 40 },
-    { "type": "range", "id": "heading_size_mobile", "min": 18, "max": 40, "step": 2, "unit": "px", "label": "Heading Size — Mobile", "default": 26 },
-    { "type": "header", "content": "Spacing" },
-    { "type": "range", "id": "padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Padding Top — Desktop", "default": 80 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Padding Bottom — Desktop", "default": 80 },
-    { "type": "range", "id": "padding_top_mobile", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding Top — Mobile", "default": 48 },
-    { "type": "range", "id": "padding_bottom_mobile", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding Bottom — Mobile", "default": 48 }
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "How It Works"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Multi-Stage Filtration Technology"
+    },
+    {
+      "type": "richtext",
+      "id": "body_text",
+      "label": "Body Text",
+      "default": "<p>Splash uses a 5-stage filtration process to remove chlorine, heavy metals, and bacteria — while infusing your shower water with skin-loving vitamins.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Filtration Image / Diagram"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#444444"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#622229"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 26
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 48
+    }
   ],
   "blocks": [
     {
       "type": "filtration_point",
       "name": "Filtration Point",
       "settings": [
-        { "type": "text", "id": "text", "label": "Point Text", "default": "Stage 1: KDF media removes chlorine & heavy metals" }
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Point Text",
+          "default": "Stage 1: KDF media removes chlorine & heavy metals"
+        }
       ]
     }
   ],
@@ -154,11 +302,36 @@
     {
       "name": "BB Filtration",
       "blocks": [
-        { "type": "filtration_point", "settings": { "text": "Stage 1: KDF media removes chlorine & heavy metals" } },
-        { "type": "filtration_point", "settings": { "text": "Stage 2: Calcium sulfite removes residual chlorine" } },
-        { "type": "filtration_point", "settings": { "text": "Stage 3: Vitamin C ball infuses shower water with antioxidants" } },
-        { "type": "filtration_point", "settings": { "text": "Stage 4: Mineral ceramic balls balance pH level" } },
-        { "type": "filtration_point", "settings": { "text": "Stage 5: Lavender-infused final filter for aromatherapy" } }
+        {
+          "type": "filtration_point",
+          "settings": {
+            "text": "Stage 1: KDF media removes chlorine & heavy metals"
+          }
+        },
+        {
+          "type": "filtration_point",
+          "settings": {
+            "text": "Stage 2: Calcium sulfite removes residual chlorine"
+          }
+        },
+        {
+          "type": "filtration_point",
+          "settings": {
+            "text": "Stage 3: Vitamin C ball infuses shower water with antioxidants"
+          }
+        },
+        {
+          "type": "filtration_point",
+          "settings": {
+            "text": "Stage 4: Mineral ceramic balls balance pH level"
+          }
+        },
+        {
+          "type": "filtration_point",
+          "settings": {
+            "text": "Stage 5: Lavender-infused final filter for aromatherapy"
+          }
+        }
       ]
     }
   ]
