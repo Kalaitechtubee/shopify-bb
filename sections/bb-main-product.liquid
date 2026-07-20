@@ -57,6 +57,7 @@
     --btn-border-radius: {{ section.settings.btn_border_radius }}px;
     --btn-padding-y: {{ section.settings.btn_padding_y }}px;
     --btn-padding-x: {{ section.settings.btn_padding_x }}px;
+    --btn-offset: {{ section.settings.btn_offset | default: 6 }}px;
 
     /* Quantity variables */
     --qty-bg: {{ section.settings.qty_bg_color }};
@@ -121,7 +122,7 @@
   /* Quantity buttons style overrides */
   #bb-product-hero-{{ section.id }} .bb-quantity {
     background: var(--qty-bg);
-    border-color: var(--qty-border-color);
+    border: 1.5px solid var(--qty-border-color);
     color: var(--qty-text-color);
     width: var(--qty-width);
     height: var(--qty-height);
@@ -131,22 +132,53 @@
   #bb-product-hero-{{ section.id }} .bb-quantity__input {
     color: var(--qty-text-color);
   }
+  #bb-product-hero-{{ section.id }} .bb-quantity__input {
+    border-left: 1.5px solid var(--qty-border-color);
+    border-right: 1.5px solid var(--qty-border-color);
+  }
 
   /* CTA buttons overrides */
+  .bb-btn-neobrutalist-wrapper {
+    position: relative;
+    width: 100%;
+    {%- if section.settings.enable_neobrutalist_btn -%}
+      background-color: var(--btn-hover-bg, #622229);
+    {%- else -%}
+      background-color: transparent;
+    {%- endif -%}
+    border-radius: var(--btn-border-radius);
+    display: block;
+  }
   #bb-product-hero-{{ section.id }} .bb-btn--primary-custom {
     background-color: var(--btn-bg);
     color: var(--btn-text);
-    border: 2px solid var(--btn-bg);
+    border: none;
     border-radius: var(--btn-border-radius);
     height: var(--btn-height);
     font-size: var(--btn-font-size);
     padding: var(--btn-padding-y) var(--btn-padding-x);
-    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    transform: translate(0, 0);
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    {%- if section.settings.enable_neobrutalist_btn -%}
+      transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    {%- else -%}
+      transition: background-color 0.25s ease, color 0.25s ease;
+    {%- endif -%}
   }
   #bb-product-hero-{{ section.id }} .bb-btn--primary-custom:hover {
-    background-color: #ffffff;
-    color: var(--btn-bg);
-    border-color: var(--btn-bg);
+    {%- if section.settings.enable_neobrutalist_btn -%}
+      transform: translate(calc(-1 * var(--btn-offset)), calc(-1 * var(--btn-offset)));
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+    {%- else -%}
+      background-color: var(--btn-hover-bg);
+      color: var(--btn-text);
+    {%- endif -%}
+  }
+  #bb-product-hero-{{ section.id }} .bb-btn--primary-custom[disabled]:hover {
+    transform: none;
   }
 
   @media (min-width: 768px) {
@@ -372,19 +404,21 @@
 
             <!-- Add to Cart -->
             <div class="bb-product-cta">
-              <button
-                type="submit"
-                name="add"
-                class="bb-btn bb-btn--primary-custom bb-btn--full"
-                {% if current_variant.available == false %}disabled{% endif %}
-                style="display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;"
-              >
-                {%- if current_variant.available -%}
-                  {{ section.settings.add_to_cart_text | default: 'Add to Cart' }}
-                {%- else -%}
-                  Sold Out
-                {%- endif -%}
-              </button>
+              <div class="bb-btn-neobrutalist-wrapper">
+                <button
+                  type="submit"
+                  name="add"
+                  class="bb-btn bb-btn--primary-custom bb-btn--full"
+                  {% if current_variant.available == false %}disabled{% endif %}
+                  style="display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;"
+                >
+                  {%- if current_variant.available -%}
+                    {{ section.settings.add_to_cart_text | default: 'Add to Cart' }}
+                  {%- else -%}
+                    Sold Out
+                  {%- endif -%}
+                </button>
+              </div>
             </div>
 
           {%- endform -%}
@@ -413,6 +447,54 @@
                 </button>
                 <div class="bb-accordion-v2__content bb-rte">
                   {{ block.settings.content }}
+                  {%- liquid
+                    assign display_video = false
+                    assign is_hosted = false
+                    
+                    if block.settings.video_type == 'hosted'
+                      if block.settings.hosted_video != blank
+                        assign display_video = true
+                        assign is_hosted = true
+                      endif
+                    elsif block.settings.video_type == 'youtube'
+                      if block.settings.video_url != blank
+                        assign display_video = true
+                      endif
+                    elsif block.settings.video_type == 'auto' or block.settings.video_type == blank
+                      if block.settings.hosted_video != blank
+                        assign display_video = true
+                        assign is_hosted = true
+                      elsif block.settings.video_url != blank
+                        assign display_video = true
+                      endif
+                    endif
+                  -%}
+                  
+                  {%- if display_video -%}
+                    <div class="bb-accordion-v2__video-wrapper">
+                      {%- if is_hosted -%}
+                        {{ block.settings.hosted_video | video_tag: autoplay: false, loop: true, muted: true, playsinline: true, controls: true, class: "bb-accordion-v2__video" }}
+                      {%- else -%}
+                        {%- if block.settings.video_url.type == 'youtube' -%}
+                          <iframe
+                            src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}?autoplay=0&mute=1&loop=1&playlist={{ block.settings.video_url.id }}&playsinline=1"
+                            class="bb-accordion-v2__iframe"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen
+                            title="{{ block.settings.title | escape }}"
+                          ></iframe>
+                        {%- elsif block.settings.video_url.type == 'vimeo' -%}
+                          <iframe
+                            src="https://player.vimeo.com/video/{{ block.settings.video_url.id }}?autoplay=0&muted=1&loop=1&playsinline=1"
+                            class="bb-accordion-v2__iframe"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen
+                            title="{{ block.settings.title | escape }}"
+                          ></iframe>
+                        {%- endif -%}
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
                 </div>
               </div>
             {%- endfor -%}
@@ -828,6 +910,22 @@
       "default": "#333333"
     },
     {
+      "type": "checkbox",
+      "id": "enable_neobrutalist_btn",
+      "label": "Enable 3D Offset Button Hover Effect",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "btn_offset",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Hover Offset Distance",
+      "default": 6
+    },
+    {
       "type": "color",
       "id": "btn_text_color",
       "label": "Button Text Color",
@@ -1195,6 +1293,29 @@
           "type": "image_picker",
           "id": "icon_image",
           "label": "Accordion Custom Icon (optional file upload)"
+        },
+        {
+          "type": "select",
+          "id": "video_type",
+          "label": "Video Type",
+          "default": "auto",
+          "options": [
+            { "value": "auto", "label": "Auto-detect (Recommended)" },
+            { "value": "hosted", "label": "Hosted Video (Upload)" },
+            { "value": "youtube", "label": "YouTube / Vimeo" },
+            { "value": "none", "label": "None (Hide Video)" }
+          ]
+        },
+        {
+          "type": "video",
+          "id": "hosted_video",
+          "label": "Hosted Video (Shopify Upload)"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "Video URL (YouTube or Vimeo)",
+          "accept": ["youtube", "vimeo"]
         }
       ]
     }

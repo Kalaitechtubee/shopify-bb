@@ -1,14 +1,26 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign _bb_meta = product.metafields.custom.problems.value -%}
+{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
+  {%- assign bg_color = section.settings.background_color -%}
+  {%- if bg_color == '#FAF5F5' or bg_color == '#ffffff' or bg_color == '#FFFFFF' or bg_color == blank -%}
+    {%- assign bg_color = '#FAF0F0' -%}
+  {%- endif -%}
+
   #bb-recognise-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile | default: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 0 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 0 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
     
     /* CSS Variables mapping for complete customization */
-    --rec-bg: {{ section.settings.background_color }};
+    --rec-bg: {{ bg_color }};
     --rec-max-width: {{ section.settings.container_max_width }}px;
     
     --rec-badge-bg: {{ section.settings.badge_bg_color }};
@@ -28,6 +40,7 @@
     
     --rec-card-bg: {{ section.settings.card_bg_color }};
     --rec-card-border: {{ section.settings.card_border_color }};
+    --rec-card-border-hover: {{ section.settings.card_border_hover_color }};
     --rec-card-radius: {{ section.settings.card_border_radius }}px;
     --rec-card-padding: {{ section.settings.card_padding }}px;
     
@@ -35,19 +48,88 @@
     --rec-bullet-color: {{ section.settings.bullet_color }};
     
     --rec-text-size: {{ section.settings.card_text_size }}px;
-    --rec-text-weight: {{ section.settings.card_text_weight }};
+    --rec-text-weight: {{ section.settings.card_text_weight }}px;
     --rec-text-color: {{ section.settings.text_color }};
   }
   @media (min-width: 768px) {
     #bb-recognise-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      {%- unless section.settings.full_width -%}
+        max-width: var(--page-width, 1200px);
+        margin-left: auto;
+        margin-right: auto;
+      {%- endunless -%}
     }
   }
   @media (max-width: 768px) {
     #bb-recognise-{{ section.id }} .bb-recognise-v2__heading {
       font-size: {{ section.settings.heading_size_mobile }}px;
     }
+  }
+
+  #bb-recognise-{{ section.id }} .bb-container {
+    max-width: var(--rec-max-width);
+    width: 100%;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto;
+      margin-right: 0;
+    {%- endif -%}
+  }
+
+  #bb-recognise-{{ section.id }} .bb-recognise-v2__inner {
+    max-width: var(--rec-max-width);
+    width: 100%;
+    margin-left: inherit;
+    margin-right: inherit;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-recognise-{{ section.id }} .bb-recognise-v2__heading {
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    color: #17123B;
+  }
+  #bb-recognise-{{ section.id }} .bb-recognise-v2__heading .bb-heading-maroon {
+    color: #6B2430;
+    display: block;
+  }
+
+  #bb-recognise-{{ section.id }} .bb-recognise-v2__grid {
+    text-align: left;
+  }
+  #bb-recognise-{{ section.id }} .bb-recognise-v2__card:hover {
+    border-color: var(--rec-card-border-hover);
   }
 {%- endstyle -%}
 
@@ -57,7 +139,7 @@
   data-section-id="{{ section.id }}"
 >
   <div class="bb-container">
-    <div class="bb-recognise-v2__inner bb-text-center">
+    <div class="bb-recognise-v2__inner">
       
       <!-- Subheading Badge -->
       {%- if section.settings.subheading != blank -%}
@@ -66,45 +148,98 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-recognise-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-recognise-v2__heading">
+          {%- assign h_lower = section.settings.heading | downcase -%}
+          {%- if h_lower contains "perfect if" and h_lower contains "recognise" -%}
+            {%- if h_lower contains " recognise " -%}
+              {%- assign first_part = section.settings.heading | split: " recognise " | first -%}
+              {%- assign second_part = section.settings.heading | split: first_part | last -%}
+              {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part | strip }}</span>
+            {%- else -%}
+              {{ section.settings.heading }}
+            {%- endif -%}
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Grid -->
       <div class="bb-recognise-v2__grid">
-        {%- if section.blocks.size > 0 -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'problem' -%}
-              <div class="bb-recognise-v2__card bb-fade-in" {{ block.shopify_attributes }}>
-                <span class="bb-recognise-v2__card-icon">
-                  {%- if block.settings.custom_icon != blank -%}
-                    <img src="{{ block.settings.custom_icon | image_url: width: 48 }}" alt="" loading="lazy">
-                  {%- else -%}
-                    {%- if section.settings.bullet_icon_type == 'checkmark' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    {%- elsif section.settings.bullet_icon_type == 'cross' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    {%- elsif section.settings.bullet_icon_type == 'dot' -%}
+        {%- if section.settings.use_default_content -%}
+          <!-- 6 Default Cards to match reference image -->
+          <div class="bb-recognise-v2__card bb-fade-in">
+            <span class="bb-recognise-v2__card-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+            </span>
+            <p class="bb-recognise-v2__card-text">Hair fall due to stress, water, or lifestyle</p>
+          </div>
+          <div class="bb-recognise-v2__card bb-fade-in">
+            <span class="bb-recognise-v2__card-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+            </span>
+            <p class="bb-recognise-v2__card-text">Thinning hairline or widening partition</p>
+          </div>
+          <div class="bb-recognise-v2__card bb-fade-in">
+            <span class="bb-recognise-v2__card-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+            </span>
+            <p class="bb-recognise-v2__card-text">Slow or no regrowth despite treatments</p>
+          </div>
+          <div class="bb-recognise-v2__card bb-fade-in">
+            <span class="bb-recognise-v2__card-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+            </span>
+            <p class="bb-recognise-v2__card-text">Weak roots or frequent breakage</p>
+          </div>
+          <div class="bb-recognise-v2__card bb-fade-in">
+            <span class="bb-recognise-v2__card-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+            </span>
+            <p class="bb-recognise-v2__card-text">Patchy hair density</p>
+          </div>
+          <div class="bb-recognise-v2__card bb-fade-in">
+            <span class="bb-recognise-v2__card-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+            </span>
+            <p class="bb-recognise-v2__card-text">Undergoing or planning hair treatments</p>
+          </div>
+        {%- else -%}
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'problem' -%}
+                <div class="bb-recognise-v2__card bb-fade-in" {{ block.shopify_attributes }}>
+                  <span class="bb-recognise-v2__card-icon">
+                    {%- if block.settings.custom_icon != blank -%}
+                      <img src="{{ block.settings.custom_icon | image_url: width: 48 }}" alt="" loading="lazy">
+                    {%- else -%}
+                      {%- if section.settings.bullet_icon_type == 'checkmark' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      {%- elsif section.settings.bullet_icon_type == 'cross' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      {%- elsif section.settings.bullet_icon_type == 'dot' -%}
+                        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </span>
+                  <p class="bb-recognise-v2__card-text">{{ block.settings.text }}</p>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign probs_meta = product.metafields.custom.problem_items.value -%}
+            {%- if probs_meta != blank -%}
+              {%- for item in probs_meta -%}
+                <div class="bb-recognise-v2__card bb-fade-in">
+                  <span class="bb-recognise-v2__card-icon">
+                    {%- if section.settings.bullet_icon_type == 'dot' -%}
                       <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
                     {%- endif -%}
-                  {%- endif -%}
-                </span>
-                <p class="bb-recognise-v2__card-text">{{ block.settings.text }}</p>
-              </div>
+                  </span>
+                  <p class="bb-recognise-v2__card-text">{{ item }}</p>
+                </div>
+              {%- endfor -%}
             {%- endif -%}
-          {%- endfor -%}
-        {%- else -%}
-          {%- assign probs_meta = product.metafields.custom.problem_items.value -%}
-          {%- if probs_meta != blank -%}
-            {%- for item in probs_meta -%}
-              <div class="bb-recognise-v2__card bb-fade-in">
-                <span class="bb-recognise-v2__card-icon">
-                  {%- if section.settings.bullet_icon_type == 'dot' -%}
-                    <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
-                  {%- endif -%}
-                </span>
-                <p class="bb-recognise-v2__card-text">{{ item }}</p>
-              </div>
-            {%- endfor -%}
           {%- endif -%}
         {%- endif -%}
       </div>
@@ -113,6 +248,7 @@
   </div>
 </section>
 
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
 {%- endunless -%}
 
 {% schema %}
@@ -140,11 +276,29 @@
       "type": "range",
       "id": "container_max_width",
       "min": 400,
-      "max": 1200,
+      "max": 1600,
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 1000
+      "default": 1280
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_default_content",
+      "label": "Use Default Reference Content",
+      "info": "If enabled, this will render the exact 6 items from the reference design (2 columns, 3 rows).",
+      "default": true
     },
     {
       "type": "header",
@@ -198,11 +352,11 @@
       "type": "range",
       "id": "badge_margin_bottom",
       "min": 0,
-      "max": 60,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 26
     },
     {
       "type": "header",
@@ -224,21 +378,21 @@
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 100,
       "step": 2,
       "unit": "px",
-      "label": "Heading Size — Desktop",
-      "default": 36
+      "label": "Heading Size â€” Desktop",
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
-      "max": 40,
+      "min": 16,
+      "max": 60,
       "step": 2,
       "unit": "px",
-      "label": "Heading Size — Mobile",
-      "default": 26
+      "label": "Heading Size â€” Mobile",
+      "default": 42
     },
     {
       "type": "select",
@@ -249,18 +403,19 @@
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
         { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
       ]
     },
     {
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 32
+      "default": 48
     },
     {
       "type": "header",
@@ -272,7 +427,7 @@
       "min": 1,
       "max": 4,
       "step": 1,
-      "label": "Columns — Desktop",
+      "label": "Columns â€” Desktop",
       "default": 2
     },
     {
@@ -299,7 +454,13 @@
       "type": "color",
       "id": "card_border_color",
       "label": "Card Border Color",
-      "default": "#efefef"
+      "default": "#F1E4E3"
+    },
+    {
+      "type": "color",
+      "id": "card_border_hover_color",
+      "label": "Card Border Color (Hover)",
+      "default": "#6B2430"
     },
     {
       "type": "range",
@@ -309,7 +470,7 @@
       "step": 1,
       "unit": "px",
       "label": "Card Border Radius",
-      "default": 12
+      "default": 18
     },
     {
       "type": "range",
@@ -319,7 +480,7 @@
       "step": 2,
       "unit": "px",
       "label": "Card Padding",
-      "default": 20
+      "default": 24
     },
     {
       "type": "header",
@@ -341,17 +502,17 @@
       "type": "color",
       "id": "bullet_color",
       "label": "Bullet Icon Color",
-      "default": "#622229"
+      "default": "#6B2430"
     },
     {
       "type": "range",
       "id": "bullet_icon_size",
-      "min": 8,
+      "min": 4,
       "max": 32,
       "step": 1,
       "unit": "px",
       "label": "Bullet Icon Size",
-      "default": 10
+      "default": 8
     },
     {
       "type": "header",
@@ -361,7 +522,7 @@
       "type": "color",
       "id": "text_color",
       "label": "Card Text Color",
-      "default": "#1a1a1a"
+      "default": "#17123B"
     },
     {
       "type": "range",
@@ -371,13 +532,13 @@
       "step": 1,
       "unit": "px",
       "label": "Card Text Font Size",
-      "default": 15
+      "default": 16
     },
     {
       "type": "select",
       "id": "card_text_weight",
       "label": "Card Text Weight",
-      "default": "500",
+      "default": "600",
       "options": [
         { "value": "400", "label": "Regular" },
         { "value": "500", "label": "Medium" },
@@ -393,7 +554,13 @@
       "type": "color",
       "id": "background_color",
       "label": "Section Background Color",
-      "default": "#FAF5F5"
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make Section Full Width",
+      "default": false
     },
     {
       "type": "range",
@@ -402,7 +569,7 @@
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top — Desktop",
+      "label": "Padding Top â€” Desktop",
       "default": 80
     },
     {
@@ -412,8 +579,28 @@
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom — Desktop",
+      "label": "Padding Bottom â€” Desktop",
       "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left â€” Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right â€” Desktop",
+      "default": 40
     },
     {
       "type": "range",
@@ -422,7 +609,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top — Mobile",
+      "label": "Padding Top â€” Mobile",
       "default": 48
     },
     {
@@ -432,8 +619,68 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom — Mobile",
+      "label": "Padding Bottom â€” Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left â€” Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right â€” Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top â€” Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom â€” Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top â€” Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom â€” Mobile",
+      "default": 0
     }
   ],
   "blocks": [

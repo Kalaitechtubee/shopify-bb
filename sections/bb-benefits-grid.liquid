@@ -1,6 +1,9 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign _bb_meta = product.metafields.custom.benefits.value -%}
+{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
   #bb-benefits-{{ section.id }} {
@@ -28,6 +31,7 @@
     
     --results-card-bg: {{ section.settings.card_bg_color }};
     --results-card-border: {{ section.settings.card_border_color }};
+    --results-card-border-hover: {{ section.settings.card_border_hover_color | default: '#622229' }};
     --results-card-radius: {{ section.settings.card_border_radius }}px;
     --results-card-padding: {{ section.settings.card_padding }}px;
     
@@ -43,14 +47,46 @@
   }
   @media (min-width: 768px) {
     #bb-benefits-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      {%- unless section.settings.full_width -%}
+        max-width: var(--page-width, 1200px);
+        margin-left: auto;
+        margin-right: auto;
+      {%- endunless -%}
     }
   }
   @media (max-width: 768px) {
     #bb-benefits-{{ section.id }} .bb-results-v2__heading {
-      font-size: {{ section.settings.heading_size_mobile }}px;
+      font-size: {{ section.settings.heading_size_mobile | default: 32 }}px;
     }
+  }
+  #bb-benefits-{{ section.id }} .bb-container {
+    max-width: var(--results-max-width); width: 100%;
+    {%- if section.settings.alignment == 'center' -%}margin-left: auto; margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}margin-left: auto; margin-right: 0;
+    {%- else -%}margin-left: 0; margin-right: auto;{%- endif -%}
+  }
+  #bb-benefits-{{ section.id }} .bb-results-v2__inner {
+    display: flex; flex-direction: column;
+    {%- if section.settings.alignment == 'center' -%}align-items: center; text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}align-items: flex-end; text-align: right;
+    {%- else -%}align-items: flex-start; text-align: left;{%- endif -%}
+  }
+  #bb-benefits-{{ section.id }} .bb-results-v2__heading {
+    font-size: var(--results-heading-size, 48px);
+    font-weight: var(--results-heading-weight, 800);
+    color: var(--results-heading-color, #17123B);
+    line-height: 1.1; letter-spacing: -1px;
+    text-align: inherit; width: 100%; margin-top: 0;
+    margin-bottom: var(--results-heading-margin, 40px);
+  }
+  #bb-benefits-{{ section.id }} .bb-heading-maroon {
+    color: #6B2430; display: block;
   }
 {%- endstyle -%}
 
@@ -60,7 +96,7 @@
   data-section-id="{{ section.id }}"
 >
   <div class="bb-container">
-    <div class="bb-results-v2__inner bb-text-center">
+    <div class="bb-results-v2__inner">
       
       <!-- Subheading Badge -->
       {%- if section.settings.subheading != blank -%}
@@ -69,7 +105,22 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-results-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-results-v2__heading">
+          {%- assign h_words = section.settings.heading | split: ' ' -%}
+          {%- assign total_words = h_words | size -%}
+          {%- if total_words >= 2 -%}
+            {%- if total_words <= 3 -%}
+              {%- assign mid = total_words | minus: 1 -%}
+            {%- else -%}
+              {%- assign mid = total_words | divided_by: 2 -%}
+            {%- endif -%}
+            {%- assign first_part = h_words | slice: 0, mid | join: ' ' -%}
+            {%- assign second_part = h_words | slice: mid, total_words | join: ' ' -%}
+            {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part }}</span>
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Benefits Grid (Using Results Grid styles) -->
@@ -77,17 +128,32 @@
         {%- if section.blocks.size > 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'benefit' -%}
+              {%- assign title_color = block.settings.title_color -%}
+              {%- assign title_size  = block.settings.title_font_size -%}
+              {%- assign desc_color  = block.settings.desc_color -%}
+              {%- assign desc_size   = block.settings.desc_font_size -%}
+              {%- assign bullet_color = block.settings.bullet_color -%}
+              {%- assign bullet_size  = block.settings.bullet_size -%}
               <div class="bb-results-v2__card bb-fade-in" {{ block.shopify_attributes }}>
                 
                 <!-- Title Row -->
                 <div class="bb-results-v2__card-title-wrap">
-                  <span class="bb-results-v2__card-bullet"></span>
-                  <h3 class="bb-results-v2__card-title">{{ block.settings.title }}</h3>
+                  <span class="bb-results-v2__card-bullet" style="
+                    {%- if bullet_color != blank -%}background-color: {{ bullet_color }};{%- endif -%}
+                    {%- if bullet_size != blank -%}width: {{ bullet_size }}px; height: {{ bullet_size }}px;{%- endif -%}
+                  "></span>
+                  <h3 class="bb-results-v2__card-title" style="
+                    {%- if title_color != blank -%}color: {{ title_color }};{%- endif -%}
+                    {%- if title_size != blank -%}font-size: {{ title_size }}px;{%- endif -%}
+                  ">{{ block.settings.title }}</h3>
                 </div>
 
                 <!-- Description -->
                 {%- if block.settings.description != blank -%}
-                  <p class="bb-results-v2__card-desc">{{ block.settings.description }}</p>
+                  <p class="bb-results-v2__card-desc" style="
+                    {%- if desc_color != blank -%}color: {{ desc_color }};{%- endif -%}
+                    {%- if desc_size != blank -%}font-size: {{ desc_size }}px;{%- endif -%}
+                  ">{{ block.settings.description }}</p>
                 {%- endif -%}
 
               </div>
@@ -115,6 +181,7 @@
   </div>
 </section>
 
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
 {%- endunless -%}
 
 {% schema %}
@@ -214,7 +281,7 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Results women notice within 2–3 weeks"
+      "default": "Results women notice within 2â€“3 weeks"
     },
     {
       "type": "color",
@@ -302,6 +369,12 @@
       "id": "card_border_color",
       "label": "Card Border Color",
       "default": "#efefef"
+    },
+    {
+      "type": "color",
+      "id": "card_border_hover_color",
+      "label": "Card Border Color (Hover)",
+      "default": "#622229"
     },
     {
       "type": "range",
@@ -402,6 +475,12 @@
       "default": "#ffffff"
     },
     {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make Section Full Width",
+      "default": false
+    },
+    {
       "type": "range",
       "id": "padding_top",
       "min": 0,
@@ -440,6 +519,97 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 0
     }
   ],
   "blocks": [
@@ -458,6 +628,58 @@
           "id": "description",
           "label": "Description",
           "default": "Eliminates up to 99.9% of chlorine that causes dry scalp, brittle hair and skin irritation."
+        },
+        {
+          "type": "header",
+          "content": "Styling overrides"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title Color",
+          "default": "#1a1a1a"
+        },
+        {
+          "type": "range",
+          "id": "title_font_size",
+          "min": 12,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Title Font Size",
+          "default": 18
+        },
+        {
+          "type": "color",
+          "id": "desc_color",
+          "label": "Description Color",
+          "default": "#666666"
+        },
+        {
+          "type": "range",
+          "id": "desc_font_size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Description Font Size",
+          "default": 15
+        },
+        {
+          "type": "color",
+          "id": "bullet_color",
+          "label": "Bullet Color",
+          "default": "#622229"
+        },
+        {
+          "type": "range",
+          "id": "bullet_size",
+          "min": 4,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Bullet Size",
+          "default": 8
         }
       ]
     }

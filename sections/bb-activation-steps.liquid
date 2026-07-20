@@ -1,6 +1,9 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign _bb_meta = product.metafields.custom.activation_steps.value -%}
+{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
   #bb-activation-{{ section.id }} {
@@ -23,7 +26,7 @@
     --act-num-bg: {{ section.settings.accent_color }};
     --act-num-color: {{ section.settings.num_text_color }};
     --act-num-size: {{ section.settings.num_circle_size }}px;
-    --act-num-radius: {{ section.settings.num_circle_radius }}%;
+    --act-num-radius: {{ section.settings.num_circle_radius }}px;
     --act-num-font-size: {{ section.settings.num_font_size }}px;
     
     --act-divider-width: {{ section.settings.divider_width }}px;
@@ -39,19 +42,94 @@
     --act-desc-size: {{ section.settings.desc_font_size }}px;
     --act-desc-color: {{ section.settings.desc_color }};
     
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile | default: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 0 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 0 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
   }
   @media (min-width: 768px) {
     #bb-activation-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      {%- unless section.settings.full_width -%}
+        max-width: var(--page-width, 1200px);
+        margin-left: auto;
+        margin-right: auto;
+      {%- endunless -%}
     }
   }
   @media (max-width: 768px) {
     #bb-activation-{{ section.id }} .bb-activation-v2__heading {
       font-size: {{ section.settings.heading_size_mobile }}px;
     }
+  }
+
+  #bb-activation-{{ section.id }} .bb-container {
+    max-width: var(--act-max-width);
+    width: 100%;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto;
+      margin-right: 0;
+    {%- endif -%}
+  }
+
+  #bb-activation-{{ section.id }} .bb-activation-v2__inner {
+    max-width: var(--act-max-width);
+    width: 100%;
+    margin-left: inherit;
+    margin-right: inherit;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-activation-{{ section.id }} .bb-activation-v2__heading {
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  #bb-activation-{{ section.id }} .bb-activation-v2__list {
+    text-align: left;
+    border-top: var(--act-divider-width, 1px) var(--act-divider-style, solid) var(--act-divider-color, #efefef);
+  }
+  #bb-activation-{{ section.id }} .bb-activation-v2__heading {
+    font-size: var(--act-heading-size, 72px);
+    font-weight: var(--act-heading-weight, 800);
+    line-height: 1.05;
+    letter-spacing: -2.5px;
+    color: #17123B;
+    margin-bottom: var(--act-heading-margin, 48px);
+  }
+  #bb-activation-{{ section.id }} .bb-activation-v2__heading .bb-heading-maroon {
+    color: #6B2430;
+    display: block;
+  }
+  #bb-activation-{{ section.id }} .bb-activation-v2__number {
+    border-radius: var(--act-num-radius, 10px);
+    flex-shrink: 0;
+    aspect-ratio: 1;
   }
 {%- endstyle -%}
 
@@ -70,7 +148,24 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-activation-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-activation-v2__heading">
+          {%- assign h_words = section.settings.heading | split: ' ' -%}
+          {%- assign total_words = h_words | size -%}
+          {%- if total_words >= 4 -%}
+            {%- assign mid = total_words | divided_by: 2 -%}
+            {%- assign first_part_arr = '' -%}
+            {%- for i in (0..mid) -%}
+              {%- unless forloop.first and forloop.last -%}
+              {%- endunless -%}
+            {%- endfor -%}
+            {%- comment %} Split heading: first ~half is dark, second ~half is maroon {% endcomment -%}
+            {%- assign first_part = h_words | slice: 0, mid | join: ' ' -%}
+            {%- assign second_part = h_words | slice: mid, total_words | join: ' ' -%}
+            {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part }}</span>
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Steps List -->
@@ -119,6 +214,7 @@
   </div>
 </section>
 
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
 {%- endunless -%}
 
 {% schema %}
@@ -146,11 +242,22 @@
       "type": "range",
       "id": "container_max_width",
       "min": 400,
-      "max": 1200,
+      "max": 1600,
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 800
+      "default": 1280
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
     },
     {
       "type": "header",
@@ -204,11 +311,11 @@
       "type": "range",
       "id": "badge_margin_bottom",
       "min": 0,
-      "max": 60,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 26
     },
     {
       "type": "header",
@@ -230,21 +337,21 @@
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 36
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
-      "max": 40,
+      "min": 16,
+      "max": 60,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 26
+      "default": 42
     },
     {
       "type": "select",
@@ -255,18 +362,19 @@
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
         { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
       ]
     },
     {
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 40
+      "default": 48
     },
     {
       "type": "header",
@@ -289,8 +397,8 @@
     {
       "type": "color",
       "id": "accent_color",
-      "label": "Number Circle Background",
-      "default": "#622229"
+      "label": "Number Badge Background",
+      "default": "#17123B"
     },
     {
       "type": "color",
@@ -313,10 +421,10 @@
       "id": "num_circle_radius",
       "min": 0,
       "max": 50,
-      "step": 5,
-      "unit": "%",
-      "label": "Number Circle Radius (50% is round)",
-      "default": 50
+      "step": 2,
+      "unit": "px",
+      "label": "Number Badge Corner Radius (0=square, 50=pill/circle)",
+      "default": 10
     },
     {
       "type": "range",
@@ -418,6 +526,12 @@
       "default": "#FAF5F5"
     },
     {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make Section Full Width",
+      "default": false
+    },
+    {
       "type": "range",
       "id": "padding_top",
       "min": 0,
@@ -439,6 +553,26 @@
     },
     {
       "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
       "id": "padding_top_mobile",
       "min": 0,
       "max": 120,
@@ -456,6 +590,66 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 0
     }
   ],
   "blocks": [

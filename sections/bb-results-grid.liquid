@@ -1,11 +1,18 @@
-{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+﻿{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign _bb_meta = product.metafields.custom.results.value -%}
+{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
   #bb-results-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile | default: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 0 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 0 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
     
     /* CSS Variables mapping for complete customization */
     --results-bg: {{ section.settings.background_color }};
@@ -28,6 +35,7 @@
     
     --results-card-bg: {{ section.settings.card_bg_color }};
     --results-card-border: {{ section.settings.card_border_color }};
+    --results-card-border-hover: {{ section.settings.card_border_hover_color }};
     --results-card-radius: {{ section.settings.card_border_radius }}px;
     --results-card-padding: {{ section.settings.card_padding }}px;
     
@@ -43,14 +51,78 @@
   }
   @media (min-width: 768px) {
     #bb-results-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
     }
   }
   @media (max-width: 768px) {
     #bb-results-{{ section.id }} .bb-results-v2__heading {
       font-size: {{ section.settings.heading_size_mobile }}px;
     }
+  }
+
+  #bb-results-{{ section.id }} .bb-container {
+    max-width: var(--results-max-width);
+    width: 100%;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto;
+      margin-right: 0;
+    {%- endif -%}
+  }
+
+  #bb-results-{{ section.id }} .bb-results-v2__inner {
+    max-width: var(--results-max-width);
+    width: 100%;
+    margin-left: inherit;
+    margin-right: inherit;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-results-{{ section.id }} .bb-results-v2__heading {
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    color: #17123B;
+  }
+  #bb-results-{{ section.id }} .bb-results-v2__heading .bb-heading-maroon {
+    color: #6B2430;
+    display: block;
+  }
+
+  #bb-results-{{ section.id }} .bb-results-v2__grid {
+    text-align: left;
+  }
+  #bb-results-{{ section.id }} .bb-results-v2__card:hover {
+    border-color: var(--results-card-border-hover);
   }
 {%- endstyle -%}
 
@@ -60,7 +132,7 @@
   data-section-id="{{ section.id }}"
 >
   <div class="bb-container">
-    <div class="bb-results-v2__inner bb-text-center">
+    <div class="bb-results-v2__inner">
       
       <!-- Subheading Badge -->
       {%- if section.settings.subheading != blank -%}
@@ -69,57 +141,120 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-results-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-results-v2__heading">
+          {%- assign h_lower = section.settings.heading | downcase -%}
+          {%- if h_lower contains "results women" and h_lower contains "within weeks" -%}
+            {%- if h_lower contains " see " -%}
+              {%- assign first_part = section.settings.heading | split: " see " | first -%}
+              {%- assign second_part = section.settings.heading | split: first_part | last -%}
+              {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part | strip }}</span>
+            {%- elsif h_lower contains " see " or h_lower contains " see " -%}
+              {%- assign first_part = section.settings.heading | split: " see " | first -%}
+              {%- assign second_part = section.settings.heading | split: first_part | last -%}
+              {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part | strip }}</span>
+            {%- else -%}
+              {{ section.settings.heading }}
+            {%- endif -%}
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Results Grid -->
       <div class="bb-results-v2__grid">
-        {%- if section.blocks.size > 0 -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'result_card' -%}
-              <div class="bb-results-v2__card bb-fade-in" {{ block.shopify_attributes }}>
-                
-                <!-- Optional Card Image -->
-                {%- if block.settings.image != blank -%}
-                  <div class="bb-results-v2__card-img">
-                    <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
-                  </div>
-                {%- endif -%}
-
-                <!-- Title Row -->
-                <div class="bb-results-v2__card-title-wrap">
-                  {%- if block.settings.custom_bullet != blank -%}
-                    <span class="bb-results-v2__card-icon" style="width:{{ section.settings.bullet_size }}px; height:{{ section.settings.bullet_size }}px; display:inline-block; flex-shrink:0;">
-                      <img src="{{ block.settings.custom_bullet | image_url: width: 48 }}" alt="" loading="lazy" style="width:100%; height:100%; object-fit:contain;">
-                    </span>
-                  {%- else -%}
-                    <span class="bb-results-v2__card-bullet"></span>
-                  {%- endif -%}
-                  <h3 class="bb-results-v2__card-title">{{ block.settings.title }}</h3>
-                </div>
-
-                <!-- Description -->
-                {%- if block.settings.description != blank -%}
-                  <p class="bb-results-v2__card-desc">{{ block.settings.description }}</p>
-                {%- endif -%}
-
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
+        {%- if section.settings.use_default_content -%}
+          <!-- 6 Default Cards to match reference image -->
+          <div class="bb-results-v2__card bb-fade-in">
+            <div class="bb-results-v2__card-title-wrap">
+              <span class="bb-results-v2__card-bullet"></span>
+              <h3 class="bb-results-v2__card-title">Reduced hair fall</h3>
+            </div>
+            <p class="bb-results-v2__card-desc">Follicle stimulation strengthens roots â€” shedding visibly reduces in weeks</p>
+          </div>
+          <div class="bb-results-v2__card bb-fade-in">
+            <div class="bb-results-v2__card-title-wrap">
+              <span class="bb-results-v2__card-bullet"></span>
+              <h3 class="bb-results-v2__card-title">Baby hair regrowth</h3>
+            </div>
+            <p class="bb-results-v2__card-desc">New growth in thinning areas as dormant follicles reactivate</p>
+          </div>
+          <div class="bb-results-v2__card bb-fade-in">
+            <div class="bb-results-v2__card-title-wrap">
+              <span class="bb-results-v2__card-bullet"></span>
+              <h3 class="bb-results-v2__card-title">Thicker, denser strands</h3>
+            </div>
+            <p class="bb-results-v2__card-desc">Deep nutrient delivery means each strand grows stronger from the root</p>
+          </div>
+          <div class="bb-results-v2__card bb-fade-in">
+            <div class="bb-results-v2__card-title-wrap">
+              <span class="bb-results-v2__card-bullet"></span>
+              <h3 class="bb-results-v2__card-title">Healthier scalp</h3>
+            </div>
+            <p class="bb-results-v2__card-desc">Less dryness and irritation as blood flow and hydration improve</p>
+          </div>
+          <div class="bb-results-v2__card bb-fade-in">
+            <div class="bb-results-v2__card-title-wrap">
+              <span class="bb-results-v2__card-bullet"></span>
+              <h3 class="bb-results-v2__card-title">Better from other treatments</h3>
+            </div>
+            <p class="bb-results-v2__card-desc">Enhanced absorption means your oils and serums finally work properly</p>
+          </div>
+          <div class="bb-results-v2__card bb-fade-in">
+            <div class="bb-results-v2__card-title-wrap">
+              <span class="bb-results-v2__card-bullet"></span>
+              <h3 class="bb-results-v2__card-title">More confidence</h3>
+            </div>
+            <p class="bb-results-v2__card-desc">Visible density improvement in thinning areas and along the hairline</p>
+          </div>
         {%- else -%}
-          {%- assign results_meta = product.metafields.custom.result_images.value -%}
-          {%- if results_meta != blank -%}
-            {%- for item in results_meta -%}
-              <div class="bb-results-v2__card bb-fade-in">
-                <div class="bb-results-v2__card-title-wrap">
-                  <span class="bb-results-v2__card-bullet"></span>
-                  <h3 class="bb-results-v2__card-title">{{ item.title }}</h3>
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'result_card' -%}
+                <div class="bb-results-v2__card bb-fade-in" {{ block.shopify_attributes }}>
+                  
+                  <!-- Optional Card Image -->
+                  {%- if block.settings.image != blank -%}
+                    <div class="bb-results-v2__card-img">
+                      <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+                    </div>
+                  {%- endif -%}
+
+                  <!-- Title Row -->
+                  <div class="bb-results-v2__card-title-wrap">
+                    {%- if block.settings.custom_bullet != blank -%}
+                      <span class="bb-results-v2__card-icon" style="width:{{ section.settings.bullet_size }}px; height:{{ section.settings.bullet_size }}px; display:inline-block; flex-shrink:0;">
+                        <img src="{{ block.settings.custom_bullet | image_url: width: 48 }}" alt="" loading="lazy" style="width:100%; height:100%; object-fit:contain;">
+                      </span>
+                    {%- else -%}
+                      <span class="bb-results-v2__card-bullet"></span>
+                    {%- endif -%}
+                    <h3 class="bb-results-v2__card-title">{{ block.settings.title }}</h3>
+                  </div>
+
+                  <!-- Description -->
+                  {%- if block.settings.description != blank -%}
+                    <p class="bb-results-v2__card-desc">{{ block.settings.description }}</p>
+                  {%- endif -%}
+
                 </div>
-                {%- if item.description != blank -%}
-                  <p class="bb-results-v2__card-desc">{{ item.description }}</p>
-                {%- endif -%}
-              </div>
+              {%- endif -%}
             {%- endfor -%}
+          {%- else -%}
+            {%- assign results_meta = product.metafields.custom.result_images.value -%}
+            {%- if results_meta != blank -%}
+              {%- for item in results_meta -%}
+                <div class="bb-results-v2__card bb-fade-in">
+                  <div class="bb-results-v2__card-title-wrap">
+                    <span class="bb-results-v2__card-bullet"></span>
+                    <h3 class="bb-results-v2__card-title">{{ item.title }}</h3>
+                  </div>
+                  {%- if item.description != blank -%}
+                    <p class="bb-results-v2__card-desc">{{ item.description }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
           {%- endif -%}
         {%- endif -%}
       </div>
@@ -128,6 +263,7 @@
   </div>
 </section>
 
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
 {%- endunless -%}
 
 {% schema %}
@@ -147,6 +283,13 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "use_default_content",
+      "label": "Use Default Reference Content",
+      "info": "If enabled, this will render the exact 6 step cards from the original reference design (2 columns, 3 rows).",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "custom_class",
       "label": "Custom CSS Class"
@@ -155,11 +298,22 @@
       "type": "range",
       "id": "container_max_width",
       "min": 400,
-      "max": 1200,
+      "max": 1600,
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 1000
+      "default": 1280
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
     },
     {
       "type": "header",
@@ -213,11 +367,11 @@
       "type": "range",
       "id": "badge_margin_bottom",
       "min": 0,
-      "max": 60,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 26
     },
     {
       "type": "header",
@@ -239,21 +393,21 @@
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 100,
       "step": 2,
       "unit": "px",
-      "label": "Heading Size — Desktop",
-      "default": 36
+      "label": "Heading Size â€” Desktop",
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
-      "max": 40,
+      "min": 16,
+      "max": 60,
       "step": 2,
       "unit": "px",
-      "label": "Heading Size — Mobile",
-      "default": 26
+      "label": "Heading Size â€” Mobile",
+      "default": 42
     },
     {
       "type": "select",
@@ -264,18 +418,19 @@
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
         { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
       ]
     },
     {
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 32
+      "default": 48
     },
     {
       "type": "header",
@@ -287,7 +442,7 @@
       "min": 1,
       "max": 4,
       "step": 1,
-      "label": "Columns — Desktop",
+      "label": "Columns â€” Desktop",
       "default": 2
     },
     {
@@ -314,7 +469,13 @@
       "type": "color",
       "id": "card_border_color",
       "label": "Card Border Color",
-      "default": "#efefef"
+      "default": "#F1E4E3"
+    },
+    {
+      "type": "color",
+      "id": "card_border_hover_color",
+      "label": "Card Border Color (Hover)",
+      "default": "#6B2430"
     },
     {
       "type": "range",
@@ -324,7 +485,7 @@
       "step": 1,
       "unit": "px",
       "label": "Card Border Radius",
-      "default": 12
+      "default": 18
     },
     {
       "type": "range",
@@ -334,7 +495,7 @@
       "step": 2,
       "unit": "px",
       "label": "Card Padding",
-      "default": 24
+      "default": 32
     },
     {
       "type": "header",
@@ -344,7 +505,7 @@
       "type": "color",
       "id": "bullet_color",
       "label": "Bullet Dot Color",
-      "default": "#622229"
+      "default": "#6B2430"
     },
     {
       "type": "range",
@@ -364,7 +525,7 @@
       "type": "color",
       "id": "card_title_color",
       "label": "Card Title Color",
-      "default": "#1a1a1a"
+      "default": "#17123B"
     },
     {
       "type": "range",
@@ -374,13 +535,13 @@
       "step": 1,
       "unit": "px",
       "label": "Card Title Font Size",
-      "default": 18
+      "default": 20
     },
     {
       "type": "select",
       "id": "card_title_weight",
       "label": "Card Title Weight",
-      "default": "800",
+      "default": "700",
       "options": [
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
@@ -392,7 +553,7 @@
       "type": "color",
       "id": "card_desc_color",
       "label": "Card Description Color",
-      "default": "#666666"
+      "default": "#555555"
     },
     {
       "type": "range",
@@ -402,7 +563,7 @@
       "step": 1,
       "unit": "px",
       "label": "Card Description Font Size",
-      "default": 15
+      "default": 16
     },
     {
       "type": "header",
@@ -421,7 +582,7 @@
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top — Desktop",
+      "label": "Padding Top â€” Desktop",
       "default": 80
     },
     {
@@ -431,8 +592,28 @@
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom — Desktop",
+      "label": "Padding Bottom â€” Desktop",
       "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left â€” Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right â€” Desktop",
+      "default": 40
     },
     {
       "type": "range",
@@ -441,7 +622,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top — Mobile",
+      "label": "Padding Top â€” Mobile",
       "default": 48
     },
     {
@@ -451,8 +632,68 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom — Mobile",
+      "label": "Padding Bottom â€” Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left â€” Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right â€” Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top â€” Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom â€” Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top â€” Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom â€” Mobile",
+      "default": 0
     }
   ],
   "blocks": [
@@ -470,7 +711,7 @@
           "type": "textarea",
           "id": "description",
           "label": "Description",
-          "default": "Follicle stimulation strengthens roots — shedding visibly reduces in weeks"
+          "default": "Follicle stimulation strengthens roots â€” shedding visibly reduces in weeks"
         },
         {
           "type": "image_picker",
@@ -493,7 +734,7 @@
           "type": "result_card",
           "settings": {
             "title": "Reduced hair fall",
-            "description": "Follicle stimulation strengthens roots — shedding visibly reduces in weeks"
+            "description": "Follicle stimulation strengthens roots â€” shedding visibly reduces in weeks"
           }
         },
         {

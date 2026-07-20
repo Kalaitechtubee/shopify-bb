@@ -1,0 +1,23 @@
+{%- liquid
+  assign is_open = defaultOpen | default: false
+  assign item_id = 'bb-faq-accordion-' | append: index | append: '-' | append: section.id
+-%}
+
+<div class="bb-faq-card{% if is_open %} bb-faq-card--open{% endif %}" data-index="{{ index }}" {{ block.shopify_attributes }}>
+  <button
+    class="bb-faq-card__trigger"
+    aria-expanded="{% if is_open %}true{% else %}false{% endif %}"
+    aria-controls="{{ item_id }}"
+    type="button"
+  >
+    <span class="bb-faq-card__question">{{ question }}</span>
+    <span class="bb-faq-card__plus">
+      <span class="bb-faq-card__plus-icon">+</span>
+    </span>
+  </button>
+  <div class="bb-faq-card__content-wrapper" id="{{ item_id }}" role="region">
+    <div class="bb-faq-card__content bb-rte">
+      {{ answer }}
+    </div>
+  </div>
+</div>

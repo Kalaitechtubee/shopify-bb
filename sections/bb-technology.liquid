@@ -5,8 +5,12 @@
 {%- style -%}
   #bb-technology-{{ section.id }} {
     background-color: {{ section.settings.section_background_color }};
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile | default: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 0 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 0 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
     
     /* Map CSS custom variables for complete customizability */
     --tech-max-width: {{ section.settings.container_max_width }}px;
@@ -49,8 +53,12 @@
   }
   @media (min-width: 768px) {
     #bb-technology-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
     }
   }
   @media (max-width: 768px) {
@@ -60,6 +68,54 @@
     #bb-technology-{{ section.id }} .bb-tech-v2__panel {
       padding: {{ section.settings.panel_padding_mobile }}px;
     }
+  }
+
+  #bb-technology-{{ section.id }} .bb-container {
+    max-width: var(--tech-max-width);
+    width: 100%;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto;
+      margin-right: 0;
+    {%- endif -%}
+  }
+  
+  #bb-technology-{{ section.id }} .bb-tech-v2 {
+    max-width: var(--tech-max-width);
+    width: 100%;
+    margin-left: inherit;
+    margin-right: inherit;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-technology-{{ section.id }} .bb-tech-v2__heading {
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  #bb-technology-{{ section.id }} .bb-tech-v2__panel {
+    text-align: left;
+  }
+
+  #bb-technology-{{ section.id }} .bb-tech-v2__footer-text {
+    text-align: inherit;
   }
 {%- endstyle -%}
 
@@ -76,10 +132,10 @@
         <div class="bb-tech-v2__badge">{{ section.settings.subheading }}</div>
       {%- endif -%}
 
-      <!-- Main Heading — navy line 1, maroon line 2 -->
+      <!-- Main Heading â€” navy line 1, maroon line 2 -->
       {%- if section.settings.heading != blank -%}
         <h2 class="bb-tech-v2__heading">
-          Micro-Needling<span class="bb-heading-maroon">Serum Technology</span>
+          Micro-Needling<br><span class="bb-heading-maroon">Serum Technology</span>
         </h2>
       {%- endif -%}
 
@@ -133,7 +189,6 @@
     </div>
   </div>
 </section>
-
 {%- endunless -%}
 
 
@@ -162,11 +217,22 @@
       "type": "range",
       "id": "container_max_width",
       "min": 400,
-      "max": 1200,
+      "max": 1600,
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 800
+      "default": 1280
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
     },
     {
       "type": "header",
@@ -220,11 +286,11 @@
       "type": "range",
       "id": "badge_margin_bottom",
       "min": 0,
-      "max": 60,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 26
     },
     {
       "type": "header",
@@ -246,21 +312,21 @@
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 100,
       "step": 2,
       "unit": "px",
-      "label": "Heading Size — Desktop",
-      "default": 36
+      "label": "Heading Size â€” Desktop",
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
-      "max": 40,
+      "min": 16,
+      "max": 60,
       "step": 2,
       "unit": "px",
-      "label": "Heading Size — Mobile",
-      "default": 26
+      "label": "Heading Size â€” Mobile",
+      "default": 42
     },
     {
       "type": "select",
@@ -271,18 +337,19 @@
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
         { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
       ]
     },
     {
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 32
+      "default": 48
     },
     {
       "type": "header",
@@ -311,7 +378,7 @@
       "max": 80,
       "step": 2,
       "unit": "px",
-      "label": "Panel Padding — Desktop",
+      "label": "Panel Padding â€” Desktop",
       "default": 40
     },
     {
@@ -321,7 +388,7 @@
       "max": 60,
       "step": 2,
       "unit": "px",
-      "label": "Panel Padding — Mobile",
+      "label": "Panel Padding â€” Mobile",
       "default": 24
     },
     {
@@ -332,7 +399,7 @@
       "type": "text",
       "id": "panel_title",
       "label": "Panel Title",
-      "default": "Boost & Bloom™ Micro-Needling Serum"
+      "default": "Boost & Bloomâ„¢ Micro-Needling Serum"
     },
     {
       "type": "color",
@@ -513,7 +580,7 @@
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top — Desktop",
+      "label": "Padding Top â€” Desktop",
       "default": 80
     },
     {
@@ -523,8 +590,28 @@
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom — Desktop",
+      "label": "Padding Bottom â€” Desktop",
       "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left â€” Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right â€” Desktop",
+      "default": 40
     },
     {
       "type": "range",
@@ -533,7 +620,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top — Mobile",
+      "label": "Padding Top â€” Mobile",
       "default": 48
     },
     {
@@ -543,8 +630,68 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom — Mobile",
+      "label": "Padding Bottom â€” Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left â€” Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right â€” Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top â€” Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom â€” Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top â€” Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom â€” Mobile",
+      "default": 0
     }
   ],
   "blocks": [

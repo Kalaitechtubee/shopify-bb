@@ -26,12 +26,127 @@
             if (openItem !== item) {
               openItem.classList.remove('bb-accordion__item--open');
               openItem.classList.remove('bb-accordion-v2__item--open');
+              
+              // Pause video in sibling
+              var video = openItem.querySelector('video');
+              if (video) video.pause();
+              
+              var iframe = openItem.querySelector('iframe');
+              if (iframe) {
+                if (iframe.dataset.originalSrc) {
+                  iframe.src = iframe.dataset.originalSrc;
+                } else {
+                  var src = iframe.src;
+                  if (src.indexOf('autoplay=1') > -1) {
+                    iframe.dataset.autoplaySrc = src;
+                    iframe.dataset.originalSrc = src.replace('autoplay=1', 'autoplay=0');
+                    iframe.src = iframe.dataset.originalSrc;
+                  }
+                }
+              }
             }
           });
         }
 
         item.classList.toggle(openClass, !isOpen);
         this.setAttribute('aria-expanded', !isOpen);
+
+        // Handle video playback for current item
+        if (!isOpen) {
+          // Opened
+          var video = item.querySelector('video');
+          if (video) {
+            video.play().catch(function(e) { /* ignore autoplay blocks */ });
+          }
+          var iframe = item.querySelector('iframe');
+          if (iframe) {
+            var src = iframe.src;
+            if (iframe.dataset.autoplaySrc) {
+              iframe.src = iframe.dataset.autoplaySrc;
+            } else if (src.indexOf('autoplay=0') > -1) {
+              iframe.dataset.originalSrc = src;
+              iframe.dataset.autoplaySrc = src.replace('autoplay=0', 'autoplay=1');
+              iframe.src = iframe.dataset.autoplaySrc;
+            } else if (src.indexOf('autoplay=1') === -1) {
+              iframe.dataset.originalSrc = src;
+              var separator = src.indexOf('?') > -1 ? '&' : '?';
+              iframe.dataset.autoplaySrc = src + separator + 'autoplay=1&mute=1';
+              iframe.src = iframe.dataset.autoplaySrc;
+            }
+          }
+        } else {
+          // Closed
+          var video = item.querySelector('video');
+          if (video) {
+            video.pause();
+          }
+          var iframe = item.querySelector('iframe');
+          if (iframe) {
+            if (iframe.dataset.originalSrc) {
+              iframe.src = iframe.dataset.originalSrc;
+            } else {
+              var src = iframe.src;
+              if (src.indexOf('autoplay=1') > -1) {
+                iframe.dataset.autoplaySrc = src;
+                iframe.dataset.originalSrc = src.replace('autoplay=1', 'autoplay=0');
+                iframe.src = iframe.dataset.originalSrc;
+              }
+            }
+          }
+        }
+      });
+    });
+  }
+
+  /* --------------------------------------------------
+     BB FAQ Accordion
+     -------------------------------------------------- */
+  function initFaqAccordions(scope) {
+    var scope = scope || document;
+    scope.querySelectorAll('.bb-faq-card__trigger').forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        var item = this.closest('.bb-faq-card');
+        var isOpen = item.classList.contains('bb-faq-card--open');
+
+        // Close siblings
+        var parent = item.closest('.bb-faq-v2__list');
+        if (parent) {
+          parent.querySelectorAll('.bb-faq-card--open').forEach(function (openItem) {
+            if (openItem !== item) {
+              openItem.classList.remove('bb-faq-card--open');
+              var siblingTrigger = openItem.querySelector('.bb-faq-card__trigger');
+              if (siblingTrigger) siblingTrigger.setAttribute('aria-expanded', 'false');
+            }
+          });
+        }
+
+        item.classList.toggle('bb-faq-card--open', !isOpen);
+        this.setAttribute('aria-expanded', !isOpen);
+      });
+
+      // Keyboard Accessibility
+      trigger.addEventListener('keydown', function (e) {
+        var item = this.closest('.bb-faq-card');
+        var parent = item.closest('.bb-faq-v2__list');
+        if (!parent) return;
+        var triggers = Array.prototype.slice.call(parent.querySelectorAll('.bb-faq-card__trigger'));
+        var index = triggers.indexOf(this);
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          var nextIndex = (index + 1) % triggers.length;
+          triggers[nextIndex].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          var prevIndex = (index - 1 + triggers.length) % triggers.length;
+          triggers[prevIndex].focus();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          triggers[0].focus();
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          triggers[triggers.length - 1].focus();
+        }
       });
     });
   }
@@ -185,6 +300,14 @@
      Scroll Fade-in Animations
      -------------------------------------------------- */
   function initFadeIn() {
+    var isDesignMode = window.Shopify && window.Shopify.designMode;
+    if (isDesignMode) {
+      document.querySelectorAll('.bb-fade-in').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
     if (!('IntersectionObserver' in window)) return;
 
     var observer = new IntersectionObserver(function (entries) {
@@ -241,6 +364,7 @@
      -------------------------------------------------- */
   function init() {
     initAccordions();
+    initFaqAccordions();
     initSliders();
     initProductGallery();
     initQuantityButtons();
@@ -259,10 +383,107 @@
   document.addEventListener('shopify:section:load', function (e) {
     var section = e.target;
     initAccordions(section);
+    initFaqAccordions(section);
     initSliders(section);
     initProductGallery(section);
     initQuantityButtons(section);
     initVariantPicker(section);
+    initFadeIn();
+  });
+
+  // Customizer Block Select Auto-Expand Accordion
+  document.addEventListener('shopify:block:select', function (e) {
+    var block = e.target;
+    var trigger = block.querySelector('.bb-accordion-v2__trigger, .bb-accordion__trigger, .bb-faq-card__trigger');
+    if (trigger) {
+      var item = trigger.closest('.bb-accordion__item, .bb-accordion-v2__item, .bb-faq-card');
+      var isFaq = item.classList.contains('bb-faq-card');
+      var openClass = isFaq ? 'bb-faq-card--open' : (item.classList.contains('bb-accordion-v2__item') ? 'bb-accordion-v2__item--open' : 'bb-accordion__item--open');
+      
+      // Close other accordions in the same parent
+      var parent = item.closest('.bb-accordion, .bb-accordion-v2, .bb-faq-v2__list');
+      if (parent) {
+        parent.querySelectorAll('.bb-accordion__item--open, .bb-accordion-v2__item--open, .bb-faq-card--open').forEach(function (openItem) {
+          if (openItem !== item) {
+            openItem.classList.remove('bb-accordion__item--open');
+            openItem.classList.remove('bb-accordion-v2__item--open');
+            openItem.classList.remove('bb-faq-card--open');
+            
+            var video = openItem.querySelector('video');
+            if (video) video.pause();
+            
+            var iframe = openItem.querySelector('iframe');
+            if (iframe) {
+              if (iframe.dataset.originalSrc) {
+                iframe.src = iframe.dataset.originalSrc;
+              } else {
+                var src = iframe.src;
+                if (src.indexOf('autoplay=1') > -1) {
+                  iframe.dataset.autoplaySrc = src;
+                  iframe.dataset.originalSrc = src.replace('autoplay=1', 'autoplay=0');
+                  iframe.src = iframe.dataset.originalSrc;
+                }
+              }
+            }
+          }
+        });
+      }
+      
+      item.classList.add(openClass);
+      trigger.setAttribute('aria-expanded', 'true');
+      
+      // Play video
+      var video = item.querySelector('video');
+      if (video) {
+        video.play().catch(function(err) {});
+      }
+      var iframe = item.querySelector('iframe');
+      if (iframe) {
+        var src = iframe.src;
+        if (iframe.dataset.autoplaySrc) {
+          iframe.src = iframe.dataset.autoplaySrc;
+        } else if (src.indexOf('autoplay=0') > -1) {
+          iframe.dataset.originalSrc = src;
+          iframe.dataset.autoplaySrc = src.replace('autoplay=0', 'autoplay=1');
+          iframe.src = iframe.dataset.autoplaySrc;
+        } else if (src.indexOf('autoplay=1') === -1) {
+          iframe.dataset.originalSrc = src;
+          var separator = src.indexOf('?') > -1 ? '&' : '?';
+          iframe.dataset.autoplaySrc = src + separator + 'autoplay=1&mute=1';
+          iframe.src = iframe.dataset.autoplaySrc;
+        }
+      }
+    }
+  });
+
+  document.addEventListener('shopify:block:deselect', function (e) {
+    var block = e.target;
+    var trigger = block.querySelector('.bb-accordion-v2__trigger, .bb-accordion__trigger, .bb-faq-card__trigger');
+    if (trigger) {
+      var item = trigger.closest('.bb-accordion__item, .bb-accordion-v2__item, .bb-faq-card');
+      var isFaq = item.classList.contains('bb-faq-card');
+      var openClass = isFaq ? 'bb-faq-card--open' : (item.classList.contains('bb-accordion-v2__item') ? 'bb-accordion-v2__item--open' : 'bb-accordion__item--open');
+      
+      item.classList.remove(openClass);
+      trigger.setAttribute('aria-expanded', 'false');
+      
+      var video = item.querySelector('video');
+      if (video) video.pause();
+      
+      var iframe = item.querySelector('iframe');
+      if (iframe) {
+        if (iframe.dataset.originalSrc) {
+          iframe.src = iframe.dataset.originalSrc;
+        } else {
+          var src = iframe.src;
+          if (src.indexOf('autoplay=1') > -1) {
+            iframe.dataset.autoplaySrc = src;
+            iframe.dataset.originalSrc = src.replace('autoplay=1', 'autoplay=0');
+            iframe.src = iframe.dataset.originalSrc;
+          }
+        }
+      }
+    }
   });
 
 })();

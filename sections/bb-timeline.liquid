@@ -1,6 +1,9 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign _bb_meta = product.metafields.custom.timeline_items.value -%}
+{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
   #bb-timeline-{{ section.id }} {
@@ -35,14 +38,51 @@
   }
   @media (min-width: 768px) {
     #bb-timeline-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      {%- unless section.settings.full_width -%}
+        max-width: var(--page-width, 1200px);
+        margin-left: auto;
+        margin-right: auto;
+      {%- endunless -%}
     }
   }
   @media (max-width: 768px) {
     #bb-timeline-{{ section.id }} .bb-timeline-v2__heading {
-      font-size: {{ section.settings.heading_size_mobile }}px;
+      font-size: {{ section.settings.heading_size_mobile | default: 32 }}px;
     }
+  }
+
+  #bb-timeline-{{ section.id }} .bb-container {
+    max-width: var(--t-max-width); width: 100%;
+    {%- if section.settings.alignment == 'left' -%}margin-left: 0; margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}margin-left: auto; margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}margin-left: auto; margin-right: 0;
+    {%- endif -%}
+  }
+  #bb-timeline-{{ section.id }} .bb-timeline-v2__inner {
+    display: flex; flex-direction: column;
+    {%- if section.settings.alignment == 'left' -%}align-items: flex-start; text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}align-items: center; text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}align-items: flex-end; text-align: right;
+    {%- else -%}align-items: flex-start; text-align: left;{%- endif -%}
+  }
+  #bb-timeline-{{ section.id }} .bb-timeline-v2__heading {
+    font-size: var(--t-heading-size, 72px);
+    font-weight: var(--t-heading-weight, 800);
+    line-height: 1.05; letter-spacing: -2.5px;
+    color: #17123B; text-align: inherit; width: 100%; margin-top: 0;
+    margin-bottom: var(--t-heading-margin, 48px);
+  }
+  #bb-timeline-{{ section.id }} .bb-heading-maroon {
+    color: #6B2430; display: block;
+  }
+  #bb-timeline-{{ section.id }} .bb-timeline-v2__list {
+    text-align: left; width: 100%;
   }
 {%- endstyle -%}
 
@@ -52,7 +92,7 @@
   data-section-id="{{ section.id }}"
 >
   <div class="bb-container">
-    <div class="bb-timeline-v2__inner bb-text-center">
+    <div class="bb-timeline-v2__inner">
       
       <!-- Subheading Badge -->
       {%- if section.settings.subheading != blank -%}
@@ -61,7 +101,22 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-timeline-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-timeline-v2__heading">
+          {%- assign h_words = section.settings.heading | split: ' ' -%}
+          {%- assign total_words = h_words | size -%}
+          {%- if total_words >= 2 -%}
+            {%- if total_words <= 3 -%}
+              {%- assign mid = total_words | minus: 1 -%}
+            {%- else -%}
+              {%- assign mid = total_words | divided_by: 2 -%}
+            {%- endif -%}
+            {%- assign first_part = h_words | slice: 0, mid | join: ' ' -%}
+            {%- assign second_part = h_words | slice: mid, total_words | join: ' ' -%}
+            {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part }}</span>
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Timeline List -->
@@ -69,21 +124,40 @@
         {%- if section.blocks.size > 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'timeline_item' -%}
+              {%- assign pill_bg     = block.settings.pill_bg_color -%}
+              {%- assign pill_text   = block.settings.pill_text_color -%}
+              {%- assign pill_radius = block.settings.pill_radius | default: 50 -%}
+              {%- assign pill_size   = block.settings.pill_font_size | default: 12 -%}
+              {%- assign title_size  = block.settings.title_font_size | default: 16 -%}
+              {%- assign title_col   = block.settings.title_color -%}
+              {%- assign desc_size   = block.settings.desc_font_size | default: 16 -%}
+              {%- assign desc_col    = block.settings.desc_color -%}
               <li class="bb-timeline-v2__item bb-fade-in" {{ block.shopify_attributes }}>
-                
+
                 <!-- Left Capsule Badge -->
                 {%- if block.settings.week != blank -%}
-                  <span class="bb-timeline-v2__week">{{ block.settings.week }}</span>
+                  <span class="bb-timeline-v2__week" style="
+                    {%- if pill_bg != blank -%}background-color:{{ pill_bg }};border-color:{{ pill_bg }};{%- endif -%}
+                    {%- if pill_text != blank -%}color:{{ pill_text }};{%- endif -%}
+                    border-radius:{{ pill_radius }}px;
+                    font-size:{{ pill_size }}px;
+                  ">{{ block.settings.week }}</span>
                 {%- endif -%}
 
                 <!-- Right Description -->
                 <div class="bb-timeline-v2__content">
                   <p class="bb-timeline-v2__text">
                     {%- if block.settings.title != blank -%}
-                      <strong>{{ block.settings.title }}</strong>
+                      <strong style="
+                        {%- if title_col != blank -%}color:{{ title_col }};{%- endif -%}
+                        font-size:{{ title_size }}px;
+                      ">{{ block.settings.title }}</strong>
                     {%- endif -%}
                     {%- if block.settings.description != blank -%}
-                      {% if block.settings.title != blank %} — {% endif %}{{ block.settings.description }}
+                      <span style="
+                        {%- if desc_col != blank -%}color:{{ desc_col }};{%- endif -%}
+                        font-size:{{ desc_size }}px;
+                      ">{% if block.settings.title != blank %} — {% endif %}{{ block.settings.description }}</span>
                     {%- endif -%}
                   </p>
                 </div>
@@ -112,6 +186,7 @@
   </div>
 </section>
 
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
 {%- endunless -%}
 
 {% schema %}
@@ -217,27 +292,27 @@
       "type": "color",
       "id": "heading_color",
       "label": "Heading Color",
-      "default": "#1a1a1a"
+      "default": "#17123B"
     },
     {
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 36
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
       "min": 18,
-      "max": 40,
+      "max": 60,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 26
+      "default": 40
     },
     {
       "type": "select",
@@ -255,11 +330,11 @@
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 32
+      "default": 48
     },
     {
       "type": "header",
@@ -337,7 +412,13 @@
       "type": "color",
       "id": "background_color",
       "label": "Section Background Color",
-      "default": "#FAF5F5"
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make Section Full Width",
+      "default": false
     },
     {
       "type": "range",
@@ -378,6 +459,97 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 0
     }
   ],
   "blocks": [
@@ -386,22 +558,98 @@
       "name": "Timeline Item",
       "settings": [
         {
+          "type": "header",
+          "content": "Week Pill"
+        },
+        {
           "type": "text",
           "id": "week",
-          "label": "Week Label",
+          "label": "Week Label Text",
           "default": "Week 1–2"
+        },
+        {
+          "type": "color",
+          "id": "pill_bg_color",
+          "label": "Pill Background Color",
+          "default": "#FAF0F0"
+        },
+        {
+          "type": "color",
+          "id": "pill_text_color",
+          "label": "Pill Text Color",
+          "default": "#622229"
+        },
+        {
+          "type": "range",
+          "id": "pill_radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Pill Border Radius (0=square, 50=pill)",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "pill_font_size",
+          "min": 8,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Pill Font Size",
+          "default": 12
+        },
+        {
+          "type": "header",
+          "content": "Step Title"
         },
         {
           "type": "text",
           "id": "title",
-          "label": "Step Title",
+          "label": "Title Text",
           "default": "Reduced hair fall"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title Color",
+          "default": "#17123B"
+        },
+        {
+          "type": "range",
+          "id": "title_font_size",
+          "min": 10,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Title Font Size",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Step Description"
         },
         {
           "type": "text",
           "id": "description",
-          "label": "Step Description",
+          "label": "Description Text",
           "default": "roots feel stronger, less shedding in the shower"
+        },
+        {
+          "type": "color",
+          "id": "desc_color",
+          "label": "Description Color",
+          "default": "#555555"
+        },
+        {
+          "type": "range",
+          "id": "desc_font_size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Description Font Size",
+          "default": 16
         }
       ]
     }

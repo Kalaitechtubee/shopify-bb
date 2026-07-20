@@ -1849,7 +1849,7 @@
   background-color: var(--problem-alert-bg, #F4E5E5);
   border-left: var(--problem-alert-border-width, 4px) solid var(--problem-alert-border-color, #7A2E37);
   padding: var(--problem-alert-padding, 18px 20px);
-  border-radius: 0 8px 8px 0;
+  border-radius: 12px;
   width: 100%;
   box-sizing: border-box;
   text-align: left;
@@ -1971,6 +1971,11 @@
 .bb-tech-v2__footer-text {
   font-size: var(--tech-footer-size, 15px);
   line-height: 1.6;
+  color: var(--tech-footer-color, #B8B8B8);
+}
+.bb-tech-v2__footer-text p {
+  color: inherit;
+  margin: 0;
 }
 .bb-tech-v2__footer-text .bb-footer-italic {
   font-style: italic;
@@ -1986,16 +1991,16 @@
 
 /* Activation Steps V2 Style */
 .bb-activation-v2 {
-  background-color: var(--act-bg, #FAF5F5);
-  padding: var(--act-padding-y-desktop, 80px) 0;
+  background-color: var(--act-bg, #ffffff);
+  width: 100%;
 }
 .bb-activation-v2__inner {
   max-width: var(--act-max-width, 800px);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 }
 .bb-activation-v2__badge {
   display: inline-block;
@@ -2038,8 +2043,8 @@
 .bb-activation-v2__number {
   width: var(--act-num-size, 40px);
   height: var(--act-num-size, 40px);
-  border-radius: var(--act-num-radius, 50%);
-  background-color: var(--act-num-bg, #622229);
+  border-radius: var(--act-num-radius, 10px);
+  background-color: var(--act-num-bg, #17123B);
   color: var(--act-num-color, #ffffff);
   font-size: var(--act-num-font-size, 18px);
   font-weight: 700;
@@ -2047,6 +2052,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  aspect-ratio: 1;
 }
 .bb-activation-v2__number img {
   width: 70%;
@@ -2131,6 +2137,30 @@
 }
 .bb-accordion-v2__item--open .bb-accordion-v2__content {
   display: block;
+}
+.bb-accordion-v2__video-wrapper {
+  margin-top: 12px;
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: #000;
+  display: block;
+}
+.bb-accordion-v2__video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.bb-accordion-v2__iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+  border: none;
+  border-radius: 8px;
 }
 
 /* Custom Highlight Pills & Overrides */
@@ -2271,7 +2301,13 @@
   display: flex;
   flex-direction: column;
   text-align: left;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+}
+.bb-results-v2__card:hover {
+  border-color: var(--results-card-border-hover, #622229);
+  box-shadow: 0 8px 32px rgba(98, 34, 41, 0.08);
+  transform: translateY(-4px);
 }
 .bb-results-v2__card-title-wrap {
   display: flex;
@@ -2678,12 +2714,15 @@
 
 /* 1. Growth Timeline Section */
 .bb-timeline-v2 {
-  background-color: var(--t-bg, #ffffff);
+  background-color: var(--t-bg, #FAF0F0);
   width: 100%;
 }
 .bb-timeline-v2__inner {
   max-width: var(--t-max-width, 800px);
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .bb-timeline-v2__badge {
   display: inline-block;
@@ -2699,12 +2738,14 @@
   margin-bottom: var(--t-badge-margin, 20px);
 }
 .bb-timeline-v2__heading {
-  font-size: var(--t-heading-size, 36px);
+  font-size: var(--t-heading-size, 72px);
   font-weight: var(--t-heading-weight, 800);
-  color: var(--t-heading-color, #1a1a1a);
-  margin: 0 0 var(--t-heading-margin, 32px) 0;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  color: var(--t-heading-color, #17123B);
+  margin: 0 0 var(--t-heading-margin, 40px) 0;
+  line-height: 1.05;
+  letter-spacing: -2.5px;
+  text-align: left;
+  width: 100%;
 }
 .bb-timeline-v2__list {
   display: flex;
@@ -2728,15 +2769,16 @@
 .bb-timeline-v2__week {
   display: inline-block;
   flex-shrink: 0;
-  width: 100px;
-  padding: 8px 12px;
+  min-width: 90px;
+  padding: 6px 14px;
   background-color: var(--t-badge-bg, #FAF0F0);
   color: var(--t-badge-text, #622229);
-  border: 1px solid var(--t-badge-border, #FAF0F0);
+  border: 1px solid var(--t-badge-border, #e8c8c8);
   border-radius: var(--t-badge-radius, 50px);
   font-size: var(--t-badge-size, 12px);
   font-weight: 700;
   text-align: center;
+  white-space: nowrap;
 }
 .bb-timeline-v2__content {
   text-align: left;

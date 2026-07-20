@@ -1,57 +1,198 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign test_meta_check = product.metafields.custom.testimonials.value -%}
+{%- if section.blocks.size == 0 and test_meta_check == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
   #bb-testimonials-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
-    
-    /* CSS Variables mapping for complete customization */
+    background-color: var(--test-bg, #ffffff);
+    padding-top: {{ section.settings.padding_top_mobile | default: 48 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 48 }}px;
+
     --test-bg: {{ section.settings.background_color }};
     --test-max-width: {{ section.settings.container_max_width }}px;
-    --test-cols-desktop: {{ section.settings.columns_desktop }};
-    --test-gap: {{ section.settings.grid_gap }}px;
-    
-    --test-stripe-bg: {{ section.settings.stripe_bg_color }};
-    --test-stripe-height: {{ section.settings.stripe_height }}px;
-    --test-stripe-text-color: {{ section.settings.stripe_text_color }};
-    --test-stripe-text-size-desktop: {{ section.settings.stripe_text_size_desktop }}px;
-    --test-stripe-text-size-mobile: {{ section.settings.stripe_text_size_mobile }}px;
-    
     --test-card-bg: {{ section.settings.card_bg_color }};
     --test-card-border-color: {{ section.settings.card_border_color }};
     --test-card-border-width: {{ section.settings.card_border_width }}px;
     --test-card-radius: {{ section.settings.card_border_radius }}px;
     --test-card-padding: {{ section.settings.card_padding }}px;
-    --test-card-active-border: {{ section.settings.card_active_border }};
-    
+    --test-card-width: {{ section.settings.card_width }}px;
+    --test-hover-border: {{ section.settings.card_hover_border_color | default: '#622229' }};
     --test-star-color: {{ section.settings.star_color }};
     --test-star-size: {{ section.settings.star_size }}px;
-    
     --test-heading-size: {{ section.settings.heading_size_desktop }}px;
     --test-heading-weight: {{ section.settings.heading_weight }};
     --test-heading-color: {{ section.settings.heading_color }};
-    
     --test-sub-size: {{ section.settings.subheading_size }}px;
     --test-sub-color: {{ section.settings.subheading_color }};
-    
     --test-text-size: {{ section.settings.text_size }}px;
     --test-text-color: {{ section.settings.text_color }};
-    
     --test-name-size: {{ section.settings.name_size }}px;
     --test-name-color: {{ section.settings.name_color }};
+    --test-scroll-speed: {{ section.settings.scroll_speed }}s;
+    --test-gap: {{ section.settings.card_gap }}px;
   }
+
   @media (min-width: 768px) {
     #bb-testimonials-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 80 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+    }
+    #bb-testimonials-{{ section.id }} .bb-testimonials-v2__heading {
+      font-size: var(--test-heading-size, 48px);
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     #bb-testimonials-{{ section.id }} .bb-testimonials-v2__heading {
-      font-size: {{ section.settings.heading_size_mobile }}px;
+      font-size: {{ section.settings.heading_size_mobile | default: 28 }}px;
     }
+  }
+
+  /* Inner alignment (heading/subtitle above marquee) */
+  #bb-testimonials-{{ section.id }} .bb-container {
+    max-width: var(--test-max-width);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__header {
+    display: flex;
+    flex-direction: column;
+    align-items: {%- if section.settings.heading_alignment == 'left' -%}flex-start{%- elsif section.settings.heading_alignment == 'right' -%}flex-end{%- else -%}center{%- endif -%};
+    text-align: {{ section.settings.heading_alignment | default: 'center' }};
+    margin-bottom: {{ section.settings.heading_margin_bottom | default: 48 }}px;
+  }
+
+  /* Heading */
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__heading {
+    font-size: var(--test-heading-size, 48px);
+    font-weight: var(--test-heading-weight, 800);
+    color: var(--test-heading-color, #17123B);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin: 0 0 16px 0;
+    text-align: inherit;
+    width: 100%;
+  }
+
+  /* Subtitle */
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__subheading {
+    font-size: var(--test-sub-size, 16px);
+    color: var(--test-sub-color, #6B2430);
+    margin: 0;
+    width: 100%;
+    max-width: 640px;
+    text-align: {{ section.settings.subtitle_alignment | default: 'center' }};
+    {%- if section.settings.subtitle_alignment == 'center' or section.settings.subtitle_alignment == blank -%}
+      align-self: center;
+    {%- elsif section.settings.subtitle_alignment == 'right' -%}
+      align-self: flex-end;
+    {%- else -%}
+      align-self: flex-start;
+    {%- endif -%}
+  }
+
+  /* ── Marquee Scroller ── */
+  #bb-testimonials-{{ section.id }} .bb-marquee-wrapper {
+    width: 100%;
+    padding: 12px 0;      /* lets hover shadow + lift be visible */
+    position: relative;
+  }
+  #bb-testimonials-{{ section.id }} .bb-marquee-clip {
+    overflow: hidden;     /* horizontal clip for the marquee */
+    width: 100%;
+    position: relative;
+  }
+  #bb-testimonials-{{ section.id }} .bb-marquee-clip::before,
+  #bb-testimonials-{{ section.id }} .bb-marquee-clip::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  #bb-testimonials-{{ section.id }} .bb-marquee-clip::before {
+    left: 0;
+    background: linear-gradient(to right, var(--test-bg, #ffffff), transparent);
+  }
+  #bb-testimonials-{{ section.id }} .bb-marquee-clip::after {
+    right: 0;
+    background: linear-gradient(to left, var(--test-bg, #ffffff), transparent);
+  }
+
+  #bb-testimonials-{{ section.id }} .bb-marquee-track {
+    display: flex;
+    gap: var(--test-gap, 24px);
+    width: max-content;
+    animation: bb-marquee-scroll var(--test-scroll-speed, 30s) linear infinite;
+  }
+  #bb-testimonials-{{ section.id }} .bb-marquee-track:hover {
+    animation-play-state: paused;
+  }
+  @keyframes bb-marquee-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Cards */
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__card {
+    background: var(--test-card-bg, #ffffff);
+    border: var(--test-card-border-width, 1px) solid var(--test-card-border-color, #eeeeee);
+    border-radius: var(--test-card-radius, 16px);
+    padding: var(--test-card-padding, 28px);
+    width: var(--test-card-width, 320px);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__card:hover {
+    border-color: var(--test-hover-border, {{ section.settings.card_hover_border_color | default: '#622229' }});
+    box-shadow: 0 8px 32px rgba(98, 34, 41, 0.12);
+    transform: translateY(-4px);
+  }
+
+  /* Stars */
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__stars {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__stars svg {
+    width: var(--test-star-size, 18px);
+    height: var(--test-star-size, 18px);
+    fill: var(--test-star-color, #622229);
+    flex-shrink: 0;
+  }
+
+  /* Review text */
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__text {
+    font-size: var(--test-text-size, 15px);
+    color: var(--test-text-color, #333333);
+    line-height: 1.65;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  /* Customer name */
+  #bb-testimonials-{{ section.id }} .bb-testimonials-v2__name {
+    font-size: var(--test-name-size, 14px);
+    font-weight: 700;
+    color: var(--test-name-color, #17123B);
+    margin: 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--test-card-border-color, #eeeeee);
   }
 {%- endstyle -%}
 
@@ -60,148 +201,95 @@
   class="bb-section bb-testimonials-v2 {{ section.settings.custom_class }}"
   data-section-id="{{ section.id }}"
 >
-  {%- if section.settings.enable_stripe -%}
-    <div class="bb-testimonials-v2__stripe">
-      {%- if section.settings.stripe_text != blank -%}
-        <p class="bb-testimonials-v2__stripe-text">{{ section.settings.stripe_text }}</p>
-      {%- endif -%}
-    </div>
-  {%- endif -%}
 
-  <div class="bb-container bb-testimonials-v2__container">
-    <div class="bb-testimonials-v2__inner bb-text-center">
-      
-      <!-- Main Heading -->
+  <!-- Heading & Subtitle -->
+  <div class="bb-container">
+    <div class="bb-testimonials-v2__header">
       {%- if section.settings.heading != blank -%}
         <h2 class="bb-testimonials-v2__heading">{{ section.settings.heading }}</h2>
       {%- endif -%}
-
-      <!-- Subtitle -->
       {%- if section.settings.subheading != blank -%}
         <p class="bb-testimonials-v2__subheading">{{ section.settings.subheading }}</p>
       {%- endif -%}
-
-      <!-- Cards Slider / Grid -->
-      {%- if section.settings.use_slider -%}
-        <div class="bb-slider">
-          <div class="bb-slider__track">
-            {%- if section.blocks.size > 0 -%}
-              {%- for block in section.blocks -%}
-                {%- if block.type == 'testimonial' -%}
-                  <div class="bb-slider__slide" {{ block.shopify_attributes }}>
-                    
-                    <div class="bb-testimonials-v2__card {% if block.settings.is_active %}bb-testimonials-v2__card--active{% endif %}" style="height: 100%;">
-                      <div>
-                        <!-- Rating Stars -->
-                        <div class="bb-testimonials-v2__stars">
-                          {%- for i in (1..block.settings.rating) -%}
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                          {%- endfor -%}
-                        </div>
-                        
-                        <!-- Review Text -->
-                        <p class="bb-testimonials-v2__text">"{{ block.settings.text }}"</p>
-                      </div>
-                      
-                      <!-- Customer Name -->
-                      <p class="bb-testimonials-v2__name">{{ block.settings.name }}</p>
-                    </div>
-
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
-            {%- else -%}
-              {%- assign test_meta = product.metafields.custom.testimonials.value -%}
-              {%- if test_meta != blank -%}
-                {%- for item in test_meta -%}
-                  <div class="bb-slider__slide">
-                    <div class="bb-testimonials-v2__card" style="height: 100%;">
-                      <div>
-                        <div class="bb-testimonials-v2__stars">
-                          {%- for i in (1..item.rating) -%}
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                          {%- endfor -%}
-                        </div>
-                        <p class="bb-testimonials-v2__text">"{{ item.text }}"</p>
-                      </div>
-                      <p class="bb-testimonials-v2__name">{{ item.name }}</p>
-                    </div>
-                  </div>
-                {%- endfor -%}
-              {%- endif -%}
-            {%- endif -%}
-          </div>
-
-          <div class="bb-slider__controls">
-            <button class="bb-slider__btn bb-slider__btn--prev" aria-label="Previous testimonial" type="button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <div class="bb-slider__dots">
-              {%- assign dot_count = section.blocks | where: 'type', 'testimonial' | size -%}
-              {%- if dot_count == 0 -%}{%- assign dot_count = 3 -%}{%- endif -%}
-              {%- for i in (1..dot_count) -%}
-                <button class="bb-slider__dot{% if forloop.first %} bb-slider__dot--active{% endif %}" aria-label="Go to testimonial {{ forloop.index }}" type="button"></button>
-              {%- endfor -%}
-            </div>
-            <button class="bb-slider__btn bb-slider__btn--next" aria-label="Next testimonial" type="button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
-        </div>
-
-      {%- else -%}
-        <!-- Grid Layout -->
-        <div class="bb-testimonials-v2__grid">
-          {%- if section.blocks.size > 0 -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'testimonial' -%}
-                <div class="bb-testimonials-v2__card {% if block.settings.is_active %}bb-testimonials-v2__card--active{% endif %}" {{ block.shopify_attributes }}>
-                  <div>
-                    <div class="bb-testimonials-v2__stars">
-                      {%- for i in (1..block.settings.rating) -%}
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                      {%- endfor -%}
-                    </div>
-                    <p class="bb-testimonials-v2__text">"{{ block.settings.text }}"</p>
-                  </div>
-                  <p class="bb-testimonials-v2__name">{{ block.settings.name }}</p>
-                </div>
-              {%- endif -%}
-            {%- endfor -%}
-          {%- else -%}
-            {%- assign test_meta = product.metafields.custom.testimonials.value -%}
-            {%- if test_meta != blank -%}
-              {%- for item in test_meta -%}
-                <div class="bb-testimonials-v2__card">
-                  <div>
-                    <div class="bb-testimonials-v2__stars">
-                      {%- for i in (1..item.rating) -%}
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                      {%- endfor -%}
-                    </div>
-                    <p class="bb-testimonials-v2__text">"{{ item.text }}"</p>
-                  </div>
-                  <p class="bb-testimonials-v2__name">{{ item.name }}</p>
-                </div>
-              {%- endfor -%}
-            {%- endif -%}
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-
     </div>
   </div>
+
+  <!-- Marquee Scrolling Cards -->
+  <div class="bb-marquee-wrapper">
+    <div class="bb-marquee-clip">
+      <div class="bb-marquee-track">
+      {%- comment -%}First pass of cards{%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'testimonial' -%}
+            <div class="bb-testimonials-v2__card" {{ block.shopify_attributes }}>
+              <div>
+                <div class="bb-testimonials-v2__stars">
+                  {%- for i in (1..block.settings.rating) -%}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {%- endfor -%}
+                </div>
+                <p class="bb-testimonials-v2__text">"{{ block.settings.text }}"</p>
+              </div>
+              <p class="bb-testimonials-v2__name">{{ block.settings.name }}</p>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- comment -%}Duplicate for infinite loop{%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'testimonial' -%}
+            <div class="bb-testimonials-v2__card" aria-hidden="true">
+              <div>
+                <div class="bb-testimonials-v2__stars">
+                  {%- for i in (1..block.settings.rating) -%}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {%- endfor -%}
+                </div>
+                <p class="bb-testimonials-v2__text">"{{ block.settings.text }}"</p>
+              </div>
+              <p class="bb-testimonials-v2__name">{{ block.settings.name }}</p>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign test_meta = product.metafields.custom.testimonials.value -%}
+        {%- if test_meta != blank -%}
+          {%- for item in test_meta -%}
+            <div class="bb-testimonials-v2__card">
+              <div>
+                <div class="bb-testimonials-v2__stars">
+                  {%- for i in (1..item.rating) -%}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {%- endfor -%}
+                </div>
+                <p class="bb-testimonials-v2__text">"{{ item.text }}"</p>
+              </div>
+              <p class="bb-testimonials-v2__name">{{ item.name }}</p>
+            </div>
+          {%- endfor -%}
+          {%- for item in test_meta -%}
+            <div class="bb-testimonials-v2__card" aria-hidden="true">
+              <div>
+                <div class="bb-testimonials-v2__stars">
+                  {%- for i in (1..item.rating) -%}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {%- endfor -%}
+                </div>
+                <p class="bb-testimonials-v2__text">"{{ item.text }}"</p>
+              </div>
+              <p class="bb-testimonials-v2__name">{{ item.name }}</p>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endif -%}
+      </div><!-- /.bb-marquee-track -->
+    </div><!-- /.bb-marquee-clip -->
+  </div><!-- /.bb-marquee-wrapper -->
+
 </section>
 
-{%- endunless -%}
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
+{%- endunless -%}{%- comment -%}end enable_section{%- endcomment -%}
 
 {% schema %}
 {
@@ -228,216 +316,47 @@
       "type": "range",
       "id": "container_max_width",
       "min": 400,
-      "max": 1400,
+      "max": 1600,
       "step": 20,
       "unit": "px",
-      "label": "Container Max Width",
-      "default": 1200
+      "label": "Heading Container Max Width",
+      "default": 1280
     },
     {
       "type": "header",
-      "content": "Heading & Subtitle"
+      "content": "Heading"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
+      "label": "Heading Text",
       "default": "Listen to what our customers Say"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Subtitle Text",
-      "default": "Hear from some of our amazing customers who are building faster."
-    },
-    {
-      "type": "header",
-      "content": "Top Stripe Banner"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_stripe",
-      "label": "Enable Stripe Banner",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "stripe_text",
-      "label": "Stripe Banner Text",
-      "default": "one filter, long hair, zero hair problems"
-    },
-    {
-      "type": "color",
-      "id": "stripe_bg_color",
-      "label": "Stripe Background Color",
-      "default": "#622229"
-    },
-    {
-      "type": "color",
-      "id": "stripe_text_color",
-      "label": "Stripe Text Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "stripe_text_size_desktop",
-      "min": 14,
-      "max": 60,
-      "step": 1,
-      "unit": "px",
-      "label": "Stripe Text Size — Desktop",
-      "default": 32
-    },
-    {
-      "type": "range",
-      "id": "stripe_text_size_mobile",
-      "min": 12,
-      "max": 40,
-      "step": 1,
-      "unit": "px",
-      "label": "Stripe Text Size — Mobile",
-      "default": 22
-    },
-    {
-      "type": "range",
-      "id": "stripe_height",
-      "min": 40,
-      "max": 300,
-      "step": 5,
-      "unit": "px",
-      "label": "Stripe Banner Height",
-      "default": 120
-    },
-    {
-      "type": "header",
-      "content": "Layout Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "use_slider",
-      "label": "Use Carousel Slider",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 4,
-      "step": 1,
-      "label": "Columns — Desktop (Grid view)",
-      "default": 3
-    },
-    {
-      "type": "range",
-      "id": "grid_gap",
-      "min": 8,
-      "max": 60,
-      "step": 2,
-      "unit": "px",
-      "label": "Grid Gap Spacing",
-      "default": 24
-    },
-    {
-      "type": "header",
-      "content": "Card Options"
-    },
-    {
-      "type": "color",
-      "id": "card_bg_color",
-      "label": "Card Background Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "card_border_color",
-      "label": "Card Border Color",
-      "default": "#efefef"
-    },
-    {
-      "type": "range",
-      "id": "card_border_width",
-      "min": 0,
-      "max": 10,
-      "step": 1,
-      "unit": "px",
-      "label": "Card Border Width",
-      "default": 1
-    },
-    {
-      "type": "range",
-      "id": "card_border_radius",
-      "min": 0,
-      "max": 40,
-      "step": 1,
-      "unit": "px",
-      "label": "Card Border Radius",
-      "default": 12
-    },
-    {
-      "type": "range",
-      "id": "card_padding",
-      "min": 8,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Card Padding",
-      "default": 32
-    },
-    {
-      "type": "color",
-      "id": "card_active_border",
-      "label": "Active Highlight Border Color",
-      "default": "#622229"
-    },
-    {
-      "type": "header",
-      "content": "Stars Indicator"
-    },
-    {
-      "type": "color",
-      "id": "star_color",
-      "label": "Star Color",
-      "default": "#622229"
-    },
-    {
-      "type": "range",
-      "id": "star_size",
-      "min": 8,
-      "max": 40,
-      "step": 1,
-      "unit": "px",
-      "label": "Star Size",
-      "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Typography"
     },
     {
       "type": "color",
       "id": "heading_color",
       "label": "Heading Color",
-      "default": "#1a1a1a"
+      "default": "#17123B"
     },
     {
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 80,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 36
+      "default": 48
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
       "min": 18,
-      "max": 40,
+      "max": 48,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 26
+      "default": 28
     },
     {
       "type": "select",
@@ -452,15 +371,46 @@
       ]
     },
     {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Space Below Heading",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtitle Text",
+      "default": "Hear from some of our amazing customers who are building faster."
+    },
+    {
       "type": "color",
       "id": "subheading_color",
       "label": "Subtitle Color",
-      "default": "#666666"
+      "default": "#6B2430"
     },
     {
       "type": "range",
       "id": "subheading_size",
-      "min": 10,
+      "min": 12,
       "max": 24,
       "step": 1,
       "unit": "px",
@@ -468,46 +418,160 @@
       "default": 16
     },
     {
+      "type": "header",
+      "content": "Marquee Scroll Settings"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll Speed (lower = faster)",
+      "default": 35
+    },
+    {
+      "type": "header",
+      "content": "Card Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 12,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Card Padding",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "min": 240,
+      "max": 480,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Width",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap Between Cards",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "card_hover_border_color",
+      "label": "Card Hover Border Color",
+      "default": "#622229"
+    },
+    {
+      "type": "header",
+      "content": "Stars"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#622229"
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Star Size",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Review Text"
+    },
+    {
       "type": "color",
       "id": "text_color",
       "label": "Review Text Color",
-      "default": "#1a1a1a"
+      "default": "#333333"
     },
     {
       "type": "range",
       "id": "text_size",
-      "min": 10,
-      "max": 30,
+      "min": 12,
+      "max": 20,
       "step": 1,
       "unit": "px",
       "label": "Review Text Size",
       "default": 15
     },
     {
+      "type": "header",
+      "content": "Customer Name"
+    },
+    {
       "type": "color",
       "id": "name_color",
-      "label": "Name Text Color",
-      "default": "#1a1a1a"
+      "label": "Name Color",
+      "default": "#17123B"
     },
     {
       "type": "range",
       "id": "name_size",
       "min": 10,
-      "max": 30,
+      "max": 20,
       "step": 1,
       "unit": "px",
-      "label": "Name Text Size",
-      "default": 15
+      "label": "Name Font Size",
+      "default": 14
     },
     {
       "type": "header",
-      "content": "Section Background & Spacing"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Section Background Color",
-      "default": "#ffffff"
+      "content": "Section Spacing"
     },
     {
       "type": "range",
@@ -548,24 +612,64 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
     }
   ],
   "blocks": [
     {
       "type": "testimonial",
-      "name": "Testimonial",
+      "name": "Review Card",
       "settings": [
         {
           "type": "text",
           "id": "name",
           "label": "Customer Name",
-          "default": "Sarah M."
+          "default": "Priya M"
         },
         {
           "type": "textarea",
           "id": "text",
           "label": "Review Text",
-          "default": "I was losing hope after trying so many products. By week 3, my shedding was noticeably less. Now at week 8, I have actual new growth!"
+          "default": "I was honestly skeptical because I've tried so many serums that did absolutely nothing. But after about 3 weeks of using Boost & Bloom consistently, I started noticing these tiny baby hairs along my hairline. I've never had that before. The roller tip feels really satisfying to use too, almost like a mini scalp massage every morning."
         },
         {
           "type": "range",
@@ -575,12 +679,6 @@
           "step": 1,
           "label": "Rating (Stars)",
           "default": 5
-        },
-        {
-          "type": "checkbox",
-          "id": "is_active",
-          "label": "Highlight Card (Active)",
-          "default": false
         }
       ]
     }
@@ -594,8 +692,7 @@
           "settings": {
             "name": "Priya M",
             "text": "I was honestly skeptical because I've tried so many serums that did absolutely nothing. But after about 3 weeks of using Boost & Bloom consistently, I started noticing these tiny baby hairs along my hairline. I've never had that before. The roller tip feels really satisfying to use too, almost like a mini scalp massage every morning.",
-            "rating": 5,
-            "is_active": false
+            "rating": 5
           }
         },
         {
@@ -603,8 +700,7 @@
           "settings": {
             "name": "Karthik R",
             "text": "My hair has been thinning since my early 20s and I'd kind of just accepted it. My sister got me this as a birthday gift and I didn't expect much honestly. Two months in and my barber actually asked me what I've been doing differently. That was the moment I knew it was working.",
-            "rating": 5,
-            "is_active": false
+            "rating": 5
           }
         },
         {
@@ -612,17 +708,15 @@
           "settings": {
             "name": "Ananya S",
             "text": "Post-pregnancy hair fall was brutal for me. I tried everything, oils, supplements, the works. Boost & Bloom is the only thing that's felt like it actually does something. I love that the applicator means I'm not wasting product, it goes exactly where it needs to go. Will 100% repurchase.",
-            "rating": 5,
-            "is_active": true
+            "rating": 5
           }
         },
         {
           "type": "testimonial",
           "settings": {
             "name": "Divya K",
-            "text": "I was nervous about the microneedling part but it doesn't hurt at all, it's more like a light tingle. I use it every other night before bed and my scalp feels so much healthier. Less flakiness and itching after the shower. Three weeks in and I'm not stopping anytime soon.",
-            "rating": 5,
-            "is_active": false
+            "text": "I was nervous about the microneedling part but it doesn't hurt at all, it's more like a light tingle. I use it every other night before bed and my scalp feels so much healthier. Less flakiness, less shedding in the shower. Three months in and I'm not stopping anytime soon.",
+            "rating": 5
           }
         }
       ]

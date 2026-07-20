@@ -1,12 +1,18 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- if section.blocks.size == 0 and section.settings.heading == blank and section.settings.subheading == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
   #bb-problem-{{ section.id }} {
     background-color: {{ section.settings.section_background_color }};
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile | default: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 0 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 0 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
     
     --problem-max-width: {{ section.settings.container_max_width }}px;
     --problem-badge-bg: {{ section.settings.badge_bg_color }};
@@ -40,6 +46,7 @@
     --problem-alert-bg: {{ section.settings.alert_bg_color }};
     --problem-alert-border-color: {{ section.settings.alert_border_color }};
     --problem-alert-border-width: {{ section.settings.alert_border_width }}px;
+    --problem-alert-radius: {{ section.settings.alert_border_radius }}px;
     --problem-alert-size: {{ section.settings.alert_font_size }}px;
     --problem-alert-color: {{ section.settings.alert_text_color }};
     --problem-alert-highlight-color: {{ section.settings.alert_highlight_color }};
@@ -47,9 +54,66 @@
   }
   @media (min-width: 768px) {
     #bb-problem-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      {%- unless section.settings.full_width -%}
+        max-width: var(--page-width, 1200px);
+        margin-left: auto;
+        margin-right: auto;
+      {%- endunless -%}
     }
+  }
+  #bb-problem-{{ section.id }} .bb-container {
+    max-width: var(--problem-max-width);
+    width: 100%;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto;
+      margin-right: 0;
+    {%- endif -%}
+  }
+  
+  #bb-problem-{{ section.id }} .bb-problem-v2 {
+    max-width: var(--problem-max-width);
+    width: 100%;
+    margin-left: inherit;
+    margin-right: inherit;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem-v2__heading {
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem-v2__panel {
+    text-align: left;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem-v2__alert {
+    text-align: inherit;
+    border-radius: var(--problem-alert-radius);
   }
   @media (max-width: 768px) {
     #bb-problem-{{ section.id }} .bb-problem-v2__heading {
@@ -74,11 +138,23 @@
         <div class="bb-problem-v2__badge">{{ section.settings.subheading }}</div>
       {%- endif -%}
 
-      <!-- Main Heading — two-color split: navy line 1, maroon line 2 -->
+      <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
         <h2 class="bb-problem-v2__heading">
-          Hair fall isn't about<br>
-          <span class="bb-heading-maroon">weak hair. It's a lazy scalp.</span>
+          {%- assign h_words = section.settings.heading | split: ' ' -%}
+          {%- assign total_words = h_words | size -%}
+          {%- if total_words >= 2 -%}
+            {%- if total_words <= 3 -%}
+              {%- assign mid = total_words | minus: 1 -%}
+            {%- else -%}
+              {%- assign mid = total_words | divided_by: 2 -%}
+            {%- endif -%}
+            {%- assign first_part = h_words | slice: 0, mid | join: ' ' -%}
+            {%- assign second_part = h_words | slice: mid, total_words | join: ' ' -%}
+            {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part }}</span>
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
         </h2>
       {%- endif -%}
 
@@ -97,8 +173,20 @@
           <ul class="bb-problem-v2__list">
             {%- for block in section.blocks -%}
               {%- if block.type == 'problem_item' -%}
-                <li class="bb-problem-v2__list-item" {{ block.shopify_attributes }}>
-                  <span class="bb-problem-v2__icon">
+                {%- assign text_color   = block.settings.text_color -%}
+                {%- assign text_size    = block.settings.text_font_size -%}
+                {%- assign icon_bg      = block.settings.icon_bg_color -%}
+                {%- assign icon_symbol  = block.settings.icon_symbol_color -%}
+                {%- assign icon_radius  = block.settings.icon_radius -%}
+                <li class="bb-problem-v2__list-item" style="
+                  {%- if text_color != blank -%}color: {{ text_color }};{%- endif -%}
+                  {%- if text_size != blank -%}font-size: {{ text_size }}px;{%- endif -%}
+                " {{ block.shopify_attributes }}>
+                  <span class="bb-problem-v2__icon" style="
+                    {%- if icon_bg != blank -%}border-color: {{ icon_bg }}; background-color: {{ icon_bg }};{%- endif -%}
+                    {%- if icon_symbol != blank -%}color: {{ icon_symbol }};{%- endif -%}
+                    {%- if icon_radius != blank -%}border-radius: {{ icon_radius }}%;{%- endif -%}
+                  ">
                     {%- if block.settings.custom_icon != blank -%}
                       <img src="{{ block.settings.custom_icon | image_url: width: 48 }}" alt="" loading="lazy">
                     {%- else -%}
@@ -128,7 +216,8 @@
   </div>
 </section>
 
-{%- endunless -%}
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
+{%- endunless -%}{%- comment -%}end enable_section{%- endcomment -%}
 
 
 {% schema %}
@@ -155,12 +244,12 @@
     {
       "type": "range",
       "id": "container_max_width",
-      "min": 400,
-      "max": 1200,
+      "min": 600,
+      "max": 1600,
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 800
+      "default": 1280
     },
     {
       "type": "header",
@@ -204,21 +293,21 @@
       "type": "range",
       "id": "badge_font_size",
       "min": 8,
-      "max": 20,
+      "max": 24,
       "step": 1,
       "unit": "px",
       "label": "Badge Font Size",
-      "default": 12
+      "default": 11
     },
     {
       "type": "range",
       "id": "badge_margin_bottom",
       "min": 0,
-      "max": 60,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 26
     },
     {
       "type": "header",
@@ -231,6 +320,17 @@
       "default": "Hair fall isn't about weak hair. It's a lazy scalp."
     },
     {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
       "type": "color",
       "id": "heading_color",
       "label": "Heading Color",
@@ -239,22 +339,22 @@
     {
       "type": "range",
       "id": "heading_size_desktop",
-      "min": 20,
-      "max": 64,
+      "min": 24,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 36
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
-      "max": 40,
+      "min": 16,
+      "max": 60,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 26
+      "default": 42
     },
     {
       "type": "select",
@@ -265,18 +365,19 @@
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
         { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
       ]
     },
     {
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 32
+      "default": 48
     },
     {
       "type": "header",
@@ -451,7 +552,7 @@
     {
       "type": "range",
       "id": "alert_border_width",
-      "min": 1,
+      "min": 0,
       "max": 10,
       "step": 1,
       "unit": "px",
@@ -501,6 +602,16 @@
       "default": 20
     },
     {
+      "type": "range",
+      "id": "alert_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Alert Border Radius",
+      "default": 12
+    },
+    {
       "type": "header",
       "content": "General Spacing"
     },
@@ -509,6 +620,12 @@
       "id": "section_background_color",
       "label": "Section Background Color",
       "default": "#FAF5F5"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make Section Full Width",
+      "default": false
     },
     {
       "type": "range",
@@ -532,6 +649,26 @@
     },
     {
       "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
       "id": "padding_top_mobile",
       "min": 0,
       "max": 120,
@@ -549,6 +686,66 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 0
     }
   ],
   "blocks": [
@@ -556,6 +753,10 @@
       "type": "problem_item",
       "name": "Problem Item",
       "settings": [
+        {
+          "type": "header",
+          "content": "Problem Content"
+        },
         {
           "type": "text",
           "id": "text",
@@ -566,6 +767,45 @@
           "type": "image_picker",
           "id": "custom_icon",
           "label": "Custom Bullet Icon (optional file upload)"
+        },
+        {
+          "type": "header",
+          "content": "Styling"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color (Leave blank to inherit section text color)"
+        },
+        {
+          "type": "range",
+          "id": "text_font_size",
+          "min": 10,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Text Font Size",
+          "default": 15
+        },
+        {
+          "type": "color",
+          "id": "icon_bg_color",
+          "label": "Icon Border/Bg Color (Leave blank to inherit section color)"
+        },
+        {
+          "type": "color",
+          "id": "icon_symbol_color",
+          "label": "Icon Symbol Color (Leave blank to inherit section color)"
+        },
+        {
+          "type": "range",
+          "id": "icon_radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Icon Border Radius (0=square, 50=circle)",
+          "default": 50
         }
       ]
     }

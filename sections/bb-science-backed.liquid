@@ -1,53 +1,130 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign _bb_meta = product.metafields.custom.science.value -%}
+{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
+  {%- assign bg_color = section.settings.background_color -%}
+  {%- if bg_color == '#FAF5F5' or bg_color == '#ffffff' or bg_color == '#FFFFFF' or bg_color == blank -%}
+    {%- assign bg_color = '#FAF0F0' -%}
+  {%- endif -%}
+
   #bb-science-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile | default: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 0 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 0 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
     
     /* CSS Variables mapping for complete customization */
-    --sci-bg: {{ section.settings.background_color }};
-    --sci-max-width: {{ section.settings.container_max_width }}px;
+    --sci-bg: {{ bg_color }};
+    --sci-max-width: {{ section.settings.container_max_width | default: 1200 }}px;
     
     --sci-badge-bg: {{ section.settings.badge_bg_color }};
     --sci-badge-text: {{ section.settings.badge_text_color }};
     --sci-badge-border: {{ section.settings.badge_border_color }};
-    --sci-badge-radius: {{ section.settings.badge_border_radius }}px;
-    --sci-badge-size: {{ section.settings.badge_font_size }}px;
-    --sci-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    --sci-badge-radius: {{ section.settings.badge_border_radius | default: 50 }}px;
+    --sci-badge-size: {{ section.settings.badge_font_size | default: 12 }}px;
+    --sci-badge-margin: {{ section.settings.badge_margin_bottom | default: 20 }}px;
     
-    --sci-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --sci-heading-size: {{ section.settings.heading_size_desktop | default: 36 }}px;
     --sci-heading-weight: {{ section.settings.heading_weight }};
     --sci-heading-color: {{ section.settings.heading_color }};
-    --sci-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    --sci-heading-margin: {{ section.settings.heading_margin_bottom | default: 32 }}px;
     
-    --sci-gap: {{ section.settings.grid_gap }}px;
+    --sci-gap: {{ section.settings.grid_gap | default: 16 }}px;
     
     --sci-card-bg: {{ section.settings.card_bg_color }};
     --sci-card-border-color: {{ section.settings.card_border_color }};
-    --sci-card-radius: {{ section.settings.card_border_radius }}px;
-    --sci-card-padding: {{ section.settings.card_padding }}px;
+    --sci-card-radius: {{ section.settings.card_border_radius | default: 12 }}px;
+    --sci-card-padding: {{ section.settings.card_padding | default: 20 }}px;
     
-    --sci-icon-size: {{ section.settings.icon_size }}px;
+    --sci-icon-size: {{ section.settings.icon_size | default: 20 }}px;
     --sci-icon-bg: {{ section.settings.icon_bg_color }};
     --sci-icon-symbol: {{ section.settings.icon_symbol_color }};
     
-    --sci-text-size: {{ section.settings.card_text_size }}px;
-    --sci-text-weight: {{ section.settings.card_text_weight }}px;
+    --sci-text-size: {{ section.settings.card_text_size | default: 15 }}px;
+    --sci-text-weight: {{ section.settings.card_text_weight | default: 500 }}px;
     --sci-text-color: {{ section.settings.text_color }};
   }
   @media (min-width: 768px) {
     #bb-science-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      {%- unless section.settings.full_width -%}
+        max-width: var(--page-width, 1200px);
+        margin-left: auto;
+        margin-right: auto;
+      {%- endunless -%}
     }
   }
   @media (max-width: 768px) {
     #bb-science-{{ section.id }} .bb-science-v2__heading {
-      font-size: {{ section.settings.heading_size_mobile }}px;
+      font-size: {{ section.settings.heading_size_mobile | default: 26 }}px;
     }
+  }
+
+  #bb-science-{{ section.id }} .bb-container {
+    max-width: var(--sci-max-width);
+    width: 100%;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto;
+      margin-right: 0;
+    {%- endif -%}
+  }
+
+  #bb-science-{{ section.id }} .bb-science-v2__inner {
+    max-width: var(--sci-max-width);
+    width: 100%;
+    margin-left: inherit;
+    margin-right: inherit;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-science-{{ section.id }} .bb-science-v2__heading {
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    color: #17123B;
+  }
+  #bb-science-{{ section.id }} .bb-science-v2__heading .bb-heading-maroon {
+    color: #6B2430;
+  }
+
+  #bb-science-{{ section.id }} .bb-science-v2__list {
+    text-align: left;
   }
 {%- endstyle -%}
 
@@ -57,7 +134,7 @@
   data-section-id="{{ section.id }}"
 >
   <div class="bb-container">
-    <div class="bb-science-v2__inner bb-text-center">
+    <div class="bb-science-v2__inner">
       
       <!-- Subheading Badge -->
       {%- if section.settings.subheading != blank -%}
@@ -66,7 +143,20 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-science-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-science-v2__heading">
+          {%- assign h_lower = section.settings.heading | downcase -%}
+          {%- if h_lower contains "science-backed" and h_lower contains "clinically" -%}
+            {%- if h_lower contains ", " -%}
+              {%- assign first_part = section.settings.heading | split: ", " | first -%}
+              {%- assign second_part = section.settings.heading | split: first_part | last | remove_first: ", " -%}
+              {{ first_part }},<br><span class="bb-heading-maroon">{{ second_part | strip }}</span>
+            {%- else -%}
+              {{ section.settings.heading }}
+            {%- endif -%}
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Checklist stack -->
@@ -113,6 +203,7 @@
   </div>
 </section>
 
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
 {%- endunless -%}
 
 {% schema %}
@@ -140,11 +231,22 @@
       "type": "range",
       "id": "container_max_width",
       "min": 400,
-      "max": 1200,
+      "max": 1600,
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 800
+      "default": 1280
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
     },
     {
       "type": "header",
@@ -198,11 +300,11 @@
       "type": "range",
       "id": "badge_margin_bottom",
       "min": 0,
-      "max": 60,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 26
     },
     {
       "type": "header",
@@ -224,21 +326,21 @@
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 36
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
-      "max": 40,
+      "min": 16,
+      "max": 60,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 26
+      "default": 42
     },
     {
       "type": "select",
@@ -249,18 +351,19 @@
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
         { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
       ]
     },
     {
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 32
+      "default": 48
     },
     {
       "type": "header",
@@ -389,7 +492,13 @@
       "type": "color",
       "id": "background_color",
       "label": "Section Background Color",
-      "default": "#FAF5F5"
+      "default": "#FAF0F0"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make Section Full Width",
+      "default": false
     },
     {
       "type": "range",
@@ -413,6 +522,26 @@
     },
     {
       "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
       "id": "padding_top_mobile",
       "min": 0,
       "max": 120,
@@ -430,6 +559,66 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 0
     }
   ],
   "blocks": [

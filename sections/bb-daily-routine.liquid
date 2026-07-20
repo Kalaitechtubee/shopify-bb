@@ -1,6 +1,9 @@
 {{ 'bb-theme.css' | asset_url | stylesheet_tag }}
 
 {%- unless section.settings.enable_section == false -%}
+{%- assign _bb_meta = product.metafields.custom.routine_steps.value -%}
+{%- if section.blocks.size == 0 and _bb_meta == blank -%}{%- assign _skip_section = true -%}{%- endif -%}
+{%- unless _skip_section -%}
 
 {%- style -%}
   #bb-routine-{{ section.id }} {
@@ -41,14 +44,64 @@
   }
   @media (min-width: 768px) {
     #bb-routine-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
     }
   }
   @media (max-width: 768px) {
     #bb-routine-{{ section.id }} .bb-routine-v2__heading {
-      font-size: {{ section.settings.heading_size_mobile }}px;
+      font-size: {{ section.settings.heading_size_mobile | default: 32 }}px;
     }
+  }
+
+  #bb-routine-{{ section.id }} .bb-container {
+    max-width: var(--rt-max-width);
+    width: 100%;
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0; margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto; margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto; margin-right: 0;
+    {%- endif -%}
+  }
+
+  #bb-routine-{{ section.id }} .bb-routine-v2__inner {
+    display: flex;
+    flex-direction: column;
+    {%- if section.settings.alignment == 'left' -%}
+      align-items: flex-start; text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      align-items: center; text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      align-items: flex-end; text-align: right;
+    {%- else -%}
+      align-items: flex-start; text-align: left;
+    {%- endif -%}
+  }
+
+  #bb-routine-{{ section.id }} .bb-routine-v2__heading {
+    font-size: var(--rt-heading-size, 72px);
+    font-weight: var(--rt-heading-weight, 800);
+    line-height: 1.05;
+    letter-spacing: -2.5px;
+    color: #17123B;
+    margin-bottom: var(--rt-heading-margin, 48px);
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+  }
+  #bb-routine-{{ section.id }} .bb-heading-maroon {
+    color: #6B2430;
+    display: block;
+  }
+  #bb-routine-{{ section.id }} .bb-routine-v2__list {
+    text-align: left;
+    width: 100%;
   }
 {%- endstyle -%}
 
@@ -58,7 +111,7 @@
   data-section-id="{{ section.id }}"
 >
   <div class="bb-container">
-    <div class="bb-routine-v2__inner bb-text-center">
+    <div class="bb-routine-v2__inner">
       
       <!-- Subheading Badge -->
       {%- if section.settings.subheading != blank -%}
@@ -67,7 +120,18 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-routine-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-routine-v2__heading">
+          {%- assign h_words = section.settings.heading | split: ' ' -%}
+          {%- assign total_words = h_words | size -%}
+          {%- if total_words >= 4 -%}
+            {%- assign mid = total_words | divided_by: 2 -%}
+            {%- assign first_part = h_words | slice: 0, mid | join: ' ' -%}
+            {%- assign second_part = h_words | slice: mid, total_words | join: ' ' -%}
+            {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part }}</span>
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Steps Stack -->
@@ -112,6 +176,7 @@
   </div>
 </section>
 
+{%- endunless -%}{%- comment -%}end _skip_section{%- endcomment -%}
 {%- endunless -%}
 
 {% schema %}
@@ -428,6 +493,97 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 0
     }
   ],
   "blocks": [

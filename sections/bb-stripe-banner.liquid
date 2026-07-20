@@ -1,0 +1,281 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-stripe-{{ section.id }} {
+    background-color: {{ section.settings.background_color | default: '#622229' }};
+    padding-top: {{ section.settings.padding_top_mobile | default: 16 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 16 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: {{ section.settings.height_mobile | default: 50 }}px;
+  }
+
+  #bb-stripe-{{ section.id }} .bb-stripe__text {
+    color: {{ section.settings.text_color | default: '#ffffff' }};
+    font-size: {{ section.settings.text_size_mobile | default: 18 }}px;
+    font-weight: {{ section.settings.text_weight | default: '700' }};
+    text-transform: {{ section.settings.text_transform | default: 'uppercase' }};
+    letter-spacing: {{ section.settings.letter_spacing | default: 1 }}px;
+    margin: 0;
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 20px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-stripe-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | default: 20 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 20 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      min-height: {{ section.settings.height_desktop | default: 60 }}px;
+    }
+    #bb-stripe-{{ section.id }} .bb-stripe__text {
+      font-size: {{ section.settings.text_size_desktop | default: 28 }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-stripe-{{ section.id }}"
+  class="bb-section bb-stripe-banner {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  {%- if section.settings.stripe_text != blank -%}
+    <p class="bb-stripe__text">{{ section.settings.stripe_text }}</p>
+  {%- endif -%}
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Stripe Banner",
+  "tag": "section",
+  "class": "bb-section-stripe-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "stripe_text",
+      "label": "Banner Text",
+      "default": "one filter, long hair, zero hair problems"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#622229"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "text_size_desktop",
+      "min": 14,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Text Size — Desktop",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "min": 10,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Text Size — Mobile",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "text_weight",
+      "label": "Font Weight",
+      "default": "700",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text Transform",
+      "default": "uppercase",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Letter Spacing",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Sizing & Heights"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 30,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Min Height — Desktop",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Min Height — Mobile",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Stripe Banner"
+    }
+  ]
+}
+{% endschema %}

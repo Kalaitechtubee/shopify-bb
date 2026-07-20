@@ -3,63 +3,171 @@
 {%- unless section.settings.enable_section == false -%}
 
 {%- style -%}
+  {%- assign left_bg = section.settings.left_bg_color -%}
+  {%- assign left_border = section.settings.left_border_color -%}
+  {%- assign right_bg = section.settings.right_bg_color -%}
+  {%- assign right_border = section.settings.right_border_color -%}
+  {%- assign right_title = section.settings.right_title_color -%}
+  {%- assign right_heading = section.settings.right_heading_color -%}
+  {%- assign right_text = section.settings.right_text_color -%}
+  {%- assign right_highlight = section.settings.right_highlight_color -%}
+
+  {%- if left_bg == '#FAF0F0' or left_bg == blank or left_bg == 'rgba(0,0,0,0)' -%}
+    {%- if left_border == '#FAF0F0' or left_border == '#faf0f0' or left_border == blank or left_border == 'rgba(0,0,0,0)' -%}
+      {%- assign left_border = '#E4A1A9' -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if right_bg == '#000000' or right_bg == blank or right_bg == 'rgba(0,0,0,0)' -%}
+    {%- assign right_bg = '#FFFFFF' -%}
+  {%- endif -%}
+  {%- if right_border == '#000000' or right_border == blank or right_border == 'rgba(0,0,0,0)' -%}
+    {%- assign right_border = '#A3FE01' -%}
+  {%- endif -%}
+  {%- if right_title == '#FF808B' or right_title == '#ff808b' or right_title == blank or right_title == 'rgba(0,0,0,0)' -%}
+    {%- assign right_title = '#24B14C' -%}
+  {%- endif -%}
+  {%- if right_heading == '#ffffff' or right_heading == '#FFFFFF' or right_heading == blank or right_heading == 'rgba(0,0,0,0)' -%}
+    {%- assign right_heading = '#17123B' -%}
+  {%- endif -%}
+  {%- if right_text == 'rgba(255, 255, 255, 0.85)' or right_text == 'rgba(255,255,255,0.85)' or right_text == blank or right_text == 'rgba(0,0,0,0)' -%}
+    {%- assign right_text = '#17123B' -%}
+  {%- endif -%}
+  {%- if right_highlight == '#A3FE01' or right_highlight == '#a3fe01' or right_highlight == blank or right_highlight == 'rgba(0,0,0,0)' -%}
+    {%- assign right_highlight = '#24B14C' -%}
+  {%- endif -%}
+
   #bb-comparison-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top_mobile }}px;
-    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile | default: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 0 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 0 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 0 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
     
     /* CSS Variables mapping for complete customization */
     --comp-bg: {{ section.settings.background_color }};
-    --comp-max-width: {{ section.settings.container_max_width }}px;
+    --comp-max-width: {{ section.settings.container_max_width | default: 1200 }}px;
     
     --comp-badge-bg: {{ section.settings.badge_bg_color }};
     --comp-badge-text: {{ section.settings.badge_text_color }};
     --comp-badge-border: {{ section.settings.badge_border_color }};
-    --comp-badge-radius: {{ section.settings.badge_border_radius }}px;
-    --comp-badge-size: {{ section.settings.badge_font_size }}px;
-    --comp-badge-margin: {{ section.settings.badge_margin_bottom }}px;
+    --comp-badge-radius: {{ section.settings.badge_border_radius | default: 50 }}px;
+    --comp-badge-size: {{ section.settings.badge_font_size | default: 12 }}px;
+    --comp-badge-margin: {{ section.settings.badge_margin_bottom | default: 20 }}px;
     
-    --comp-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --comp-heading-size: {{ section.settings.heading_size_desktop | default: 36 }}px;
     --comp-heading-weight: {{ section.settings.heading_weight }};
     --comp-heading-color: {{ section.settings.heading_color }};
-    --comp-heading-margin: {{ section.settings.heading_margin_bottom }}px;
+    --comp-heading-margin: {{ section.settings.heading_margin_bottom | default: 32 }}px;
     
-    --comp-gap: {{ section.settings.grid_gap }}px;
-    --comp-card-radius: {{ section.settings.card_border_radius }}px;
-    --comp-card-padding: {{ section.settings.card_padding }}px;
+    --comp-gap: {{ section.settings.grid_gap | default: 24 }}px;
+    --comp-card-radius: {{ section.settings.card_border_radius | default: 16 }}px;
+    --comp-card-padding: {{ section.settings.card_padding | default: 32 }}px;
     
     /* Left Card */
-    --comp-left-bg: {{ section.settings.left_bg_color }};
-    --comp-left-border-color: {{ section.settings.left_border_color }};
+    --comp-left-bg: {{ left_bg }};
+    --comp-left-border-color: {{ left_border }};
     --comp-left-title-color: {{ section.settings.left_title_color }};
-    --comp-left-title-size: {{ section.settings.left_title_size }}px;
+    --comp-left-title-size: {{ section.settings.left_title_size | default: 13 }}px;
     --comp-left-heading-color: {{ section.settings.left_heading_color }};
-    --comp-left-heading-size: {{ section.settings.left_heading_size }}px;
+    --comp-left-heading-size: {{ section.settings.left_heading_size | default: 22 }}px;
     --comp-left-heading-weight: {{ section.settings.left_heading_weight }};
-    --comp-left-desc-size: {{ section.settings.desc_font_size }}px;
+    --comp-left-desc-size: {{ section.settings.desc_font_size | default: 15 }}px;
     --comp-left-text-color: {{ section.settings.left_text_color }};
     
     /* Right Card */
-    --comp-right-bg: {{ section.settings.right_bg_color }};
-    --comp-right-border-color: {{ section.settings.right_border_color }};
-    --comp-right-title-color: {{ section.settings.right_title_color }};
-    --comp-right-title-size: {{ section.settings.right_title_size }}px;
-    --comp-right-heading-color: {{ section.settings.right_heading_color }};
-    --comp-right-heading-size: {{ section.settings.right_heading_size }}px;
+    --comp-right-bg: {{ right_bg }};
+    --comp-right-border-color: {{ right_border }};
+    --comp-right-title-color: {{ right_title }};
+    --comp-right-title-size: {{ section.settings.right_title_size | default: 13 }}px;
+    --comp-right-heading-color: {{ right_heading }};
+    --comp-right-heading-size: {{ section.settings.right_heading_size | default: 22 }}px;
     --comp-right-heading-weight: {{ section.settings.right_heading_weight }};
-    --comp-right-desc-size: {{ section.settings.desc_font_size }}px;
-    --comp-right-text-color: {{ section.settings.right_text_color }};
-    --comp-right-highlight-color: {{ section.settings.right_highlight_color }};
+    --comp-right-desc-size: {{ section.settings.desc_font_size | default: 15 }}px;
+    --comp-right-text-color: {{ right_text }};
+    --comp-right-highlight-color: {{ right_highlight }};
   }
   @media (min-width: 768px) {
     #bb-comparison-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | default: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 0 }}px;
+      padding-left: {{ section.settings.padding_left | default: 0 }}px;
+      padding-right: {{ section.settings.padding_right | default: 0 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+      {%- unless section.settings.full_width -%}
+        max-width: var(--page-width, 1200px);
+        margin-left: auto;
+        margin-right: auto;
+      {%- endunless -%}
     }
   }
   @media (max-width: 768px) {
     #bb-comparison-{{ section.id }} .bb-comparison-v2__heading {
       font-size: {{ section.settings.heading_size_mobile }}px;
     }
+  }
+
+  #bb-comparison-{{ section.id }} .bb-container {
+    max-width: var(--comp-max-width);
+    width: 100%;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      margin-left: 0;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'center' -%}
+      margin-left: auto;
+      margin-right: auto;
+    {%- elsif section.settings.alignment == 'right' -%}
+      margin-left: auto;
+      margin-right: 0;
+    {%- endif -%}
+  }
+
+  #bb-comparison-{{ section.id }} .bb-comparison-v2__inner {
+    max-width: var(--comp-max-width);
+    width: 100%;
+    margin-left: inherit;
+    margin-right: inherit;
+    
+    {%- if section.settings.alignment == 'left' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    {%- elsif section.settings.alignment == 'center' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    {%- elsif section.settings.alignment == 'right' -%}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    {%- endif -%}
+  }
+
+  #bb-comparison-{{ section.id }} .bb-comparison-v2__heading {
+    text-align: inherit;
+    width: 100%;
+    margin-top: 0;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    color: #17123B;
+  }
+  #bb-comparison-{{ section.id }} .bb-comparison-v2__heading .bb-heading-maroon {
+    color: #6B2430;
+    display: block;
+  }
+
+  #bb-comparison-{{ section.id }} .bb-comparison-v2__cards {
+    text-align: left;
+  }
+
+  #bb-comparison-{{ section.id }} .bb-comparison-v2__card-title--right {
+    color: var(--comp-right-heading-color, #17123B);
   }
 {%- endstyle -%}
 
@@ -69,7 +177,7 @@
   data-section-id="{{ section.id }}"
 >
   <div class="bb-container">
-    <div class="bb-comparison-v2__inner bb-text-center">
+    <div class="bb-comparison-v2__inner">
       
       <!-- Subheading Badge -->
       {%- if section.settings.subheading != blank -%}
@@ -78,12 +186,28 @@
 
       <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb-comparison-v2__heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-comparison-v2__heading">
+          {%- assign h_lower = section.settings.heading | downcase -%}
+          {%- if h_lower contains "why regular" and h_lower contains "failing you" -%}
+            {%- if h_lower contains " keep " -%}
+              {%- assign first_part = section.settings.heading | split: " keep " | first -%}
+              {%- assign second_part = section.settings.heading | split: first_part | last -%}
+              {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part | strip }}</span>
+            {%- else -%}
+              {{ section.settings.heading }}
+            {%- endif -%}
+          {%- else -%}
+            {{ section.settings.heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
 
       <!-- Cards Grid -->
       <div class="bb-comparison-v2__cards">
         
+        {%- assign left_clean_title = section.settings.left_title | replace: "✕", "" | replace: "✖", "" | replace: "✕", "" | replace: "x ", "" | replace: "X ", "" | strip -%}
+        {%- assign right_clean_title = section.settings.right_title | replace: "✓", "" | replace: "✔", "" | replace: "✓", "" | replace: "v ", "" | replace: "V ", "" | strip -%}
+
         <!-- Left Card (Regular Serums) -->
         <div class="bb-comparison-v2__card bb-comparison-v2__card--left bb-fade-in">
           {%- if section.settings.left_title != blank -%}
@@ -93,11 +217,11 @@
                   <img src="{{ section.settings.left_icon | image_url: width: 48 }}" alt="" loading="lazy">
                 </span>
               {%- else -%}
-                <span class="bb-comparison-v2__card-title-icon" style="color: {{ section.settings.left_title_color }};">
+                <span class="bb-comparison-v2__card-title-icon" style="color: var(--comp-left-title-color);">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </span>
               {%- endif -%}
-              {{ section.settings.left_title }}
+              {{ left_clean_title }}
             </div>
           {%- endif -%}
           {%- if section.settings.left_header != blank -%}
@@ -117,11 +241,11 @@
                   <img src="{{ section.settings.right_icon | image_url: width: 48 }}" alt="" loading="lazy">
                 </span>
               {%- else -%}
-                <span class="bb-comparison-v2__card-title-icon" style="color: {{ section.settings.right_title_color }};">
+                <span class="bb-comparison-v2__card-title-icon" style="color: var(--comp-right-title-color);">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </span>
               {%- endif -%}
-              {{ section.settings.right_title }}
+              {{ right_clean_title }}
             </div>
           {%- endif -%}
           {%- if section.settings.right_header != blank -%}
@@ -137,7 +261,6 @@
     </div>
   </div>
 </section>
-
 {%- endunless -%}
 
 {% schema %}
@@ -165,11 +288,22 @@
       "type": "range",
       "id": "container_max_width",
       "min": 400,
-      "max": 1200,
+      "max": 1600,
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 1000
+      "default": 1280
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
     },
     {
       "type": "header",
@@ -223,11 +357,11 @@
       "type": "range",
       "id": "badge_margin_bottom",
       "min": 0,
-      "max": 60,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Badge Margin Bottom",
-      "default": 20
+      "default": 26
     },
     {
       "type": "header",
@@ -249,21 +383,21 @@
       "type": "range",
       "id": "heading_size_desktop",
       "min": 20,
-      "max": 64,
+      "max": 100,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Desktop",
-      "default": 36
+      "default": 72
     },
     {
       "type": "range",
       "id": "heading_size_mobile",
-      "min": 18,
-      "max": 40,
+      "min": 16,
+      "max": 60,
       "step": 2,
       "unit": "px",
       "label": "Heading Size — Mobile",
-      "default": 26
+      "default": 42
     },
     {
       "type": "select",
@@ -274,18 +408,19 @@
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
         { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black (Heavy)" }
       ]
     },
     {
       "type": "range",
       "id": "heading_margin_bottom",
       "min": 0,
-      "max": 80,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 32
+      "default": 48
     },
     {
       "type": "header",
@@ -309,7 +444,7 @@
       "step": 1,
       "unit": "px",
       "label": "Card Border Radius",
-      "default": 16
+      "default": 18
     },
     {
       "type": "range",
@@ -353,7 +488,7 @@
       "type": "color",
       "id": "left_border_color",
       "label": "Card 1 Border Color",
-      "default": "#FAF0F0"
+      "default": "#E4A1A9"
     },
     {
       "type": "color",
@@ -436,19 +571,19 @@
       "type": "color",
       "id": "right_bg_color",
       "label": "Card 2 Background Color",
-      "default": "#000000"
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
       "id": "right_border_color",
       "label": "Card 2 Border Color",
-      "default": "#000000"
+      "default": "#A3FE01"
     },
     {
       "type": "color",
       "id": "right_title_color",
       "label": "Card 2 Title Color",
-      "default": "#FF808B"
+      "default": "#24B14C"
     },
     {
       "type": "range",
@@ -464,7 +599,7 @@
       "type": "color",
       "id": "right_heading_color",
       "label": "Card 2 Sub-Heading Color",
-      "default": "#ffffff"
+      "default": "#17123B"
     },
     {
       "type": "range",
@@ -492,13 +627,13 @@
       "type": "color",
       "id": "right_text_color",
       "label": "Card 2 Description Color",
-      "default": "rgba(255, 255, 255, 0.85)"
+      "default": "#17123B"
     },
     {
       "type": "color",
       "id": "right_highlight_color",
       "label": "Card 2 Highlight Text Color",
-      "default": "#A3FE01"
+      "default": "#24B14C"
     },
     {
       "type": "image_picker",
@@ -528,6 +663,12 @@
       "id": "background_color",
       "label": "Section Background Color",
       "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make Section Full Width",
+      "default": false
     },
     {
       "type": "range",
@@ -568,6 +709,86 @@
       "unit": "px",
       "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 0
     }
   ],
   "presets": [
