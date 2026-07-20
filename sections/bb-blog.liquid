@@ -1,6 +1,10 @@
-{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+{%- assign is_policy_page = false -%}
+{%- assign handle = page.handle | downcase -%}
+{%- if handle contains 'privacy' or handle contains 'terms' or handle contains 'shipping' or handle contains 'refund' or handle contains 'return' or handle contains 'contact' -%}
+  {%- assign is_policy_page = true -%}
+{%- endif -%}
 
-{%- unless section.settings.enable_section == false -%}
+{%- unless section.settings.enable_section == false or is_policy_page -%}
 
 {%- style -%}
   #bb-blog-{{ section.id }} {
@@ -151,26 +155,27 @@
     background-color: var(--blog-card-bg);
     border: 1px solid var(--blog-card-border);
     border-radius: var(--blog-card-radius);
-    overflow: hidden;
+    padding: var(--blog-card-padding);
     display: flex;
     flex-direction: column;
     text-decoration: none;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
   }
 
   #bb-blog-{{ section.id }} .bb-blog__card:hover {
     border-color: var(--blog-card-hover-border);
     transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
   }
 
   #bb-blog-{{ section.id }} .bb-blog__media {
     width: 100%;
-    aspect-ratio: {{ section.settings.card_image_aspect | default: '16/10' }};
+    aspect-ratio: {{ section.settings.card_image_aspect | default: '4/3' }};
     overflow: hidden;
     background-color: #f0f0f0;
     position: relative;
+    margin-bottom: 20px;
   }
 
   #bb-blog-{{ section.id }} .bb-blog__media img {
@@ -178,14 +183,15 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    border-radius: 0px;
   }
 
   #bb-blog-{{ section.id }} .bb-blog__card:hover .bb-blog__media img {
-    transform: scale(1.04);
+    transform: scale(1.03);
   }
 
   #bb-blog-{{ section.id }} .bb-blog__content {
-    padding: var(--blog-card-padding);
+    padding: 0;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -239,17 +245,18 @@
         <h2 class="bb-blog__heading">
           {%- assign h_text = section.settings.heading -%}
           {%- assign h_highlight = section.settings.heading_highlight_color | default: '#FF5A1F' -%}
-          {%- if section.settings.heading_highlight_words != blank -%}
+          {%- assign h_lower = h_text | downcase -%}
+          {%- if h_lower contains "readour latest" or h_lower contains "read our latest" -%}
+            {%- assign span_latest = '<span style="color:' | append: h_highlight | append: ';">latest</span><br>' -%}
+            {%- assign span_blog = '<span style="color:' | append: h_highlight | append: ';">blog</span>' -%}
+            {%- assign h_text = h_text | replace: "latest", span_latest | replace: "Latest", span_latest | replace: "blog", span_blog | replace: "Blog", span_blog -%}
+          {%- elsif section.settings.heading_highlight_words != blank -%}
             {%- assign words = section.settings.heading_highlight_words | split: "," -%}
             {%- for w in words -%}
               {%- assign clean_w = w | strip -%}
               {%- assign span_w = '<span style="color:' | append: h_highlight | append: ';">' | append: clean_w | append: '</span>' -%}
               {%- assign h_text = h_text | replace: clean_w, span_w -%}
             {%- endfor -%}
-          {%- else -%}
-            {%- assign span_latest = '<span style="color:' | append: h_highlight | append: ';">latest</span>' -%}
-            {%- assign span_blog = '<span style="color:' | append: h_highlight | append: ';">blog</span>' -%}
-            {%- assign h_text = h_text | replace: "latest", span_latest | replace: "Latest", span_latest | replace: "blog", span_blog | replace: "Blog", span_blog -%}
           {%- endif -%}
           {{ h_text }}
         </h2>
@@ -402,7 +409,7 @@
       "step": 20,
       "unit": "px",
       "label": "Container Max Width",
-      "default": 1200
+      "default": 1600
     },
     {
       "type": "select",
@@ -525,7 +532,7 @@
       "type": "select",
       "id": "heading_weight",
       "label": "Heading Weight",
-      "default": "800",
+      "default": "600",
       "options": [
         { "value": "400", "label": "Regular" },
         { "value": "600", "label": "Semi-Bold" },
@@ -593,7 +600,7 @@
       "step": 1,
       "unit": "px",
       "label": "Card Border Radius",
-      "default": 16
+      "default": 0
     },
     {
       "type": "range",
@@ -609,7 +616,7 @@
       "type": "select",
       "id": "card_image_aspect",
       "label": "Card Image Aspect Ratio",
-      "default": "16/10",
+      "default": "4/3",
       "options": [
         { "value": "16/10", "label": "Landscape (16:10)" },
         { "value": "4/3", "label": "Standard (4:3)" },
@@ -712,7 +719,7 @@
       "type": "color",
       "id": "background_color",
       "label": "Section Background Color",
-      "default": "#FAF5F5"
+      "default": "#FFFFFF"
     },
     {
       "type": "range",
@@ -722,7 +729,7 @@
       "step": 4,
       "unit": "px",
       "label": "Side Margin - Desktop (equal left and right)",
-      "default": 108
+      "default": 36
     },
     {
       "type": "range",

@@ -1,0 +1,37 @@
+{
+  "sections": {
+    "main": {
+      "type": "bb-policy",
+      "settings": {
+        "enable_section": true,
+        "container_max_width": 1200,
+        "title": "Refund Policy",
+        "heading_color": "#1A1A1A",
+        "heading_size_desktop": 48,
+        "heading_size_mobile": 28,
+        "content": "<p>9skin does not have a refundable policy Unless otherwise:</p>\n\n<ul>\n  <li>Products purchased directly from 9skin website were incorrectly sent or are defective.</li>\n</ul>\n\n<p>Given such, customers are to notify 9Skin within <strong>14 days for incorrectly sent products</strong>, or <strong>7 days for defective products</strong>, from the date of purchase. If an exchange is not feasible, 9skin may issue (i) a credit for the amount of the exchanged products, which may be used to purchase other products.</p>",
+        "text_color": "#333333",
+        "body_font_size": 16,
+        "background_color": "#FFFFFF",
+        "margin_x": 108,
+        "margin_x_mobile": 12,
+        "section_border_radius": 0,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "padding_left": 40,
+        "padding_right": 40,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40,
+        "padding_left_mobile": 20,
+        "padding_right_mobile": 20,
+        "margin_top": 8,
+        "margin_bottom": 8,
+        "margin_top_mobile": 8,
+        "margin_bottom_mobile": 8
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

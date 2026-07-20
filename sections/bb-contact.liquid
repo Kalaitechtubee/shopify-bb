@@ -1,36 +1,56 @@
 {%- style -%}
-  .section-{{ section.id }}-padding {
+  #bb-contact-{{ section.id }} {
     padding-top: {{ section.settings.padding_top_mobile | default: 48 }}px;
     padding-bottom: {{ section.settings.padding_bottom_mobile | default: 48 }}px;
-    --contact-pt: {{ section.settings.padding_top }}px;
-    --contact-pb: {{ section.settings.padding_bottom }}px;
-    --contact-heading-color: {{ section.settings.heading_color }};
-    --contact-subtitle-color: {{ section.settings.subtitle_color }};
-    --contact-heading-size-desktop: {{ section.settings.heading_size_desktop }}px;
-    --contact-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
-    
-    /* Spacings */
-    --contact-heading-margin-bottom: {{ section.settings.heading_margin_bottom }}px;
-    --contact-subtitle-margin-bottom: {{ section.settings.subtitle_margin_bottom }}px;
-    --contact-socials-margin-bottom: {{ section.settings.socials_margin_bottom }}px;
-    
-    /* Sizes */
-    --contact-subtitle-size: {{ section.settings.subtitle_size }}px;
-    --contact-badge-title-size: {{ section.settings.badge_title_size }}px;
-    --contact-badge-label-size: {{ section.settings.badge_label_size }}px;
-    --contact-badge-icon-size: {{ section.settings.badge_icon_size }}px;
-    --contact-social-icon-size: {{ section.settings.social_icon_size }}px;
-    
-    /* Alignment */
-    --contact-align: {{ section.settings.content_alignment }};
+    padding-left: {{ section.settings.padding_left_mobile | default: 20 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 20 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 8 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 8 }}px;
+    margin-left: {{ section.settings.margin_x_mobile | default: 12 }}px;
+    margin-right: {{ section.settings.margin_x_mobile | default: 12 }}px;
+    {%- assign _mx_mob2 = section.settings.margin_x_mobile | default: 12 | times: 2 -%}
+    width: calc(100% - {{ _mx_mob2 }}px);
+    box-sizing: border-box;
+    background-color: {{ section.settings.section_bg | default: '#F7F5F0' }};
+    border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
+
+    --contact-heading-color: {{ section.settings.heading_color | default: '#000000' }};
+    --contact-subtitle-color: {{ section.settings.subtitle_color | default: '#444444' }};
+    --contact-heading-size-desktop: {{ section.settings.heading_size_desktop | default: 48 }}px;
+    --contact-heading-size-mobile: {{ section.settings.heading_size_mobile | default: 28 }}px;
+    --contact-heading-margin-bottom: {{ section.settings.heading_margin_bottom | default: 16 }}px;
+    --contact-subtitle-margin-bottom: {{ section.settings.subtitle_margin_bottom | default: 32 }}px;
+    --contact-socials-margin-bottom: {{ section.settings.socials_margin_bottom | default: 24 }}px;
+    --contact-subtitle-size: {{ section.settings.subtitle_size | default: 16 }}px;
+    --contact-badge-title-size: {{ section.settings.badge_title_size | default: 20 }}px;
+    --contact-badge-label-size: {{ section.settings.badge_label_size | default: 14 }}px;
+    --contact-badge-icon-size: {{ section.settings.badge_icon_size | default: 24 }}px;
+    --contact-social-icon-size: {{ section.settings.social_icon_size | default: 20 }}px;
+    --contact-align: {{ section.settings.content_alignment | default: 'left' }};
     --contact-justify: {% if section.settings.content_alignment == 'center' %}center{% else %}flex-start{% endif %};
   }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+  @media screen and (min-width: 768px) {
+    #bb-contact-{{ section.id }} {
+      {%- assign _mx = section.settings.margin_x | default: 108 -%}
+      {%- assign _mx2 = _mx | times: 2 -%}
+      padding-top: {{ section.settings.padding_top | default: 60 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+      padding-left: {{ section.settings.padding_left | default: 40 }}px;
+      padding-right: {{ section.settings.padding_right | default: 40 }}px;
+      margin-top: {{ section.settings.margin_top | default: 8 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 8 }}px;
+      margin-left: {{ _mx }}px;
+      margin-right: {{ _mx }}px;
+      width: calc(100% - {{ _mx2 }}px);
     }
+  }
+
+  #bb-contact-{{ section.id }} .bb-container {
+    max-width: {{ section.settings.container_max_width | default: 1200 }}px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   /* Section CSS */
@@ -244,12 +264,12 @@
   }
 {%- endstyle -%}
 
-<div class="bb-contact-section section-{{ section.id }}-padding" style="background-color: {{ section.settings.section_bg }};">
+<section id="bb-contact-{{ section.id }}" class="bb-contact-section {{ section.settings.custom_class }}">
   <div class="bb-container">
     <div class="bb-contact-grid">
       <!-- Left Column -->
       <div class="bb-contact-info">
-        <h2 class="bb-contact-heading">{{ section.settings.heading }}</h2>
+        <h2 class="bb-contact-heading">{{ section.settings.heading | replace: "\n", "<br>" }}</h2>
         {% if section.settings.subtitle != blank %}
           <p class="bb-contact-subtitle">{{ section.settings.subtitle }}</p>
         {% endif %}
@@ -382,6 +402,19 @@
             </div>
           {%- endif -%}
 
+          {%- if section.settings.show_top_field -%}
+            <div class="bb-contact-field">
+              <label class="bb-contact-field-label" for="ContactForm-top">{{ section.settings.top_field_label | default: "Email" }}</label>
+              <input
+                type="text"
+                id="ContactForm-top"
+                name="contact[top_field]"
+                placeholder="{{ section.settings.top_field_placeholder }}"
+                class="bb-contact-input"
+              >
+            </div>
+          {%- endif -%}
+
           <div class="bb-contact-field">
             <label class="bb-contact-field-label" for="ContactForm-name">Your Name*</label>
             <input
@@ -425,7 +458,7 @@
       </div>
     </div>
   </div>
-</div>
+</section>
 
 {% schema %}
 {
@@ -439,7 +472,7 @@
     ]
   },
   "settings": [
-    {
+        {
       "type": "header",
       "content": "Section Spacing & Background"
     },
@@ -451,13 +484,53 @@
     },
     {
       "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1600
+    },
+    {
+      "type": "range",
+      "id": "margin_x",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Side Margin - Desktop (equal left and right)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_x_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Side Margin - Mobile (equal left and right)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Section Corner Radius",
+      "default": 0
+    },
+    {
+      "type": "range",
       "id": "padding_top",
       "min": 0,
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top (Desktop)",
-      "default": 40
+      "label": "Padding Top — Desktop",
+      "default": 60
     },
     {
       "type": "range",
@@ -466,8 +539,28 @@
       "max": 160,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom (Desktop)",
-      "default": 40
+      "label": "Padding Bottom — Desktop",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 92
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 92
     },
     {
       "type": "range",
@@ -476,7 +569,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Top (Mobile)",
+      "label": "Padding Top — Mobile",
       "default": 48
     },
     {
@@ -486,8 +579,68 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Padding Bottom (Mobile)",
+      "label": "Padding Bottom — Mobile",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 8
     },
     {
       "type": "header",
@@ -517,7 +670,7 @@
       "step": 2,
       "unit": "px",
       "label": "Heading Margin Bottom",
-      "default": 24
+      "default": 16
     },
     {
       "type": "range",
@@ -544,6 +697,23 @@
       "content": "Typography & Sizes"
     },
     {
+      "type": "checkbox",
+      "id": "show_top_field",
+      "label": "Show Extra Top Field (e.g. Email/Subject)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "top_field_label",
+      "label": "Top Field Label",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "top_field_placeholder",
+      "label": "Top Field Placeholder"
+    },
+    {
       "type": "textarea",
       "id": "heading",
       "label": "Heading Text",
@@ -563,7 +733,7 @@
       "step": 2,
       "unit": "px",
       "label": "Heading Font Size (Desktop)",
-      "default": 48
+      "default": 60
     },
     {
       "type": "range",
@@ -573,7 +743,7 @@
       "step": 2,
       "unit": "px",
       "label": "Heading Font Size (Mobile)",
-      "default": 32
+      "default": 34
     },
     {
       "type": "text",
@@ -595,7 +765,7 @@
       "step": 1,
       "unit": "px",
       "label": "Subtitle Font Size",
-      "default": 16
+      "default": 18
     },
     {
       "type": "header",
@@ -799,7 +969,7 @@
       "type": "color",
       "id": "card_bg",
       "label": "Card Background Color",
-      "default": "#ffffff"
+      "default": "#FFFFFF"
     },
     {
       "type": "range",
@@ -827,7 +997,7 @@
       "type": "color",
       "id": "button_text_color",
       "label": "Submit Button Text Color",
-      "default": "#ffffff"
+      "default": "#FFFFFF"
     },
     {
       "type": "range",

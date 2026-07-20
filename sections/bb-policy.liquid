@@ -1,0 +1,585 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-policy-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile | default: 40 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 40 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 20 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 20 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 8 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 8 }}px;
+    margin-left: {{ section.settings.margin_x_mobile | default: 12 }}px;
+    margin-right: {{ section.settings.margin_x_mobile | default: 12 }}px;
+    {%- assign _mx_mob2 = section.settings.margin_x_mobile | default: 12 | times: 2 -%}
+    width: calc(100% - {{ _mx_mob2 }}px);
+    box-sizing: border-box;
+    background-color: {{ section.settings.background_color | default: '#FFFFFF' }};
+    border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
+    
+    --policy-max-width: {{ section.settings.container_max_width | default: 1200 }}px;
+    --policy-heading-color: {{ section.settings.heading_color | default: '#1A1A1A' }};
+    --policy-heading-size-desktop: {{ section.settings.heading_size_desktop | default: 48 }}px;
+    --policy-heading-size-mobile: {{ section.settings.heading_size_mobile | default: 28 }}px;
+    --policy-text-color: {{ section.settings.text_color | default: '#333333' }};
+    --policy-font-size: {{ section.settings.body_font_size | default: 16 }}px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-policy-{{ section.id }} {
+      {%- assign _mx = section.settings.margin_x | default: 108 -%}
+      {%- assign _mx2 = _mx | times: 2 -%}
+      padding-top: {{ section.settings.padding_top | default: 60 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+      padding-left: {{ section.settings.padding_left | default: 40 }}px;
+      padding-right: {{ section.settings.padding_right | default: 40 }}px;
+      margin-top: {{ section.settings.margin_top | default: 8 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 8 }}px;
+      margin-left: {{ _mx }}px;
+      margin-right: {{ _mx }}px;
+      width: calc(100% - {{ _mx2 }}px);
+    }
+  }
+
+  #bb-policy-{{ section.id }} .bb-container {
+    max-width: var(--policy-max-width);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__title {
+    font-size: var(--policy-heading-size-desktop);
+    font-weight: 800;
+    color: var(--policy-heading-color);
+    margin: 0 0 32px 0;
+    line-height: 1.2;
+    letter-spacing: -1px;
+  }
+
+  @media (max-width: 768px) {
+    #bb-policy-{{ section.id }} .bb-policy__title {
+      font-size: var(--policy-heading-size-mobile);
+      margin-bottom: 24px;
+    }
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body {
+    font-size: var(--policy-font-size);
+    color: var(--policy-text-color);
+    line-height: 1.7;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--policy-heading-color);
+    margin: 36px 0 16px 0;
+    line-height: 1.3;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--policy-heading-color);
+    margin: 28px 0 12px 0;
+    line-height: 1.35;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body p {
+    margin: 0 0 18px 0;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body ul,
+  #bb-policy-{{ section.id }} .bb-policy__body ol {
+    margin: 0 0 20px 24px;
+    padding: 0;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body li {
+    margin-bottom: 8px;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 15px;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body th,
+  #bb-policy-{{ section.id }} .bb-policy__body td {
+    border: 1px solid #EFEFEF;
+    padding: 12px 16px;
+    text-align: left;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body th {
+    background-color: #F8F8F8;
+    font-weight: 700;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body a {
+    color: #FF5A1F;
+    text-decoration: underline;
+  }
+{%- endstyle -%}
+
+{%- assign p_title = section.settings.title -%}
+{%- assign p_content = section.settings.content -%}
+{%- assign handle = page.handle | downcase -%}
+
+{%- if p_content == blank -%}
+  {%- if handle contains 'privacy' -%}
+    {%- assign p_title = "Privacy Policy" -%}
+    {%- capture p_content -%}<p>This Privacy Policy describes how 9skin (the "Site", "we", "us", or "our") collects, uses, and discloses your personal information when you visit, use our services, or make a purchase from n9skin.myshopify.com (the "Site") or otherwise communicate with us (collectively, the "Services"). For purposes of this Privacy Policy, "you" and "your" means you as the user of the Services, whether you are a customer, website visitor, or another individual whose information we have collected pursuant to this Privacy Policy.</p>
+<p>Please read this Privacy Policy carefully. By using and accessing any of the Services, you agree to the collection, use, and disclosure of your information as described in this Privacy Policy. If you do not agree to this Privacy Policy, please do not use or access any of the Services.</p>
+<h2>Changes to This Privacy Policy</h2>
+<p>We may update this Privacy Policy from time to time, including to reflect changes to our practices or for other operational, legal, or regulatory reasons. We will post the revised Privacy Policy on the Site, update the "Last updated" date, and take any other steps required by applicable law.</p>
+<h2>How We Collect and Use Your Personal Information</h2>
+<p>To provide the Services, we collect and have collected over the past 12 months personal information about you from a variety of sources, as set out below. The information that we collect and use varies depending on how you interact with us.</p>
+<p>In addition to the specific uses set out below, we may use the information we collect about you to communicate with you, provide the Services, comply with any applicable legal obligations, enforce any applicable terms of service, and protect or defend the Services, our rights, and the rights of our users or others.</p>
+<h2>What Personal Information We Collect</h2>
+<p>The types of personal information we obtain about you depend on how you interact with our Site and use our Services. When we use the term "personal information", we are referring to information that identifies, relates to, describes, or can be associated with you. The following sections describe the categories and specific types of personal information we collect.</p>
+<h3>Information We Collect Directly from You</h3>
+<p>Information that you directly submit to us through our Services may include:</p>
+<ul>
+  <li><strong>Basic contact details:</strong> including your name, address, phone number, and email.</li>
+  <li><strong>Order information:</strong> includes your name, billing address, shipping address, payment confirmation, email address, and phone number.</li>
+  <li><strong>Account information:</strong> including your username, password, and security questions.</li>
+  <li><strong>Shopping information:</strong> including the items you view, put in your cart or add to your wishlist.</li>
+  <li><strong>Customer support information:</strong> including the information you choose to include in communications with us, for example, when sending a message through the Services.</li>
+</ul>
+<p>Some features of the Services may require you to directly provide us with certain information about yourself. You may elect not to provide this information, but doing so may prevent you from using or accessing these features.</p>
+<h3>Information We Collect Through Cookies</h3>
+<p>We also automatically collect certain information about your interaction with the Services ("Usage Data"). To do this, we may use cookies, pixels, and similar technologies ("Cookies"). Usage Data may include information about how you access and use our Site and your account, including device information, browser information, information about your network connection, your IP address, and other information regarding your interaction with the Services.</p>
+<h3>Information We Obtain from Third Parties</h3>
+<p>Finally, we may obtain information about you from third parties, including from vendors and service providers who may collect information on our behalf, such as:</p>
+<ul>
+  <li>Companies who support our Site and Services, such as Shopify.</li>
+  <li>Our payment processors, collect payment information (e.g., bank account, credit or debit card information, billing address) to process your payment in order to fulfill your orders and provide you with products or services you have requested, in order to perform our contract with you.</li>
+</ul>
+<p>When you visit our Site, open or click on emails we send you, or interact with our Services or advertisements, we, or third parties we work with, may automatically collect certain information using online tracking technologies such as pixels, web beacons, software developer kits, third-party libraries, and cookies.</p>
+<p>Any information we obtain from third parties will be treated in accordance with this Privacy Policy. We are not responsible or liable for the accuracy of the information provided to us by third parties and are not responsible for any third party's policies or practices. For more information, see the section below, Third Party Websites and Links.</p>
+<h2>How We Use Your Personal Information</h2>
+<ul>
+  <li><strong>Providing Products and Services:</strong> We use your personal information to provide you with the Services in order to perform our contract with you, including processing your payments, fulfilling your orders, sending notifications to you related to your account, purchases, returns, exchanges, or other transactions, to create, maintain and otherwise manage your account, to arrange for shipping, facilitate any returns and exchanges and to enable you to post reviews.</li>
+  <li><strong>Marketing and Advertising:</strong> We use your personal information for marketing and promotional purposes, such as to send marketing, advertising, and promotional communications by email, text message, or postal mail, and to show you advertisements for products or services. This may include using your personal information to better tailor the Services and advertising on our Site and other websites.</li>
+  <li><strong>Security and Fraud Prevention:</strong> We use your personal information to detect, investigate, or take action regarding possible fraudulent, illegal, or malicious activity. If you choose to use the Services and register an account, you are responsible for keeping your account credentials safe. We highly recommend that you do not share your username, password, or other access details with anyone else. If you believe your account has been compromised, please contact us immediately.</li>
+  <li><strong>Communicating with you:</strong> We use your personal information to provide you with customer support and improve our Services. This is in our legitimate interests in order to be responsive to you, to provide effective services to you, and to maintain our business relationship with you.</li>
+</ul>
+<h2>Cookies</h2>
+<p>Like many websites, we use Cookies on our Site. For specific information about the Cookies that we use related to powering our store with Shopify, see <a href="https://www.shopify.com/legal/cookies" target="_blank">https://www.shopify.com/legal/cookies</a>. We use Cookies to power and improve our Site and our Services (including to remember your actions and preferences), to run analytics, and to better understand user interaction with the Services (in our legitimate interests to administer, improve, and optimize the Services). We may also permit third parties and service providers to use Cookies on our Site to better tailor the services, products, and advertising on our Site and other websites.</p>
+<p>Most browsers automatically accept Cookies by default, but you can choose to set your browser to remove or reject Cookies through your browser controls. Please keep in mind that removing or blocking Cookies can negatively impact your user experience and may cause some of the Services, including certain features and general functionality, to work incorrectly or no longer be available. Additionally, blocking Cookies may not completely prevent how we share information with third parties such as our advertising partners.</p>
+<h2>How We Disclose Personal Information</h2>
+<p>In certain circumstances, we may disclose your personal information to third parties for legitimate purposes subject to this Privacy Policy. Such circumstances may include:</p>
+<ul>
+  <li>With vendors or other third parties who perform services on our behalf (e.g., IT management, payment processing, data analytics, customer support, cloud storage, fulfillment, and shipping).</li>
+  <li>With business and marketing partners, including Shopify, to provide services and advertise to you. Our business and marketing partners will use your information in accordance with their own privacy notices.</li>
+  <li>When you direct, request us or otherwise consent to our disclosure of certain information to third parties, such as to ship your products or through your use of social media widgets or login integrations, with your consent.</li>
+  <li>With our affiliates or otherwise within our corporate group, in our legitimate interests to run a successful business.</li>
+  <li>In connection with a business transaction such as a merger or bankruptcy, to comply with any applicable legal obligations (including responding to subpoenas, search warrants, and similar requests), to enforce any applicable terms of service, and to protect or defend the Services, our rights, and the rights of our users or others.</li>
+</ul>
+<p>We have, in the past 12 months disclosed the following categories of personal information and sensitive personal information (denoted by *) about users for the purposes set out above in "How We Collect and Use your Personal Information" and "How we Disclose Personal Information":</p>
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Categories of Recipients</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Identifiers such as basic contact details and certain order and account information</td>
+      <td>Vendors and third parties who perform services on our behalf (such as Internet service providers, payment processors, fulfillment partners, customer support partners, and data analytics providers)</td>
+    </tr>
+    <tr>
+      <td>Commercial information such as order information, shopping information, and customer support information</td>
+      <td>Business and marketing partners</td>
+    </tr>
+    <tr>
+      <td>Internet or other similar network activity, such as Usage Data</td>
+      <td>Affiliates</td>
+    </tr>
+  </tbody>
+</table>
+<p>We do not use or disclose sensitive personal information for the purposes of inferring characteristics about you.</p>
+<h2>User Generated Content</h2>
+<p>The Services may enable you to post product reviews and other user-generated content. If you choose to submit user-generated content to any public area of the Services, this content will be public and accessible to anyone.</p>
+<p>We do not control who will have access to the information that you choose to make available to others and cannot ensure that parties who have access to such information will respect your privacy or keep it secure. We are not responsible for the privacy or security of any information that you make publicly available, or for the accuracy, use, or misuse of any information that you disclose or receive from third parties.</p>
+<h2>Third-Party Websites and Links</h2>
+<p>Our Site may provide links to websites or other online platforms operated by third parties. If you follow links to sites not affiliated or controlled by us, you should review their privacy and security policies and other terms and conditions. We do not guarantee and are not responsible for the privacy or security of such sites, including the accuracy, completeness, or reliability of information found on these sites. Information you provide on public or semi-public venues, including information you share on third-party social networking platforms may also be viewable by other users of the Services and/or users of those third-party platforms without limitation as to its use by us or by a third party. Our inclusion of such links does not, by itself, imply any endorsement of the content on such platforms or of their owners or operators, except as disclosed on the Services.</p>
+<h2>Children’s Data</h2>
+<p>The Services are not intended to be used by children, and we do not knowingly collect any personal information about children. If you are the parent or guardian of a child who has provided us with their personal information, you may contact us using the contact details set out below to request that it be deleted.</p>
+<p>As of the Effective Date of this Privacy Policy, we do not have actual knowledge that we “share” or “sell” (as those terms are defined in applicable law) personal information of individuals under 16 years of age.</p>
+<h2>Security and Retention of Your Information</h2>
+<p>Please be aware that no security measures are perfect or impenetrable, and we cannot guarantee “perfect security.” In addition, any information you send to us may not be secure while in transit. We recommend that you do not use insecure channels to communicate sensitive or confidential information to us.</p>
+<p>How long we retain your personal information depends on different factors, such as whether we need the information to maintain your account, provide the Services, comply with legal obligations, resolve disputes, or enforce other applicable contracts and policies.</p>
+<h2>Your Rights and Choices</h2>
+<p>Depending on where you live, you may have some or all of the rights listed below in relation to your personal information. However, these rights are not absolute and may apply only in certain circumstances, and, in certain cases, we may decline your request as permitted by law.</p>
+<ul>
+  <li><strong>Right to Access / Know:</strong> You may have a right to request access to personal information that we hold about you, including details relating to the ways in which we use and share your information.</li>
+  <li><strong>Right to Delete:</strong> You may have a right to request that we delete the personal information we maintain about you.</li>
+  <li><strong>Right to Correct:</strong> You may have a right to request that we correct the inaccurate personal information we maintain about you.</li>
+  <li><strong>Right of Portability:</strong> You may have a right to receive a copy of the personal information we hold about you and to request that we transfer it to a third party, in certain circumstances and with certain exceptions.</li>
+  <li><strong>Right to Opt out of Sale or Sharing or Targeted Advertising:</strong> You may have a right to direct us not to "sell" or "share" your personal information or to opt out of the processing of your personal information for purposes considered to be "targeted advertising", as defined in applicable privacy laws. Please note that if you visit our Site with the Global Privacy Control opt-out preference signal enabled, depending on where you are, we will automatically treat this as a request to opt-out of the "sale" or "sharing" of information for the device and browser that you use to visit the Site.</li>
+  <li><strong>Right to Limit and/or Opt out of Use and Disclosure of Sensitive Personal Information:</strong> You may have a right to direct us to limit our use and/or disclosure of sensitive personal information to only what is necessary to perform the Services or provide the goods reasonably expected by an average individual.</li>
+  <li><strong>Restriction of Processing:</strong> You may have the right to ask us to stop or restrict our processing of personal information.</li>
+  <li><strong>Withdrawal of Consent:</strong> Where we rely on consent to process your personal information, you may have the right to withdraw this consent.</li>
+  <li><strong>Appeal:</strong> You may have a right to appeal our decision if we decline to process your request. You can do so by replying directly to our denial.</li>
+  <li><strong>Managing Communication Preferences:</strong> We may send you promotional emails, and you may opt out of receiving these at any time by using the unsubscribe option displayed in our emails to you. If you opt out, we may still send you non-promotional emails, such as those about your account or orders that you have made.</li>
+</ul>
+<p>You may exercise any of these rights where indicated on our Site or by contacting us using the contact details provided below.</p>
+<p>We will not discriminate against you for exercising any of these rights. We may need to collect information from you to verify your identity, such as your email address or account information, before providing a substantive response to the request. In accordance with applicable laws, You may designate an authorized agent to make requests on your behalf to exercise your rights. Before accepting such a request from an agent, we will require that the agent provide proof you have authorized them to act on your behalf, and we may need you to verify your identity directly with us. We will respond to your request in a timely manner as required under applicable law.</p>
+<h2>Complaints</h2>
+<p>If you have complaints about how we process your personal information, please contact us using the contact details provided below. If you are not satisfied with our response to your complaint, depending on where you live you may have the right to appeal our decision by contacting us using the contact details set out below or lodge your complaint with your local data protection authority.</p>
+<h2>International Users</h2>
+<p>Please note that we may transfer, store, and process your personal information outside the country you live in, including the United States. Your personal information is also processed by staff and third-party service providers and partners in these countries.</p>
+<p>If we transfer your personal information out of Europe, we will rely on recognized transfer mechanisms like the European Commission's Standard Contractual Clauses, or any equivalent contracts issued by the relevant competent authority of the UK, as relevant, unless the data transfer is to a country that has been determined to provide an adequate level of protection.</p>
+<h2>Contact</h2>
+<p>Should you have any questions about our privacy practices or this Privacy Policy, or if you would like to exercise any of the rights available to you, please call <strong>+91 7996189999</strong> or email us at <a href="mailto:contact@9skin.in">contact@9skin.in</a>.</p>{%- endcapture -%}
+  {%- elsif handle contains 'terms' -%}
+    {%- assign p_title = "Terms of Service" -%}
+    {%- capture p_content -%}<h2>Overview</h2>
+<p>This website is operated by 9skin. Throughout the site, the terms “we”, “us” and “our” refer to 9skin. 9skin offers this website, including all information, tools and Services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.</p>
+<p>By visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.</p>
+<p>Please read these Terms of Service carefully before accessing or using our website. By accessing or using any part of the site, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any Services. If these Terms of Service are considered an offer, acceptance is expressly limited to these Terms of Service.</p>
+
+<h2>Section 1 - Online Store Terms</h2>
+<p>By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence, or that you are the age of majority in your state or province of residence and you have given us your consent to allow any of your minor dependents to use this site.</p>
+<p>You may not use our products for any illegal or unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright laws).</p>
+
+<h2>Section 2 - General Conditions</h2>
+<p>We reserve the right to refuse Service to anyone for any reason at any time.</p>
+<p>You understand that your content (not including credit card information), may be transferred unencrypted and involve (a) transmissions over various networks; and (b) changes to conform and adapt to technical requirements of connecting networks or devices. Credit card information is always encrypted during transfer over networks.</p>
+
+<h2>Section 3 - Modifications to the Service and Prices</h2>
+<p>Prices for our products are subject to change without notice.</p>
+<p>We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.</p>
+
+<h2>Section 4 - Products or Services</h2>
+<p>Certain products or Services may be available exclusively online through the website. These products or Services may have limited quantities and are subject to return or exchange only according to our Refund Policy.</p>
+
+<h2>Section 5 - Accuracy of Billing and Account Information</h2>
+<p>We reserve the right to refuse any order you place with us. We may, in our sole discretion, limit or cancel quantities purchased per person, per household or per order.</p>
+
+<h2>Section 17 - Governing Law</h2>
+<p>These Terms of Service and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India.</p>
+
+<h2>Section 19 - Contact Information</h2>
+<p>Questions about the Terms of Service should be sent to us at <a href="mailto:contact@9skin.in">contact@9skin.in</a>.</p>
+<p>
+  <strong>N9SKIN BEAUTY PRIVATE LIMITED</strong><br>
+  Email: <a href="mailto:jose@9skin.world">jose@9skin.world</a> / <a href="mailto:contact@9skin.in">contact@9skin.in</a><br>
+  Phone: <strong>+91 99620 10030</strong><br>
+  GST: <strong>33AAJCN0639G1ZM</strong>
+</p>{%- endcapture -%}
+  {%- elsif handle contains 'shipping' -%}
+    {%- assign p_title = "Shipping Policy" -%}
+    {%- capture p_content -%}<div style="background-color: #FFF3CD; border-left: 4px solid #FFC107; padding: 16px 20px; margin-bottom: 24px; border-radius: 4px; color: #856404; font-weight: 600;">
+  IMPORTANT: SHIPPING CHARGES ARE HIGH FOR NORTH EAST INDIA. IF YOU WANT US TO DELIVER IN NORTH-EAST INDIA, PLEASE DROP US AN EMAIL AT <a href="mailto:hello@9skin.world" style="color:#856404;text-decoration:underline;">hello@9skin.world</a> WITH YOUR REQUIREMENTS. WE WILL CHECK THE SHIPPING METHOD AND CHARGES AND SEND YOU THE INVOICE. DO NOT MAKE THE PAYMENT ONLINE AS YOUR ORDER MIGHT GET CANCELLED.
+</div>
+<div style="background-color: #F8F9FA; border-left: 4px solid #17A2B8; padding: 12px 16px; margin-bottom: 28px; border-radius: 4px; color: #0C5460;">
+  FOR ALL INDIA ORDERS, AN ENTRY TAX NEEDS TO BE PAID AS PER THE GOVERNMENT'S POLICY. BUYER WILL BE RESPONSIBLE TO PAY FOR THE SAME.
+</div>
+<h2>Delivery Time</h2>
+<p>Estimated Delivery Time is 9 to 10 working days after the order has been dispatched. There might be a change in delivery time depending on the product type, quantity, destination and mode of payment. We will keep you informed if there's any delay in the delivery time due to any reason.</p>
+<h2>Shipping Costs</h2>
+<p>The shipping charges are extra and you will be calculating the same on the cart page. We highly recommend that if your order is more than 50 kg in total, send us an email at <a href="mailto:hello@9skin.world">hello@9skin.world</a> and we will create a custom quote for you.</p>
+<h2>Where do we ship?</h2>
+<p>We ship PAN India. But if it is so happens that your shipping address doesn't fall under our courier partner's service area, then your order will be dispatched by Indian Postal Service.</p>
+<h2>Contact Us</h2>
+<p>If you ever have any questions regarding our policies, please contact us at <a href="mailto:hello@9skin.world">hello@9skin.world</a> or <a href="mailto:contact@9skin.in">contact@9skin.in</a>.</p>{%- endcapture -%}
+  {%- elsif handle contains 'refund' or handle contains 'return' -%}
+    {%- assign p_title = "Refund Policy" -%}
+    {%- capture p_content -%}<p>9skin does not have a refundable policy Unless otherwise:</p>
+<ul>
+  <li>Products purchased directly from 9skin website were incorrectly sent or are defective.</li>
+</ul>
+<p>Given such, customers are to notify 9Skin within <strong>14 days for incorrectly sent products</strong>, or <strong>7 days for defective products</strong>, from the date of purchase. If an exchange is not feasible, 9skin may issue (i) a credit for the amount of the exchanged products, which may be used to purchase other products.</p>{%- endcapture -%}
+  {%- elsif page.content != blank -%}
+    {%- assign p_content = page.content -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if p_content != blank -%}
+<section
+  id="bb-policy-{{ section.id }}"
+  class="bb-section bb-policy {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-container">
+    {%- if p_title != blank -%}
+      <h1 class="bb-policy__title">{{ p_title }}</h1>
+    {%- endif -%}
+
+    <div class="bb-policy__body">
+      {{ p_content }}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Policy Section",
+  "tag": "section",
+  "class": "bb-section-policy",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 400,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Title",
+      "default": "Privacy Policy"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Desktop",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 16,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size — Mobile",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Body Content & Typography"
+    },
+    {
+      "type": "html",
+      "id": "content",
+      "label": "Policy HTML Content"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Body Font Size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Section Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "margin_x",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Side Margin - Desktop (equal left and right)",
+      "default": 108
+    },
+    {
+      "type": "range",
+      "id": "margin_x_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Side Margin - Mobile (equal left and right)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Section Corner Radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Desktop",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Desktop",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top — Mobile",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom — Mobile",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right — Desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right — Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Desktop",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Desktop",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top — Mobile",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom — Mobile",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Policy Section"
+    }
+  ]
+}
+{% endschema %}

@@ -127,11 +127,11 @@
     font-weight: var(--act-heading-weight, 800);
     line-height: 1.05;
     letter-spacing: -2.5px;
-    color: #17123B;
+    color: var(--act-heading-color, #1A1A1A);
     margin-bottom: var(--act-heading-margin, 48px);
   }
   #bb-activation-{{ section.id }} .bb-activation-v2__heading .bb-heading-maroon {
-    color: #6B2430;
+    color: #622229;
     display: block;
   }
   #bb-activation-{{ section.id }} .bb-activation-v2__number {
@@ -154,24 +154,36 @@
         <div class="bb-activation-v2__badge">{{ section.settings.subheading }}</div>
       {%- endif -%}
 
-      <!-- Main Heading -->
+            <!-- Main Heading -->
       {%- if section.settings.heading != blank -%}
         <h2 class="bb-activation-v2__heading">
-          {%- assign h_words = section.settings.heading | split: ' ' -%}
-          {%- assign total_words = h_words | size -%}
-          {%- if total_words >= 4 -%}
-            {%- assign mid = total_words | divided_by: 2 -%}
-            {%- assign first_part_arr = '' -%}
-            {%- for i in (0..mid) -%}
-              {%- unless forloop.first and forloop.last -%}
-              {%- endunless -%}
-            {%- endfor -%}
-            {%- comment %} Split heading: first ~half is dark, second ~half is maroon {% endcomment -%}
-            {%- assign first_part = h_words | slice: 0, mid | join: ' ' -%}
-            {%- assign second_part = h_words | slice: mid, total_words | join: ' ' -%}
-            {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part }}</span>
+          {%- assign h_raw = section.settings.heading -%}
+          {%- assign h_lower = h_raw | downcase -%}
+          {%- if h_lower contains "three-layer" or h_lower contains "three layer" or h_lower contains "filtration" -%}
+            {%- if h_raw contains "simple" -%}
+              {%- assign parts = h_raw | split: "simple" -%}
+              {{ parts[0] }}<br><span class="bb-heading-maroon">simple{{ parts[1] }}</span>
+            {%- else -%}
+              {{ h_raw }}
+            {%- endif -%}
+          {%- elsif h_lower contains "four steps" -%}
+            {%- if h_raw contains "real" -%}
+              {%- assign parts = h_raw | split: "real" -%}
+              {{ parts[0] }}<br><span class="bb-heading-maroon">real{{ parts[1] }}</span>
+            {%- else -%}
+              {{ h_raw }}
+            {%- endif -%}
           {%- else -%}
-            {{ section.settings.heading }}
+            {%- assign h_words = h_raw | split: ' ' -%}
+            {%- assign total_words = h_words | size -%}
+            {%- if total_words >= 4 -%}
+              {%- assign mid = total_words | divided_by: 2 -%}
+              {%- assign first_part = h_words | slice: 0, mid | join: ' ' -%}
+              {%- assign second_part = h_words | slice: mid, total_words | join: ' ' -%}
+              {{ first_part }}<br><span class="bb-heading-maroon">{{ second_part }}</span>
+            {%- else -%}
+              {{ h_raw }}
+            {%- endif -%}
           {%- endif -%}
         </h2>
       {%- endif -%}

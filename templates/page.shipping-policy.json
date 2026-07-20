@@ -1,0 +1,37 @@
+{
+  "sections": {
+    "main": {
+      "type": "bb-policy",
+      "settings": {
+        "enable_section": true,
+        "container_max_width": 1200,
+        "title": "Shipping Policy",
+        "heading_color": "#1A1A1A",
+        "heading_size_desktop": 48,
+        "heading_size_mobile": 28,
+        "content": "<div style=\"background-color: #FFF3CD; border-left: 4px solid #FFC107; padding: 16px 20px; margin-bottom: 24px; border-radius: 4px; color: #856404; font-weight: 600;\">\n  IMPORTANT: SHIPPING CHARGES ARE HIGH FOR NORTH EAST INDIA. IF YOU WANT US TO DELIVER IN NORTH-EAST INDIA, PLEASE DROP US AN EMAIL AT <a href=\"mailto:hello@9skin.world\" style=\"color:#856404;text-decoration:underline;\">hello@9skin.world</a> WITH YOUR REQUIREMENTS. WE WILL CHECK THE SHIPPING METHOD AND CHARGES AND SEND YOU THE INVOICE. DO NOT MAKE THE PAYMENT ONLINE AS YOUR ORDER MIGHT GET CANCELLED.\n</div>\n\n<div style=\"background-color: #F8F9FA; border-left: 4px solid #17A2B8; padding: 12px 16px; margin-bottom: 28px; border-radius: 4px; color: #0C5460;\">\n  FOR ALL INDIA ORDERS, AN ENTRY TAX NEEDS TO BE PAID AS PER THE GOVERNMENT'S POLICY. BUYER WILL BE RESPONSIBLE TO PAY FOR THE SAME.\n</div>\n\n<p>To process your order, quickest possible turnaround is what we strive for. We've partnered with the world's leading logistics companies to ship your products!</p>\n\n<p><strong>Note:</strong> Processing time for orders containing more than one item will be according to the item in your order requiring the longest processing time as all items in a single order will ship together.</p>\n\n<h2>Delivery Time</h2>\n<p>Estimated Delivery Time is 9 to 10 working days after the order has been dispatched. There might be a change in delivery time depending on the product type, quantity, destination and mode of payment. We will keep you informed if there's any delay in the delivery time due to any reason.</p>\n<p>If your order is delayed by more than four days of time told to you, call us asap with your Order no. We’ll surely expedite it and make sure it reaches fast.</p>\n\n<h2>Additional Costs</h2>\n<p>In case there's any octroi or entry charge, the buyer will be liable to pay for the same.</p>\n\n<h2>Shipping Costs</h2>\n<p>The shipping charges are extra and you will be calculating the same on the cart page. We highly recommend that if your order is more than 50 kg in total, send us an email at <a href=\"mailto:hello@9skin.world\">hello@9skin.world</a> and we will create a custom quote for you.</p>\n\n<h2>Where do we ship?</h2>\n<p>We ship PAN India. But if it is so happens that your shipping address doesn't fall under our courier partner's service area, then your order will be dispatched by Indian Postal Service. There might be a delay in delivery time in such case. We will inform you of the same via email.</p>\n\n<h2>Important Information</h2>\n<p>Please note that the buyer is responsible for providing any inward form or declaration form required to send the material to the provided shipping address. In case the buyer fails to do so, we won't be responsible for delay in delivery.</p>\n\n<h2>Billing & Shipping Details</h2>\n<p>Please take extra care while filling your Billing Details and Contact Information. Your Name and Address should be exactly as it appears on your Credit Card/Debit Card statement. Your Contact information should be verifiable by your Bank/Credit Card provider in authorizing payment.</p>\n<p>Your contact information also helps us to send you order confirmation and update you at all times about your order.</p>\n<p>Shipping Details are the delivery name, address and contact details where you would like your order delivered. If your Billing and Shipping details are the same, simply click the box provided.</p>\n<p><em>Caution: Billing Address & Shipping Address could be different. Please make sure to fill in the right one at the right place.</em></p>\n\n<h2>Packaging Information</h2>\n<p>Our team makes sure your shipment reaches as it left our warehouse. Our boxes/packets are sturdy and the items are wrapped in bubble wrap for protection. All orders are packed securely. Because we are customers ourselves, we know how frustrating it can be when the packaging is not quite right.</p>\n\n<h2>Delivery Condition</h2>\n<p>We really want to know if your shipment reached you in just as impeccable condition as we dispatched it. Do tell us at <a href=\"mailto:hello@9skin.world\">hello@9skin.world</a>.</p>\n\n<h2>Delivery Information</h2>\n<p>Orders shipped on completion of the processing period and via our reliable shippers will be delivered to most destinations in India within 9 to 10 working days from shipping. In case of unforeseen delays in shipping please allow some days for delivery over your order processing time. If you have still not received your order, please contact us with your Order Number at <a href=\"mailto:contact@9skin.in\">contact@9skin.in</a>.</p>\n<p>Please note: Depending on your shipping location, Octroi Levies and/or Local Govt. Taxes may be applicable on your shipment and the same will be payable by the consignee on delivery to claim the shipment.</p>\n\n<h2>Payment Information</h2>\n<p>At 9SKIN we have taken immense care to make sure that a good shopping experience is completed with robust safety and efficiency in every aspect of paying for your order. Please read our Privacy Policy to know more.</p>\n<p>From your shopping cart you proceed through payment and order confirmation in a few easy steps.</p>\n\n<h2>Contact Us</h2>\n<p>If you ever have any questions regarding our policies, please contact us at <a href=\"mailto:hello@9skin.world\">hello@9skin.world</a> or <a href=\"mailto:contact@9skin.in\">contact@9skin.in</a>.</p>",
+        "text_color": "#333333",
+        "body_font_size": 16,
+        "background_color": "#FFFFFF",
+        "margin_x": 108,
+        "margin_x_mobile": 12,
+        "section_border_radius": 0,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "padding_left": 40,
+        "padding_right": 40,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40,
+        "padding_left_mobile": 20,
+        "padding_right_mobile": 20,
+        "margin_top": 8,
+        "margin_bottom": 8,
+        "margin_top_mobile": 8,
+        "margin_bottom_mobile": 8
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
