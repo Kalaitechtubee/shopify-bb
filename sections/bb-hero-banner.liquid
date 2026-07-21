@@ -371,10 +371,12 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 0%;
+    width: 100%;                   /* always full width — we scale it */
+    transform: scaleX(0);          /* collapsed by default */
+    transform-origin: left center; /* expand left → right */
     background-color: {{ section.settings.progress_bar_color | default: '#ffffff' }};
     border-radius: 3px;
-    /* JS controls all animation via inline style - no CSS transition here */
+    /* NO transition here — JS drives it entirely */
   }
 {%- endstyle -%}
 
@@ -604,16 +606,16 @@
         fill.style.width      = '0%';
       }
 
-      // ── Helper: animate a fill bar from 0 → 100% over intervalMs ──────
+      // ── Animate fill: scaleX(0 → 1) left-to-right ─────────────────────
       function animateFill(fill) {
-        // Step 1: immediately kill any ongoing transition and snap to 0
+        // 1. Kill any running transition and instantly collapse
         fill.style.transition = 'none';
-        fill.style.width = '0%';
-        // Step 2: after 50ms the browser has definitely painted the 0% state
-        setTimeout(function () {
-          fill.style.transition = 'width ' + intervalMs + 'ms linear';
-          fill.style.width = '100%';
-        }, 50);
+        fill.style.transform  = 'scaleX(0)';
+        // 2. Force synchronous reflow so browser commits the collapsed state
+        void fill.offsetWidth;
+        // 3. Animate expand left → right over the full interval
+        fill.style.transition = 'transform ' + intervalMs + 'ms linear';
+        fill.style.transform  = 'scaleX(1)';
       }
 
       // ── Go to a specific slide ───────────────────────────────────────────
@@ -633,18 +635,18 @@
           if (!fill) return;
 
           if (i < next) {
-            // Already visited: instantly full (no transition)
-            item.classList.add('is-completed');
+            // Already visited: instantly fully expanded
             fill.style.transition = 'none';
-            fill.style.width = '100%';
+            fill.style.transform  = 'scaleX(1)';
+            item.classList.add('is-completed');
           } else if (i === next) {
-            // Current: smoothly animate
+            // Current slide: animate
             item.classList.add('is-active');
             animateFill(fill);
           } else {
-            // Upcoming: instantly empty (no transition)
+            // Upcoming: instantly collapsed
             fill.style.transition = 'none';
-            fill.style.width = '0%';
+            fill.style.transform  = 'scaleX(0)';
           }
         });
 
