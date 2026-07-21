@@ -379,14 +379,26 @@
     background-color: #FFFFFF;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
     border-radius: 4px;
-    will-change: width;
+  }
+
+  #bb-hero-{{ section.id }}[data-autoplay="true"] .bb-hero__progress-item.is-active .bb-hero__progress-fill {
+    animation: bbHeroLineFill {{ section.settings.autoplay_interval | default: 5 }}s linear forwards !important;
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-item.is-completed .bb-hero__progress-fill {
+    animation: none !important;
     width: 100% !important;
-    transition: none !important;
     background-color: #FFFFFF !important;
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
+  }
+
+  @keyframes bbHeroLineFill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
   }
 {%- endstyle -%}
 
@@ -622,35 +634,18 @@
         // Update progress items fill & animation
         progressItems.forEach((item, idx) => {
           const fill = item.querySelector('.bb-hero__progress-fill');
-          if (!fill) return;
+          item.classList.remove('is-active', 'is-completed');
+
+          if (fill) {
+            fill.style.animation = 'none';
+            void fill.offsetHeight; // Reflow to restart CSS keyframe animation
+            fill.style.animation = '';
+          }
 
           if (idx < nextIndex) {
-            item.classList.remove('is-active');
             item.classList.add('is-completed');
-            fill.style.transition = 'none';
-            fill.style.width = '100%';
-          } else if (idx > nextIndex) {
-            item.classList.remove('is-active', 'is-completed');
-            fill.style.transition = 'none';
-            fill.style.width = '0%';
-          } else {
-            // Active slide: start fill animation 0% -> 100%
-            item.classList.remove('is-completed');
+          } else if (idx === nextIndex) {
             item.classList.add('is-active');
-
-            fill.style.transition = 'none';
-            fill.style.width = '0%';
-
-            requestAnimationFrame(function () {
-              requestAnimationFrame(function () {
-                if (isAutoplay) {
-                  fill.style.transition = 'width ' + intervalTime + 'ms linear';
-                  fill.style.width = '100%';
-                } else {
-                  fill.style.width = '100%';
-                }
-              });
-            });
           }
         });
 
