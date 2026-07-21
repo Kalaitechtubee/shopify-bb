@@ -81,8 +81,18 @@
       display: none;
     }
     #bb-hero-{{ section.id }} .bb-hero__media--desktop {
-      display: block;
-    }
+  #bb-hero-{{ section.id }} .bb-hero__media--iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw;
+    min-height: 100vh;
+    min-width: 177.77vh;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border: none;
+    display: block;
   }
 
   /* Overlay */
@@ -294,17 +304,35 @@
               {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'bb-hero__media bb-hero__media--mobile' }}
             {%- endif -%}
           {%- elsif block.settings.video_url_mp4 != blank -%}
-            <video autoplay muted loop playsinline class="bb-hero__media bb-hero__media--desktop">
-              <source src="{{ block.settings.video_url_mp4 }}" type="video/mp4">
-            </video>
-            {%- if block.settings.video_url_mp4_mobile != blank -%}
-              <video autoplay muted loop playsinline class="bb-hero__media bb-hero__media--mobile">
-                <source src="{{ block.settings.video_url_mp4_mobile }}" type="video/mp4">
-              </video>
+            {%- assign v_url = block.settings.video_url_mp4 -%}
+            {%- if v_url contains 'youtu.be' or v_url contains 'youtube.com' -%}
+              {%- if v_url contains 'youtu.be/' -%}
+                {%- assign yt_id = v_url | split: 'youtu.be/' | last | split: '?' | first | split: '&' | first -%}
+              {%- elsif v_url contains 'v=' -%}
+                {%- assign yt_id = v_url | split: 'v=' | last | split: '&' | first | split: '?' | first -%}
+              {%- else -%}
+                {%- assign yt_id = v_url | split: '/' | last | split: '?' | first -%}
+              {%- endif -%}
+              <iframe
+                src="https://www.youtube.com/embed/{{ yt_id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ yt_id }}&playsinline=1&enablejsapi=1&rel=0"
+                class="bb-hero__media bb-hero__media--iframe"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+              ></iframe>
             {%- else -%}
-              <video autoplay muted loop playsinline class="bb-hero__media bb-hero__media--mobile">
+              <video autoplay muted loop playsinline class="bb-hero__media bb-hero__media--desktop">
                 <source src="{{ block.settings.video_url_mp4 }}" type="video/mp4">
               </video>
+              {%- if block.settings.video_url_mp4_mobile != blank -%}
+                <video autoplay muted loop playsinline class="bb-hero__media bb-hero__media--mobile">
+                  <source src="{{ block.settings.video_url_mp4_mobile }}" type="video/mp4">
+                </video>
+              {%- else -%}
+                <video autoplay muted loop playsinline class="bb-hero__media bb-hero__media--mobile">
+                  <source src="{{ block.settings.video_url_mp4 }}" type="video/mp4">
+                </video>
+              {%- endif -%}
             {%- endif -%}
           {%- elsif block.settings.image != blank -%}
             <img
@@ -740,13 +768,14 @@
         {
           "type": "text",
           "id": "video_url_mp4",
-          "label": "Direct MP4 Video URL (Desktop)",
-          "info": "Direct .mp4 URL fallback"
+          "label": "Direct MP4 or YouTube Video URL (Desktop)",
+          "info": "Paste YouTube URL (e.g. https://youtu.be/WjDTP0AtblE) or direct .mp4 video URL"
         },
         {
           "type": "text",
           "id": "video_url_mp4_mobile",
-          "label": "Direct MP4 Video URL (Mobile)"
+          "label": "Direct MP4 or YouTube Video URL (Mobile)",
+          "info": "Paste YouTube URL or direct .mp4 video URL"
         },
         {
           "type": "range",
