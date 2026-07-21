@@ -426,8 +426,8 @@
       </div>
     {%- endfor -%}
 
-    <!-- Progress Line Indicators at Bottom -->
-    {%- if section.blocks.size > 1 -%}
+    <!-- Progress Line Indicators at Bottom (Optional Toggle) -->
+    {%- if section.settings.show_progress_bar and section.blocks.size > 1 -%}
       <div class="bb-hero__progress-bar-wrap" aria-label="Hero slider pagination">
         {%- for block in section.blocks -%}
           <div
@@ -622,6 +622,12 @@
       "id": "enable_autoplay",
       "label": "Enable Auto-Play Slides",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress_bar",
+      "label": "Show Bottom Progress Bar Indicators",
+      "default": false
     },
     {
       "type": "range",
