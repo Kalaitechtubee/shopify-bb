@@ -359,19 +359,23 @@
         ></div>
 
         <!-- Content Container -->
-        <div class="bb-hero__content-container">
+        <div
+          class="bb-hero__content-container"
+          style="align-items: {% case block.settings.content_position_vertical %}{% when 'top' %}flex-start{% when 'bottom' %}flex-end{% else %}center{% endcase %}; padding-top: {% if block.settings.content_position_vertical == 'top' %}80px{% else %}0{% endif %}; padding-bottom: {% if block.settings.content_position_vertical == 'bottom' %}80px{% else %}0{% endif %};"
+        >
           <div class="bb-hero__content-box bb-hero__content-box--{{ block.settings.content_alignment | default: 'left' }}">
             {%- if block.settings.heading != blank -%}
+              {%- assign h_color = block.settings.highlight_color | default: section.settings.highlight_color | default: '#A6FF00' -%}
               <h2 class="bb-hero__title">
                 {%- if block.settings.heading contains '[' and block.settings.heading contains ']' -%}
                   {%- assign title_parts = block.settings.heading | split: '[' -%}
                   {{ title_parts[0] }}
                   {%- assign sub_parts = title_parts[1] | split: ']' -%}
-                  <span class="bb-hero__title-highlight">{{ sub_parts[0] }}</span>
+                  <span class="bb-hero__title-highlight" style="color: {{ h_color }};">{{ sub_parts[0] }}</span>
                   {{ sub_parts[1] }}
                 {%- else -%}
                   {%- if block.settings.highlight_text != blank -%}
-                    <span class="bb-hero__title-highlight">{{ block.settings.highlight_text }}</span>
+                    <span class="bb-hero__title-highlight" style="color: {{ h_color }};">{{ block.settings.highlight_text }}</span>
                   {%- endif -%}
                   {{ block.settings.heading }}
                 {%- endif -%}
@@ -383,9 +387,13 @@
             {%- endif -%}
 
             {%- if block.settings.button_text != blank -%}
+              {%- assign b_bg = block.settings.btn_bg_color | default: section.settings.btn_bg_color | default: '#A6FF00' -%}
+              {%- assign b_text = block.settings.btn_text_color | default: section.settings.btn_text_color | default: '#000000' -%}
+              {%- assign b_rad = block.settings.btn_border_radius | default: section.settings.btn_border_radius | default: 0 -%}
               <a
                 href="{{ block.settings.button_link | default: '#' }}"
                 class="bb-hero__btn"
+                style="background-color: {{ b_bg }}; color: {{ b_text }}; border-radius: {{ b_rad }}px;"
               >
                 {{ block.settings.button_text }}
               </a>
@@ -427,48 +435,62 @@
       const intervalTime = parseInt(heroSection.dataset.interval, 10) || 5000;
 
       let currentIndex = 0;
-      let slideTimer = null;
+      let animFrameId = null;
+      let startTime = null;
 
       if (slides.length <= 1) return;
 
-      function updateProgressStates(targetIdx) {
-        progressItems.forEach((item, idx) => {
-          item.classList.remove('is-active', 'is-completed');
-          const fill = item.querySelector('.bb-hero__progress-fill');
-
-          if (idx < targetIdx) {
-            item.classList.add('is-completed');
-          } else if (idx === targetIdx) {
-            if (fill) {
-              fill.style.animation = 'none';
-              void fill.offsetHeight; // Trigger DOM reflow to restart CSS animation
-              fill.style.animation = '';
-            }
-            item.classList.add('is-active');
-          }
-        });
-      }
-
       function goToSlide(nextIndex) {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+
         slides[currentIndex].classList.remove('is-active');
         slides[nextIndex].classList.add('is-active');
 
+        progressItems.forEach((item, idx) => {
+          item.classList.remove('is-active', 'is-completed');
+          const fill = item.querySelector('.bb-hero__progress-fill');
+          if (idx < nextIndex) {
+            item.classList.add('is-completed');
+            if (fill) fill.style.width = '100%';
+          } else if (idx > nextIndex) {
+            if (fill) fill.style.width = '0%';
+          } else {
+            item.classList.add('is-active');
+            if (fill) fill.style.width = '0%';
+          }
+        });
+
         currentIndex = nextIndex;
-        updateProgressStates(currentIndex);
 
         if (isAutoplay) {
-          restartTimer();
+          startProgressLoop();
         }
       }
 
-      function nextSlide() {
-        const nextIdx = (currentIndex + 1) % slides.length;
-        goToSlide(nextIdx);
-      }
+      function startProgressLoop() {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        startTime = performance.now();
 
-      function restartTimer() {
-        if (slideTimer) clearInterval(slideTimer);
-        slideTimer = setInterval(nextSlide, intervalTime);
+        const activeItem = progressItems[currentIndex];
+        const activeFill = activeItem ? activeItem.querySelector('.bb-hero__progress-fill') : null;
+
+        function animateProgress(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(100, (elapsed / intervalTime) * 100);
+
+          if (activeFill) {
+            activeFill.style.width = progress + '%';
+          }
+
+          if (progress >= 100) {
+            const nextIdx = (currentIndex + 1) % slides.length;
+            goToSlide(nextIdx);
+          } else {
+            animFrameId = requestAnimationFrame(animateProgress);
+          }
+        }
+
+        animFrameId = requestAnimationFrame(animateProgress);
       }
 
       // Progress Line Click Handler
@@ -496,10 +518,7 @@
       }, { passive: true });
 
       // Initial state
-      updateProgressStates(0);
-      if (isAutoplay) {
-        restartTimer();
-      }
+      goToSlide(0);
     }
 
     if (document.readyState === 'loading') {
@@ -776,13 +795,42 @@
         {
           "type": "select",
           "id": "content_alignment",
-          "label": "Content Alignment",
+          "label": "Horizontal Content Alignment",
           "options": [
             { "value": "left", "label": "Left" },
             { "value": "center", "label": "Center" },
             { "value": "right", "label": "Right" }
           ],
           "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "content_position_vertical",
+          "label": "Vertical Content Position",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Middle / Center" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "highlight_color",
+          "label": "Custom Highlight Color",
+          "default": "#A6FF00"
+        },
+        {
+          "type": "color",
+          "id": "btn_bg_color",
+          "label": "Custom Button Color",
+          "default": "#A6FF00"
+        },
+        {
+          "type": "color",
+          "id": "btn_text_color",
+          "label": "Custom Button Text Color",
+          "default": "#000000"
         }
       ]
     },
@@ -845,13 +893,42 @@
         {
           "type": "select",
           "id": "content_alignment",
-          "label": "Content Alignment",
+          "label": "Horizontal Content Alignment",
           "options": [
             { "value": "left", "label": "Left" },
             { "value": "center", "label": "Center" },
             { "value": "right", "label": "Right" }
           ],
           "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "content_position_vertical",
+          "label": "Vertical Content Position",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Middle / Center" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "highlight_color",
+          "label": "Custom Highlight Color",
+          "default": "#A6FF00"
+        },
+        {
+          "type": "color",
+          "id": "btn_bg_color",
+          "label": "Custom Button Color",
+          "default": "#A6FF00"
+        },
+        {
+          "type": "color",
+          "id": "btn_text_color",
+          "label": "Custom Button Text Color",
+          "default": "#000000"
         }
       ]
     },
