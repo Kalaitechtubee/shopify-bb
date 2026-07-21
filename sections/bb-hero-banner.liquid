@@ -592,137 +592,127 @@
 <script>
   (function () {
     function initHeroSlider() {
-      const heroSection = document.getElementById('bb-hero-{{ section.id }}');
-      if (!heroSection) return;
+      var section = document.getElementById('bb-hero-{{ section.id }}');
+      if (!section) return;
 
-      const slides = heroSection.querySelectorAll('.bb-hero__slide');
-      const progressItems = heroSection.querySelectorAll('.bb-hero__progress-item');
-      const isAutoplay = heroSection.getAttribute('data-autoplay') !== 'false';
-      const intervalTime = parseInt(heroSection.getAttribute('data-interval'), 10) || 5000;
-
-      let currentIndex = 0;
-      let slideTimeout = null;
-
+      var slides = section.querySelectorAll('.bb-hero__slide');
       if (slides.length <= 1) return;
 
-      function goToSlide(nextIndex) {
-        if (slideTimeout) clearTimeout(slideTimeout);
+      var progressItems = section.querySelectorAll('.bb-hero__progress-item');
+      var dots          = section.querySelectorAll('.bb-hero__dot');
+      var counterEl     = section.querySelector('.bb-hero__current-num');
 
-        // Update slides active state
-        slides.forEach((slide, idx) => {
-          if (idx === nextIndex) {
-            slide.classList.add('is-active');
-          } else {
-            slide.classList.remove('is-active');
-          }
+      var isAutoplay   = section.getAttribute('data-autoplay') !== 'false';
+      var intervalMs   = parseInt(section.getAttribute('data-interval'), 10) || 5000;
+
+      var currentIndex = 0;
+      var timer        = null;
+
+      // ── Helper: reset a single fill bar ─────────────────────────────────
+      function resetFill(fill) {
+        fill.style.transition = 'none';
+        fill.style.width      = '0%';
+      }
+
+      // ── Helper: animate a fill bar from 0 → 100% ────────────────────────
+      function animateFill(fill) {
+        resetFill(fill);
+        // Wait one tick so the browser commits the 0% reset before animating
+        setTimeout(function () {
+          fill.style.transition = 'width ' + intervalMs + 'ms linear';
+          fill.style.width      = '100%';
+        }, 30);
+      }
+
+      // ── Go to a specific slide ───────────────────────────────────────────
+      function goToSlide(next) {
+        if (timer) clearTimeout(timer);
+
+        // Slides
+        slides.forEach(function (slide, i) {
+          slide.classList.toggle('is-active', i === next);
         });
 
-        // Update progress items fill & animation
-        progressItems.forEach((item, idx) => {
-          const fill = item.querySelector('.bb-hero__progress-fill');
+        // Progress lines
+        progressItems.forEach(function (item, i) {
+          var fill = item.querySelector('.bb-hero__progress-fill');
           item.classList.remove('is-active', 'is-completed');
 
           if (!fill) return;
 
-          // Reset: instantly snap to 0% with no transition
-          fill.style.transition = 'none';
-          fill.style.width = '0%';
-
-          if (idx < nextIndex) {
-            // Already passed: show as 100% instantly
+          if (i < next) {
+            // Already visited: instantly full
             item.classList.add('is-completed');
-            fill.style.width = '100%';
-          } else if (idx === nextIndex) {
-            // Active: animate width from 0% to 100% over interval duration
+            fill.style.transition = 'none';
+            fill.style.width      = '100%';
+          } else if (i === next) {
+            // Current: animate
             item.classList.add('is-active');
-            // Use double rAF to guarantee the browser has applied the 0% reset
-            requestAnimationFrame(function () {
-              requestAnimationFrame(function () {
-                fill.style.transition = 'width ' + intervalTime + 'ms linear';
-                fill.style.width = '100%';
-              });
-            });
-          }
-          // idx > nextIndex: stays at 0% (already reset above)
-        });
-
-        // Update Dots
-        const dots = heroSection.querySelectorAll('.bb-hero__dot');
-        dots.forEach((dot, idx) => {
-          if (idx === nextIndex) {
-            dot.classList.add('is-active');
+            animateFill(fill);
           } else {
-            dot.classList.remove('is-active');
+            // Upcoming: instantly empty
+            fill.style.transition = 'none';
+            fill.style.width      = '0%';
           }
         });
 
-        // Update Numbers Counter
-        const currentNumEl = heroSection.querySelector('.bb-hero__current-num');
-        if (currentNumEl) {
-          const numStr = (nextIndex + 1) < 10 ? '0' + (nextIndex + 1) : (nextIndex + 1);
-          currentNumEl.textContent = numStr;
+        // Dots
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle('is-active', i === next);
+        });
+
+        // Number counter
+        if (counterEl) {
+          var n = next + 1;
+          counterEl.textContent = n < 10 ? '0' + n : '' + n;
         }
 
-        currentIndex = nextIndex;
+        currentIndex = next;
 
+        // Auto-advance
         if (isAutoplay) {
-          slideTimeout = setTimeout(function () {
-            const nextIdx = (currentIndex + 1) % slides.length;
-            goToSlide(nextIdx);
-          }, intervalTime);
+          timer = setTimeout(function () {
+            goToSlide((currentIndex + 1) % slides.length);
+          }, intervalMs);
         }
       }
 
-      // Indicator Click Handlers
-      progressItems.forEach((item, idx) => {
-        item.addEventListener('click', function () {
-          goToSlide(idx);
-        });
+      // ── Click handlers ───────────────────────────────────────────────────
+      progressItems.forEach(function (item, i) {
+        item.addEventListener('click', function () { goToSlide(i); });
       });
 
-      const dots = heroSection.querySelectorAll('.bb-hero__dot');
-      dots.forEach((dot, idx) => {
-        dot.addEventListener('click', function () {
-          goToSlide(idx);
-        });
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () { goToSlide(i); });
       });
 
-      // Prev / Next Arrows Click Handlers
-      const prevBtns = heroSection.querySelectorAll('.bb-hero__btn-prev');
-      const nextBtns = heroSection.querySelectorAll('.bb-hero__btn-next');
-
-      prevBtns.forEach(btn => {
+      section.querySelectorAll('.bb-hero__btn-prev').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          const prevIdx = (currentIndex - 1 + slides.length) % slides.length;
-          goToSlide(prevIdx);
+          goToSlide((currentIndex - 1 + slides.length) % slides.length);
         });
       });
 
-      nextBtns.forEach(btn => {
+      section.querySelectorAll('.bb-hero__btn-next').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          const nextIdx = (currentIndex + 1) % slides.length;
-          goToSlide(nextIdx);
+          goToSlide((currentIndex + 1) % slides.length);
         });
       });
 
-      // Touch Swipe Support
-      let touchStartX = 0;
-      let touchEndX = 0;
-
-      heroSection.addEventListener('touchstart', function (e) {
+      // ── Swipe support ────────────────────────────────────────────────────
+      var touchStartX = 0;
+      section.addEventListener('touchstart', function (e) {
         touchStartX = e.changedTouches[0].screenX;
       }, { passive: true });
-
-      heroSection.addEventListener('touchend', function (e) {
-        touchEndX = e.changedTouches[0].screenX;
-        if (touchStartX - touchEndX > 50) {
-          goToSlide((currentIndex + 1) % slides.length);
-        } else if (touchEndX - touchStartX > 50) {
-          goToSlide((currentIndex - 1 + slides.length) % slides.length);
+      section.addEventListener('touchend', function (e) {
+        var diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) {
+          goToSlide(diff > 0
+            ? (currentIndex + 1) % slides.length
+            : (currentIndex - 1 + slides.length) % slides.length);
         }
       }, { passive: true });
 
-      // Start on initial slide 0
+      // ── Start ────────────────────────────────────────────────────────────
       goToSlide(0);
     }
 
