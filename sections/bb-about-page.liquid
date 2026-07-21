@@ -120,17 +120,62 @@
     font-size: {{ section.settings.body_size_mobile | default: 16 }}px;
     line-height: 1.75;
     color: {{ section.settings.body_color | default: '#333333' }};
+    text-align: left;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* First Paragraph: Editorial Lead Statement */
+  #bb-about-{{ section.id }} .bb-about__story-richtext p:first-child {
+    font-family: {{ section.settings.heading_font_family | default: 'Georgia, serif' }};
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.65;
+    color: #111111;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #EAEDDD;
   }
 
   @media (min-width: 768px) {
-    #bb-about-{{ section.id }} .bb-about__story-richtext {
-      font-size: {{ section.settings.body_size_desktop | default: 18 }}px;
+    #bb-about-{{ section.id }} .bb-about__story-richtext p:first-child {
+      font-size: 24px;
     }
   }
 
-  #bb-about-{{ section.id }} .bb-about__story-richtext p {
-    margin-top: 0;
+  /* Second Paragraph: Mission Feature Callout Card */
+  #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(2) {
+    background-color: {{ section.settings.accent_color | default: '#6B2430' }};
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.6;
+    padding: 24px 32px;
+    border-radius: {{ section.settings.image_border_radius | default: 0 }}px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 20px rgba(107, 36, 48, 0.12);
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(2) {
+      font-size: 20px;
+      padding: 28px 36px;
+    }
+  }
+
+  /* Remaining Paragraphs: Clean Narrative Body */
+  #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(n+3) {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444444;
     margin-bottom: 20px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(n+3) {
+      font-size: 18px;
+    }
   }
 
   #bb-about-{{ section.id }} .bb-about__hero-img-wrap {
