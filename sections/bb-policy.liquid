@@ -133,13 +133,18 @@
   }
 {%- endstyle -%}
 
-{%- assign p_title = section.settings.title -%}
-{%- assign p_content = section.settings.content -%}
 {%- assign handle = page.handle | downcase -%}
+
+{%- assign p_title = page.title -%}
+{%- if section.settings.title != blank -%}
+  {%- assign p_title = section.settings.title -%}
+{%- endif -%}
+
+{%- assign p_content = section.settings.content -%}
 
 {%- if p_content == blank -%}
   {%- if handle contains 'privacy' -%}
-    {%- assign p_title = "Privacy Policy" -%}
+    {%- if p_title == blank -%}{%- assign p_title = "Privacy Policy" -%}{%- endif -%}
     {%- capture p_content -%}<p>This Privacy Policy describes how 9skin (the "Site", "we", "us", or "our") collects, uses, and discloses your personal information when you visit, use our services, or make a purchase from n9skin.myshopify.com (the "Site") or otherwise communicate with us (collectively, the "Services"). For purposes of this Privacy Policy, "you" and "your" means you as the user of the Services, whether you are a customer, website visitor, or another individual whose information we have collected pursuant to this Privacy Policy.</p>
 <p>Please read this Privacy Policy carefully. By using and accessing any of the Services, you agree to the collection, use, and disclosure of your information as described in this Privacy Policy. If you do not agree to this Privacy Policy, please do not use or access any of the Services.</p>
 <h2>Changes to This Privacy Policy</h2>
@@ -247,7 +252,7 @@
 <h2>Contact</h2>
 <p>Should you have any questions about our privacy practices or this Privacy Policy, or if you would like to exercise any of the rights available to you, please call <strong>+91 7996189999</strong> or email us at <a href="mailto:contact@9skin.in">contact@9skin.in</a>.</p>{%- endcapture -%}
   {%- elsif handle contains 'terms' -%}
-    {%- assign p_title = "Terms of Service" -%}
+    {%- if p_title == blank -%}{%- assign p_title = "Terms of Service" -%}{%- endif -%}
     {%- capture p_content -%}<h2>Overview</h2>
 <p>This website is operated by 9skin. Throughout the site, the terms “we”, “us” and “our” refer to 9skin. 9skin offers this website, including all information, tools and Services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.</p>
 <p>By visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.</p>
@@ -283,7 +288,7 @@
   GST: <strong>33AAJCN0639G1ZM</strong>
 </p>{%- endcapture -%}
   {%- elsif handle contains 'shipping' -%}
-    {%- assign p_title = "Shipping Policy" -%}
+    {%- if p_title == blank -%}{%- assign p_title = "Shipping Policy" -%}{%- endif -%}
     {%- capture p_content -%}<div style="background-color: #F7F7F7; border-left: 4px solid #000000; padding: 18px 24px; margin-bottom: 24px; border-radius: 0px; color: #111111; font-weight: 600; font-size: 15px; line-height: 1.6;">
   IMPORTANT: SHIPPING CHARGES ARE HIGH FOR NORTH EAST INDIA. IF YOU WANT US TO DELIVER IN NORTH-EAST INDIA, PLEASE DROP US AN EMAIL AT <a href="mailto:hello@9skin.world" style="color:#000000;text-decoration:underline;">hello@9skin.world</a> WITH YOUR REQUIREMENTS. WE WILL CHECK THE SHIPPING METHOD AND CHARGES AND SEND YOU THE INVOICE. DO NOT MAKE THE PAYMENT ONLINE AS YOUR ORDER MIGHT GET CANCELLED.
 </div>
@@ -299,7 +304,7 @@
 <h2>Contact Us</h2>
 <p>If you ever have any questions regarding our policies, please contact us at <a href="mailto:hello@9skin.world">hello@9skin.world</a> or <a href="mailto:contact@9skin.in">contact@9skin.in</a>.</p>{%- endcapture -%}
   {%- elsif handle contains 'refund' or handle contains 'return' -%}
-    {%- assign p_title = "Refund Policy" -%}
+    {%- if p_title == blank -%}{%- assign p_title = "Refund Policy" -%}{%- endif -%}
     {%- capture p_content -%}<p>9skin does not have a refundable policy Unless otherwise:</p>
 <ul>
   <li>Products purchased directly from 9skin website were incorrectly sent or are defective.</li>
@@ -368,8 +373,8 @@
     {
       "type": "text",
       "id": "title",
-      "label": "Page Title",
-      "default": "Privacy Policy"
+      "label": "Page Title Override",
+      "info": "Leave blank to automatically display the actual page title (e.g. Shipping Policy, Refund Policy, Privacy Policy)"
     },
     {
       "type": "color",
