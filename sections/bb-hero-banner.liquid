@@ -255,16 +255,25 @@
     width: 0%;
     background-color: #FFFFFF;
     border-radius: 2px;
-    transition: width 0.1s linear;
   }
 
-  #bb-hero-{{ section.id }} .bb-hero__progress-item.is-active .bb-hero__progress-fill {
-    background-color: #FFFFFF;
+  #bb-hero-{{ section.id }}[data-autoplay="true"] .bb-hero__progress-item.is-active .bb-hero__progress-fill {
+    animation: bbProgressFill {{ section.settings.autoplay_interval | default: 5 }}s linear forwards;
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-item.is-completed .bb-hero__progress-fill {
     width: 100% !important;
+    animation: none !important;
     background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  @keyframes bbProgressFill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
   }
 {%- endstyle -%}
 
@@ -407,109 +416,99 @@
 
 <!-- Slider Logic Script -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const heroSection = document.getElementById('bb-hero-{{ section.id }}');
-    if (!heroSection) return;
+  (function () {
+    function initHeroSlider() {
+      const heroSection = document.getElementById('bb-hero-{{ section.id }}');
+      if (!heroSection) return;
 
-    const slides = heroSection.querySelectorAll('.bb-hero__slide');
-    const progressItems = heroSection.querySelectorAll('.bb-hero__progress-item');
-    const isAutoplay = heroSection.dataset.autoplay === 'true';
-    const intervalTime = parseInt(heroSection.dataset.interval, 10) || 5000;
+      const slides = heroSection.querySelectorAll('.bb-hero__slide');
+      const progressItems = heroSection.querySelectorAll('.bb-hero__progress-item');
+      const isAutoplay = heroSection.dataset.autoplay === 'true';
+      const intervalTime = parseInt(heroSection.dataset.interval, 10) || 5000;
 
-    let currentIndex = 0;
-    let timer = null;
-    let progressAnim = null;
-    let startTime = null;
+      let currentIndex = 0;
+      let slideTimer = null;
 
-    if (slides.length <= 1) return;
+      if (slides.length <= 1) return;
 
-    function goToSlide(index) {
-      if (index === currentIndex) return;
+      function updateProgressStates(targetIdx) {
+        progressItems.forEach((item, idx) => {
+          item.classList.remove('is-active', 'is-completed');
+          const fill = item.querySelector('.bb-hero__progress-fill');
 
-      // Update slide classes
-      slides[currentIndex].classList.remove('is-active');
-      slides[index].classList.add('is-active');
+          if (idx < targetIdx) {
+            item.classList.add('is-completed');
+          } else if (idx === targetIdx) {
+            if (fill) {
+              fill.style.animation = 'none';
+              void fill.offsetHeight; // Trigger DOM reflow to restart CSS animation
+              fill.style.animation = '';
+            }
+            item.classList.add('is-active');
+          }
+        });
+      }
 
-      // Update progress bar items
+      function goToSlide(nextIndex) {
+        slides[currentIndex].classList.remove('is-active');
+        slides[nextIndex].classList.add('is-active');
+
+        currentIndex = nextIndex;
+        updateProgressStates(currentIndex);
+
+        if (isAutoplay) {
+          restartTimer();
+        }
+      }
+
+      function nextSlide() {
+        const nextIdx = (currentIndex + 1) % slides.length;
+        goToSlide(nextIdx);
+      }
+
+      function restartTimer() {
+        if (slideTimer) clearInterval(slideTimer);
+        slideTimer = setInterval(nextSlide, intervalTime);
+      }
+
+      // Progress Line Click Handler
       progressItems.forEach((item, idx) => {
-        item.classList.remove('is-active', 'is-completed');
-        const fill = item.querySelector('.bb-hero__progress-fill');
-        if (fill) fill.style.width = '0%';
-
-        if (idx < index) {
-          item.classList.add('is-completed');
-        } else if (idx === index) {
-          item.classList.add('is-active');
-        }
+        item.addEventListener('click', function () {
+          goToSlide(idx);
+        });
       });
 
-      currentIndex = index;
-      if (isAutoplay) startTimer();
-    }
+      // Touch Swipe Support
+      let touchStartX = 0;
+      let touchEndX = 0;
 
-    function startTimer() {
-      stopTimer();
-      startTime = Date.now();
+      heroSection.addEventListener('touchstart', function (e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
 
-      const activeFill = progressItems[currentIndex] ? progressItems[currentIndex].querySelector('.bb-hero__progress-fill') : null;
-
-      function updateProgress() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min((elapsed / intervalTime) * 100, 100);
-
-        if (activeFill) {
-          activeFill.style.width = progress + '%';
+      heroSection.addEventListener('touchend', function (e) {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 50) {
+          goToSlide((currentIndex + 1) % slides.length);
+        } else if (touchEndX - touchStartX > 50) {
+          goToSlide((currentIndex - 1 + slides.length) % slides.length);
         }
+      }, { passive: true });
 
-        if (elapsed >= intervalTime) {
-          const nextIndex = (currentIndex + 1) % slides.length;
-          goToSlide(nextIndex);
-        } else {
-          progressAnim = requestAnimationFrame(updateProgress);
-        }
+      // Initial state
+      updateProgressStates(0);
+      if (isAutoplay) {
+        restartTimer();
       }
-
-      progressAnim = requestAnimationFrame(updateProgress);
     }
 
-    function stopTimer() {
-      if (progressAnim) cancelAnimationFrame(progressAnim);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHeroSlider);
+    } else {
+      initHeroSlider();
     }
-
-    // Indicator Click Handler
-    progressItems.forEach((item, idx) => {
-      item.addEventListener('click', function () {
-        stopTimer();
-        goToSlide(idx);
-      });
-    });
-
-    // Touch Swipe Support
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    heroSection.addEventListener('touchstart', function (e) {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    heroSection.addEventListener('touchend', function (e) {
-      touchEndX = e.changedTouches[0].screenX;
-      if (touchStartX - touchEndX > 50) {
-        // Swipe left -> Next slide
-        const nextIndex = (currentIndex + 1) % slides.length;
-        goToSlide(nextIndex);
-      } else if (touchEndX - touchStartX > 50) {
-        // Swipe right -> Prev slide
-        const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-        goToSlide(prevIndex);
-      }
-    }, { passive: true });
-
-    // Start initial slider animation
-    if (isAutoplay) {
-      startTimer();
-    }
-  });
+    document.addEventListener('shopify:section:load', initHeroSlider);
+  })();
 </script>
 
 {%- endunless -%}
