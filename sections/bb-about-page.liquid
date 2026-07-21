@@ -141,49 +141,7 @@
     }
   }
 
-  /* Mission Feature Callout - Clean Professional Editorial Pull-Quote */
-  #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(2) {
-    background-color: transparent;
-    color: {{ section.settings.mission_text_color | default: '#111111' }};
-    font-size: 19px;
-    font-weight: 600;
-    line-height: 1.65;
-    padding: 16px 0 16px 24px;
-    margin-top: 32px;
-    margin-bottom: 32px;
-    border-left: 4px solid {{ section.settings.mission_line_color | default: '#111111' }};
-    box-shadow: none;
-    border-radius: 0;
-    letter-spacing: -0.2px;
-  }
-
-  @media (min-width: 768px) {
-    #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(2) {
-      font-size: 22px;
-      padding: 20px 0 20px 28px;
-      margin-top: 38px;
-      margin-bottom: 38px;
-    }
-  }
-
-  /* Style Option 2: Light Card */
-  #bb-about-{{ section.id }}.bb-mission-style--light_card .bb-about__story-richtext p:nth-child(2) {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-left: 4px solid {{ section.settings.mission_line_color | default: '#A6FF00' }};
-    border-radius: 12px;
-    padding: 24px 30px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  }
-
-  /* Style Option 3: Clean Large Bold Text */
-  #bb-about-{{ section.id }}.bb-mission-style--clean_text .bb-about__story-richtext p:nth-child(2) {
-    background-color: transparent;
-    border-left: none;
-    padding: 0;
-    font-size: 22px;
-    font-weight: 700;
-  }
+  /* Standard story text paragraph styling */
 
   #bb-about-{{ section.id }} .bb-about__hero-img-wrap {
     width: 100%;
