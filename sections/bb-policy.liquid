@@ -110,19 +110,26 @@
 
   #bb-policy-{{ section.id }} .bb-policy__body th,
   #bb-policy-{{ section.id }} .bb-policy__body td {
-    border: 1px solid #EFEFEF;
+    border: 1px solid #E0E0E0;
     padding: 12px 16px;
     text-align: left;
   }
 
   #bb-policy-{{ section.id }} .bb-policy__body th {
-    background-color: #F8F8F8;
+    background-color: #F4F4F4;
+    color: #000000;
     font-weight: 700;
   }
 
   #bb-policy-{{ section.id }} .bb-policy__body a {
-    color: #FF5A1F;
+    color: #000000;
+    font-weight: 600;
     text-decoration: underline;
+    transition: opacity 0.2s ease;
+  }
+
+  #bb-policy-{{ section.id }} .bb-policy__body a:hover {
+    opacity: 0.7;
   }
 {%- endstyle -%}
 
@@ -277,10 +284,10 @@
 </p>{%- endcapture -%}
   {%- elsif handle contains 'shipping' -%}
     {%- assign p_title = "Shipping Policy" -%}
-    {%- capture p_content -%}<div style="background-color: #FFF3CD; border-left: 4px solid #FFC107; padding: 16px 20px; margin-bottom: 24px; border-radius: 4px; color: #856404; font-weight: 600;">
-  IMPORTANT: SHIPPING CHARGES ARE HIGH FOR NORTH EAST INDIA. IF YOU WANT US TO DELIVER IN NORTH-EAST INDIA, PLEASE DROP US AN EMAIL AT <a href="mailto:hello@9skin.world" style="color:#856404;text-decoration:underline;">hello@9skin.world</a> WITH YOUR REQUIREMENTS. WE WILL CHECK THE SHIPPING METHOD AND CHARGES AND SEND YOU THE INVOICE. DO NOT MAKE THE PAYMENT ONLINE AS YOUR ORDER MIGHT GET CANCELLED.
+    {%- capture p_content -%}<div style="background-color: #F7F7F7; border-left: 4px solid #000000; padding: 18px 24px; margin-bottom: 24px; border-radius: 0px; color: #111111; font-weight: 600; font-size: 15px; line-height: 1.6;">
+  IMPORTANT: SHIPPING CHARGES ARE HIGH FOR NORTH EAST INDIA. IF YOU WANT US TO DELIVER IN NORTH-EAST INDIA, PLEASE DROP US AN EMAIL AT <a href="mailto:hello@9skin.world" style="color:#000000;text-decoration:underline;">hello@9skin.world</a> WITH YOUR REQUIREMENTS. WE WILL CHECK THE SHIPPING METHOD AND CHARGES AND SEND YOU THE INVOICE. DO NOT MAKE THE PAYMENT ONLINE AS YOUR ORDER MIGHT GET CANCELLED.
 </div>
-<div style="background-color: #F8F9FA; border-left: 4px solid #17A2B8; padding: 12px 16px; margin-bottom: 28px; border-radius: 4px; color: #0C5460;">
+<div style="background-color: #F7F7F7; border-left: 4px solid #000000; padding: 16px 24px; margin-bottom: 28px; border-radius: 0px; color: #111111; font-weight: 600; font-size: 15px; line-height: 1.6;">
   FOR ALL INDIA ORDERS, AN ENTRY TAX NEEDS TO BE PAID AS PER THE GOVERNMENT'S POLICY. BUYER WILL BE RESPONSIBLE TO PAY FOR THE SAME.
 </div>
 <h2>Delivery Time</h2>
