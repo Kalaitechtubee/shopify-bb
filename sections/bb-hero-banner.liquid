@@ -379,26 +379,12 @@
     background-color: #FFFFFF;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
     border-radius: 4px;
-  }
-
-  #bb-hero-{{ section.id }}[data-autoplay="true"] .bb-hero__progress-item.is-active .bb-hero__progress-fill {
-    animation: bbHeroLineFill {{ section.settings.autoplay_interval | default: 5 }}s linear forwards !important;
+    transition: none;
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-item.is-completed .bb-hero__progress-fill {
-    animation: none !important;
-    width: 100% !important;
-    background-color: #FFFFFF !important;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
-  }
-
-  @keyframes bbHeroLineFill {
-    from {
-      width: 0%;
-    }
-    to {
-      width: 100%;
-    }
+    width: 100%;
+    transition: none;
   }
 {%- endstyle -%}
 
@@ -636,17 +622,28 @@
           const fill = item.querySelector('.bb-hero__progress-fill');
           item.classList.remove('is-active', 'is-completed');
 
-          if (fill) {
-            fill.style.animation = 'none';
-            void fill.offsetHeight; // Reflow to restart CSS keyframe animation
-            fill.style.animation = '';
-          }
+          if (!fill) return;
+
+          // Reset: instantly snap to 0% with no transition
+          fill.style.transition = 'none';
+          fill.style.width = '0%';
 
           if (idx < nextIndex) {
+            // Already passed: show as 100% instantly
             item.classList.add('is-completed');
+            fill.style.width = '100%';
           } else if (idx === nextIndex) {
+            // Active: animate width from 0% to 100% over interval duration
             item.classList.add('is-active');
+            // Use double rAF to guarantee the browser has applied the 0% reset
+            requestAnimationFrame(function () {
+              requestAnimationFrame(function () {
+                fill.style.transition = 'width ' + intervalTime + 'ms linear';
+                fill.style.width = '100%';
+              });
+            });
           }
+          // idx > nextIndex: stays at 0% (already reset above)
         });
 
         // Update Dots
