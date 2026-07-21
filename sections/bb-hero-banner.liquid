@@ -376,15 +376,24 @@
     left: 0;
     height: 100%;
     width: 0%;
-    background-color: #FFFFFF;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
+    background-color: {{ section.settings.progress_bar_color | default: '#ffffff' }};
+    box-shadow: 0 0 10px {{ section.settings.progress_bar_color | default: 'rgba(255,255,255,0.9)' }};
     border-radius: 4px;
-    transition: none;
+    animation: none;
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__progress-fill.bb-fill-running {
+    animation: bbHeroFill {{ section.settings.autoplay_interval | default: 5 }}s linear forwards;
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-item.is-completed .bb-hero__progress-fill {
+    animation: none;
     width: 100%;
-    transition: none;
+  }
+
+  @keyframes bbHeroFill {
+    from { width: 0%; }
+    to   { width: 100%; }
   }
 {%- endstyle -%}
 
@@ -616,12 +625,13 @@
 
       // ── Helper: animate a fill bar from 0 → 100% ────────────────────────
       function animateFill(fill) {
-        resetFill(fill);
-        // Wait one tick so the browser commits the 0% reset before animating
-        setTimeout(function () {
-          fill.style.transition = 'width ' + intervalMs + 'ms linear';
-          fill.style.width      = '100%';
-        }, 30);
+        // 1. Remove running class so animation stops
+        fill.classList.remove('bb-fill-running');
+        fill.style.width = '0%';
+        // 2. Force synchronous reflow so browser commits the stopped state
+        fill.getBoundingClientRect();
+        // 3. Re-add class — browser sees a fresh animation start
+        fill.classList.add('bb-fill-running');
       }
 
       // ── Go to a specific slide ───────────────────────────────────────────
@@ -643,16 +653,16 @@
           if (i < next) {
             // Already visited: instantly full
             item.classList.add('is-completed');
-            fill.style.transition = 'none';
-            fill.style.width      = '100%';
+            fill.classList.remove('bb-fill-running');
+            fill.style.width = '100%';
           } else if (i === next) {
-            // Current: animate
+            // Current: animate with keyframe
             item.classList.add('is-active');
             animateFill(fill);
           } else {
-            // Upcoming: instantly empty
-            fill.style.transition = 'none';
-            fill.style.width      = '0%';
+            // Upcoming: reset empty
+            fill.classList.remove('bb-fill-running');
+            fill.style.width = '0%';
           }
         });
 
@@ -820,6 +830,12 @@
       "unit": "s",
       "label": "Auto-Slide Speed (Seconds)",
       "default": 5
+    },
+    {
+      "type": "color",
+      "id": "progress_bar_color",
+      "label": "Progress Bar Fill Color",
+      "default": "#ffffff"
     },
     {
       "type": "header",
