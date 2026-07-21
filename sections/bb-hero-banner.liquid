@@ -282,10 +282,11 @@
         data-slide-index="{{ forloop.index0 }}"
         {{ block.shopify_attributes }}
       >
-        <!-- Background Media (Image or Video) -->
+        <!-- Background Media (Image, Video, or Custom Color) -->
         <div class="bb-hero__media-wrap">
-          {%- comment -%} Check Video First {%- endcomment -%}
-          {%- if block.settings.video != blank -%}
+          {%- if block.settings.bg_color != blank and block.settings.image == blank and block.settings.video == blank and block.settings.video_url_mp4 == blank -%}
+            <div class="bb-hero__media" style="background: {{ block.settings.bg_color }};"></div>
+          {%- elsif block.settings.video != blank -%}
             {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'bb-hero__media bb-hero__media--desktop' }}
             {%- if block.settings.video_mobile != blank -%}
               {{ block.settings.video_mobile | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'bb-hero__media bb-hero__media--mobile' }}
@@ -338,8 +339,7 @@
               >
             {%- endif -%}
           {%- else -%}
-            {%- comment -%} Fallback placeholder image {%- endcomment -%}
-            <div class="bb-hero__media" style="background: linear-gradient(135deg, #1A1A1A 0%, #333333 100%);"></div>
+            <div class="bb-hero__media" style="background: {{ block.settings.bg_color | default: 'linear-gradient(135deg, #1A1A1A 0%, #333333 100%)' }};"></div>
           {%- endif -%}
         </div>
 
@@ -708,8 +708,222 @@
   ],
   "blocks": [
     {
+      "type": "slide_video",
+      "name": "📹 1. Video Banner Slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Background Video"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify Background Video (Desktop)"
+        },
+        {
+          "type": "video",
+          "id": "video_mobile",
+          "label": "Shopify Background Video (Mobile)"
+        },
+        {
+          "type": "text",
+          "id": "video_url_mp4",
+          "label": "Direct MP4 Video URL (Desktop)",
+          "info": "Direct .mp4 URL fallback"
+        },
+        {
+          "type": "text",
+          "id": "video_url_mp4_mobile",
+          "label": "Direct MP4 Video URL (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 90,
+          "step": 5,
+          "unit": "%",
+          "label": "Dark Overlay Opacity",
+          "default": 35
+        },
+        {
+          "type": "header",
+          "content": "Slide Content"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading Text",
+          "default": "[Haircare] that works harder.",
+          "info": "Use square brackets e.g. [Haircare] to highlight a word in neon lime color!"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext / Subtitle",
+          "default": "Minimal routine. Maximum results. Built for real hair, real days."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "CTA Button Text",
+          "default": "EXPLORE PRODUCTS"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "CTA Button Link"
+        },
+        {
+          "type": "select",
+          "id": "content_alignment",
+          "label": "Content Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "slide_image",
+      "name": "🖼️ 2. Image Banner Slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Background Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image (Desktop)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Background Image (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 90,
+          "step": 5,
+          "unit": "%",
+          "label": "Dark Overlay Opacity",
+          "default": 35
+        },
+        {
+          "type": "header",
+          "content": "Slide Content"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading Text",
+          "default": "[Haircare] that works harder.",
+          "info": "Use square brackets e.g. [Haircare] to highlight a word in neon lime color!"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext / Subtitle",
+          "default": "Minimal routine. Maximum results. Built for real hair, real days."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "CTA Button Text",
+          "default": "EXPLORE PRODUCTS"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "CTA Button Link"
+        },
+        {
+          "type": "select",
+          "id": "content_alignment",
+          "label": "Content Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        }
+      ]
+    },
+    {
+      "type": "slide_split",
+      "name": "🎨 3. Color / Split Banner Slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Background Color / Style"
+        },
+        {
+          "type": "color_background",
+          "id": "bg_color",
+          "label": "Background Color / Gradient",
+          "default": "linear-gradient(135deg, #6B2430 0%, #1A1A1A 100%)"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 90,
+          "step": 5,
+          "unit": "%",
+          "label": "Overlay Opacity",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Slide Content"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading Text",
+          "default": "[Haircare] that works harder.",
+          "info": "Use square brackets e.g. [Haircare] to highlight a word in neon lime color!"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext / Subtitle",
+          "default": "Minimal routine. Maximum results. Built for real hair, real days."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "CTA Button Text",
+          "default": "EXPLORE PRODUCTS"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "CTA Button Link"
+        },
+        {
+          "type": "select",
+          "id": "content_alignment",
+          "label": "Content Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        }
+      ]
+    },
+    {
       "type": "slide",
-      "name": "Banner Slide",
+      "name": "General Banner Slide",
       "settings": [
         {
           "type": "header",
@@ -727,7 +941,7 @@
         },
         {
           "type": "header",
-          "content": "Background Video (Overrides Image)"
+          "content": "Background Video"
         },
         {
           "type": "video",
@@ -742,8 +956,7 @@
         {
           "type": "text",
           "id": "video_url_mp4",
-          "label": "Direct MP4 Video URL (Desktop)",
-          "info": "Paste direct .mp4 file URL if not using Shopify video picker"
+          "label": "Direct MP4 Video URL (Desktop)"
         },
         {
           "type": "text",
@@ -768,14 +981,7 @@
           "type": "text",
           "id": "heading",
           "label": "Heading Text",
-          "default": "[Haircare] that works harder.",
-          "info": "Use square brackets e.g. [Haircare] to highlight a word in neon lime color!"
-        },
-        {
-          "type": "text",
-          "id": "highlight_text",
-          "label": "Highlight Word (Fallback)",
-          "info": "Used if no [brackets] are in the heading text"
+          "default": "[Haircare] that works harder."
         },
         {
           "type": "text",
@@ -813,27 +1019,30 @@
       "name": "BB Hero Banner Slider",
       "blocks": [
         {
-          "type": "slide",
+          "type": "slide_video",
           "settings": {
             "heading": "[Haircare] that works harder.",
             "subtext": "Minimal routine. Maximum results. Built for real hair, real days.",
-            "button_text": "EXPLORE PRODUCTS"
+            "button_text": "EXPLORE PRODUCTS",
+            "content_alignment": "left"
           }
         },
         {
-          "type": "slide",
+          "type": "slide_image",
           "settings": {
             "heading": "[Haircare] that works harder.",
             "subtext": "Minimal routine. Maximum results. Built for real hair, real days.",
-            "button_text": "EXPLORE PRODUCTS"
+            "button_text": "EXPLORE PRODUCTS",
+            "content_alignment": "center"
           }
         },
         {
-          "type": "slide",
+          "type": "slide_split",
           "settings": {
             "heading": "[Haircare] that works harder.",
             "subtext": "Minimal routine. Maximum results. Built for real hair, real days.",
-            "button_text": "EXPLORE PRODUCTS"
+            "button_text": "EXPLORE PRODUCTS",
+            "content_alignment": "center"
           }
         }
       ]
