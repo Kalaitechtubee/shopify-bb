@@ -220,14 +220,14 @@
   /* Progress Bar Indicators at Bottom */
   #bb-hero-{{ section.id }} .bb-hero__progress-bar-wrap {
     position: absolute;
-    bottom: 24px;
+    bottom: 28px;
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 40px);
     max-width: 900px;
-    z-index: 4;
+    z-index: 10;
     display: flex;
-    gap: 12px;
+    gap: 14px;
     align-items: center;
     justify-content: center;
   }
@@ -235,8 +235,8 @@
   #bb-hero-{{ section.id }} .bb-hero__progress-item {
     flex: 1;
     height: 6px;
-    background-color: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
@@ -245,7 +245,7 @@
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-item:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-fill {
@@ -464,15 +464,16 @@
             fill.style.transition = 'none';
             fill.style.width = '0%';
 
-            // Trigger reflow so browser registers width 0% before starting CSS transition
-            void fill.offsetHeight;
-
-            if (isAutoplay) {
-              fill.style.transition = 'width ' + intervalTime + 'ms linear';
-              fill.style.width = '100%';
-            } else {
-              fill.style.width = '100%';
-            }
+            requestAnimationFrame(function () {
+              requestAnimationFrame(function () {
+                if (isAutoplay) {
+                  fill.style.transition = 'width ' + intervalTime + 'ms linear';
+                  fill.style.width = '100%';
+                } else {
+                  fill.style.width = '100%';
+                }
+              });
+            });
           }
         });
 
