@@ -237,7 +237,7 @@
     }
   },
   "order": [
-    "image_banner",
+    "bb_hero_banner",
     "bb_ingredient_philosophy",
     "bb_real_hair_problem",
     "bb_statement_banner",
