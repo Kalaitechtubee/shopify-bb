@@ -231,7 +231,115 @@
     box-shadow: 0 6px 20px rgba(166, 255, 0, 0.4);
   }
 
-  /* Progress Bar Indicators at Bottom */
+  /* Pagination & Indicator Styles */
+  #bb-hero-{{ section.id }} .bb-hero__dots-wrap {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__dot.is-active {
+    width: 34px;
+    background-color: {{ section.settings.highlight_color | default: '#A6FF00' }};
+    border-color: {{ section.settings.highlight_color | default: '#A6FF00' }};
+    box-shadow: 0 0 14px {{ section.settings.highlight_color | default: '#A6FF00' }};
+  }
+
+  /* Numbers Counter */
+  #bb-hero-{{ section.id }} .bb-hero__numbers-wrap {
+    position: absolute;
+    bottom: 28px;
+    right: 40px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 8px 18px;
+    border-radius: 30px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__counter-btn {
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__counter-btn:hover {
+    color: {{ section.settings.highlight_color | default: '#A6FF00' }};
+    transform: scale(1.25);
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__current-num {
+    color: {{ section.settings.highlight_color | default: '#A6FF00' }};
+    font-weight: 700;
+  }
+
+  /* Side Navigation Arrows */
+  #bb-hero-{{ section.id }} .bb-hero__nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #FFFFFF;
+    font-size: 22px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__nav-arrow--prev {
+    left: 24px;
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__nav-arrow--next {
+    right: 24px;
+  }
+
+  #bb-hero-{{ section.id }} .bb-hero__nav-arrow:hover {
+    background: {{ section.settings.highlight_color | default: '#A6FF00' }};
+    color: #000000;
+    border-color: {{ section.settings.highlight_color | default: '#A6FF00' }};
+    box-shadow: 0 0 15px {{ section.settings.highlight_color | default: '#A6FF00' }};
+  }
+
+  /* Progress Bar Lines */
   #bb-hero-{{ section.id }} .bb-hero__progress-bar-wrap {
     position: absolute;
     bottom: 28px;
@@ -426,21 +534,55 @@
       </div>
     {%- endfor -%}
 
-    <!-- Progress Line Indicators at Bottom (Optional Toggle) -->
-    {%- if section.settings.show_progress_bar and section.blocks.size > 1 -%}
-      <div class="bb-hero__progress-bar-wrap" aria-label="Hero slider pagination">
-        {%- for block in section.blocks -%}
-          <div
-            class="bb-hero__progress-item {% if forloop.first %}is-active{% endif %}"
-            data-target-slide="{{ forloop.index0 }}"
-            role="button"
-            tabindex="0"
-            aria-label="Go to slide {{ forloop.index }}"
-          >
-            <div class="bb-hero__progress-fill"></div>
-          </div>
-        {%- endfor -%}
-      </div>
+    <!-- Slider Pagination & Navigation Indicators -->
+    {%- if section.blocks.size > 1 -%}
+      {%- assign p_style = section.settings.pagination_style | default: 'dots' -%}
+
+      {%- if p_style == 'dots' -%}
+        <!-- Capsule Pill Dots Pagination -->
+        <div class="bb-hero__dots-wrap" aria-label="Hero slider pagination">
+          {%- for block in section.blocks -%}
+            <div
+              class="bb-hero__dot {% if forloop.first %}is-active{% endif %}"
+              data-target-slide="{{ forloop.index0 }}"
+              role="button"
+              tabindex="0"
+              aria-label="Go to slide {{ forloop.index }}"
+            ></div>
+          {%- endfor -%}
+        </div>
+
+      {%- elsif p_style == 'numbers' -%}
+        <!-- Number Counter Pagination -->
+        <div class="bb-hero__numbers-wrap" aria-label="Hero slider pagination">
+          <button class="bb-hero__counter-btn bb-hero__btn-prev" aria-label="Previous slide">&#8249;</button>
+          <span class="bb-hero__counter-text">
+            <span class="bb-hero__current-num">01</span> / <span class="bb-hero__total-num">0{{ section.blocks.size }}</span>
+          </span>
+          <button class="bb-hero__counter-btn bb-hero__btn-next" aria-label="Next slide">&#8250;</button>
+        </div>
+
+      {%- elsif p_style == 'arrows' -%}
+        <!-- Side Navigation Arrows -->
+        <button class="bb-hero__nav-arrow bb-hero__nav-arrow--prev bb-hero__btn-prev" aria-label="Previous slide">&#8249;</button>
+        <button class="bb-hero__nav-arrow bb-hero__nav-arrow--next bb-hero__btn-next" aria-label="Next slide">&#8250;</button>
+
+      {%- elsif p_style == 'lines' -%}
+        <!-- Progress Line Indicators -->
+        <div class="bb-hero__progress-bar-wrap" aria-label="Hero slider pagination">
+          {%- for block in section.blocks -%}
+            <div
+              class="bb-hero__progress-item {% if forloop.first %}is-active{% endif %}"
+              data-target-slide="{{ forloop.index0 }}"
+              role="button"
+              tabindex="0"
+              aria-label="Go to slide {{ forloop.index }}"
+            >
+              <div class="bb-hero__progress-fill"></div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     {%- endif -%}
   </div>
 </section>
@@ -509,6 +651,23 @@
           }
         });
 
+        // Update Dots
+        const dots = heroSection.querySelectorAll('.bb-hero__dot');
+        dots.forEach((dot, idx) => {
+          if (idx === nextIndex) {
+            dot.classList.add('is-active');
+          } else {
+            dot.classList.remove('is-active');
+          }
+        });
+
+        // Update Numbers Counter
+        const currentNumEl = heroSection.querySelector('.bb-hero__current-num');
+        if (currentNumEl) {
+          const numStr = (nextIndex + 1) < 10 ? '0' + (nextIndex + 1) : (nextIndex + 1);
+          currentNumEl.textContent = numStr;
+        }
+
         currentIndex = nextIndex;
 
         if (isAutoplay) {
@@ -519,10 +678,35 @@
         }
       }
 
-      // Progress Line Click Handler
+      // Indicator Click Handlers
       progressItems.forEach((item, idx) => {
         item.addEventListener('click', function () {
           goToSlide(idx);
+        });
+      });
+
+      const dots = heroSection.querySelectorAll('.bb-hero__dot');
+      dots.forEach((dot, idx) => {
+        dot.addEventListener('click', function () {
+          goToSlide(idx);
+        });
+      });
+
+      // Prev / Next Arrows Click Handlers
+      const prevBtns = heroSection.querySelectorAll('.bb-hero__btn-prev');
+      const nextBtns = heroSection.querySelectorAll('.bb-hero__btn-next');
+
+      prevBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const prevIdx = (currentIndex - 1 + slides.length) % slides.length;
+          goToSlide(prevIdx);
+        });
+      });
+
+      nextBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const nextIdx = (currentIndex + 1) % slides.length;
+          goToSlide(nextIdx);
         });
       });
 
@@ -622,6 +806,19 @@
       "id": "enable_autoplay",
       "label": "Enable Auto-Play Slides",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "pagination_style",
+      "label": "Slider Indicator Style",
+      "options": [
+        { "value": "dots", "label": "Capsule Pill Dots (Default)" },
+        { "value": "numbers", "label": "Number Counter (01 / 03)" },
+        { "value": "arrows", "label": "Side Navigation Arrows" },
+        { "value": "lines", "label": "Progress Lines" },
+        { "value": "none", "label": "Hidden / None" }
+      ],
+      "default": "dots"
     },
     {
       "type": "checkbox",
