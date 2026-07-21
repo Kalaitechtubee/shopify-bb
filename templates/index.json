@@ -88,6 +88,7 @@
         "description": "We combine proven actives that support scalp health, hair strength and growth.",
         "before_label": "Before",
         "after_label": "After",
+        "label_border_radius": 0,
         "product_image_width": 130,
         "slider_height_desktop": 620,
         "slider_height_mobile": 280

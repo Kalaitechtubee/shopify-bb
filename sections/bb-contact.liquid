@@ -288,27 +288,56 @@
               <div class="bb-contact-socials-icons">
                 {% if insta_link != blank %}
                   <a href="{{ insta_link }}" target="_blank" aria-label="Instagram">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+                    {% if section.settings.custom_instagram_icon != blank %}
+                      <img src="{{ section.settings.custom_instagram_icon | image_url: width: 80 }}" alt="Instagram" loading="lazy" style="width: var(--contact-social-icon-size, 18px); height: var(--contact-social-icon-size, 18px); object-fit: contain;">
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+                    {% endif %}
                   </a>
                 {% endif %}
                 {% if fb_link != blank %}
                   <a href="{{ fb_link }}" target="_blank" aria-label="Facebook">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    {% if section.settings.custom_facebook_icon != blank %}
+                      <img src="{{ section.settings.custom_facebook_icon | image_url: width: 80 }}" alt="Facebook" loading="lazy" style="width: var(--contact-social-icon-size, 18px); height: var(--contact-social-icon-size, 18px); object-fit: contain;">
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    {% endif %}
                   </a>
                 {% endif %}
                 {% if linkedin_link != blank %}
                   <a href="{{ linkedin_link }}" target="_blank" aria-label="LinkedIn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    {% if section.settings.custom_linkedin_icon != blank %}
+                      <img src="{{ section.settings.custom_linkedin_icon | image_url: width: 80 }}" alt="LinkedIn" loading="lazy" style="width: var(--contact-social-icon-size, 18px); height: var(--contact-social-icon-size, 18px); object-fit: contain;">
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    {% endif %}
                   </a>
                 {% endif %}
                 {% if twitter_link != blank %}
                   <a href="{{ twitter_link }}" target="_blank" aria-label="Twitter/X">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                    {% if section.settings.custom_twitter_icon != blank %}
+                      <img src="{{ section.settings.custom_twitter_icon | image_url: width: 80 }}" alt="Twitter/X" loading="lazy" style="width: var(--contact-social-icon-size, 18px); height: var(--contact-social-icon-size, 18px); object-fit: contain;">
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                    {% endif %}
                   </a>
                 {% endif %}
                 {% if youtube_link != blank %}
                   <a href="{{ youtube_link }}" target="_blank" aria-label="YouTube">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                    {% if section.settings.custom_youtube_icon != blank %}
+                      <img src="{{ section.settings.custom_youtube_icon | image_url: width: 80 }}" alt="YouTube" loading="lazy" style="width: var(--contact-social-icon-size, 18px); height: var(--contact-social-icon-size, 18px); object-fit: contain;">
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                    {% endif %}
+                  </a>
+                {% endif %}
+                {% if tiktok_link != blank %}
+                  <a href="{{ tiktok_link }}" target="_blank" aria-label="TikTok">
+                    {% if section.settings.custom_tiktok_icon != blank %}
+                      <img src="{{ section.settings.custom_tiktok_icon | image_url: width: 80 }}" alt="TikTok" loading="lazy" style="width: var(--contact-social-icon-size, 18px); height: var(--contact-social-icon-size, 18px); object-fit: contain;">
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+                    {% endif %}
                   </a>
                 {% endif %}
               </div>
@@ -790,10 +819,20 @@
       "default": "#"
     },
     {
+      "type": "image_picker",
+      "id": "custom_instagram_icon",
+      "label": "Instagram Custom Upload Icon (Image/SVG)"
+    },
+    {
       "type": "text",
       "id": "facebook_link",
       "label": "Facebook Link URL",
       "default": "#"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_facebook_icon",
+      "label": "Facebook Custom Upload Icon (Image/SVG)"
     },
     {
       "type": "text",
@@ -802,14 +841,39 @@
       "default": "#"
     },
     {
+      "type": "image_picker",
+      "id": "custom_linkedin_icon",
+      "label": "LinkedIn Custom Upload Icon (Image/SVG)"
+    },
+    {
       "type": "text",
       "id": "twitter_link",
       "label": "Twitter/X Link URL"
     },
     {
+      "type": "image_picker",
+      "id": "custom_twitter_icon",
+      "label": "Twitter/X Custom Upload Icon (Image/SVG)"
+    },
+    {
       "type": "text",
       "id": "youtube_link",
       "label": "YouTube Link URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_youtube_icon",
+      "label": "YouTube Custom Upload Icon (Image/SVG)"
+    },
+    {
+      "type": "text",
+      "id": "tiktok_link",
+      "label": "TikTok Link URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_tiktok_icon",
+      "label": "TikTok Custom Upload Icon (Image/SVG)"
     },
     {
       "type": "range",

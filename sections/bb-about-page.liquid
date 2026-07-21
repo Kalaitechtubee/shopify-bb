@@ -1,0 +1,971 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-about-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile | default: 32 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 48 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 16 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 16 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
+    background-color: {{ section.settings.section_bg | default: '#FAF8F5' }};
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | default: 72 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 90 }}px;
+      padding-left: {{ section.settings.padding_left | default: 32 }}px;
+      padding-right: {{ section.settings.padding_right | default: 32 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__container {
+    max-width: {{ section.settings.container_max_width | default: 1280 }}px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* -------------------------------------------------------------
+     1. HERO STORY SECTION
+  ------------------------------------------------------------- */
+  #bb-about-{{ section.id }} .bb-about__hero {
+    margin-bottom: {{ section.settings.hero_margin_bottom | default: 72 }}px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__hero--text_only {
+    text-align: center;
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  @media (min-width: 992px) {
+    #bb-about-{{ section.id }} .bb-about__hero-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+    #bb-about-{{ section.id }} .bb-about__hero-grid--image_left .bb-about__hero-img-wrap {
+      order: 1;
+    }
+    #bb-about-{{ section.id }} .bb-about__hero-grid--image_left .bb-about__hero-content {
+      order: 2;
+    }
+    #bb-about-{{ section.id }} .bb-about__hero-grid--image_right .bb-about__hero-img-wrap {
+      order: 2;
+    }
+    #bb-about-{{ section.id }} .bb-about__hero-grid--image_right .bb-about__hero-content {
+      order: 1;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__badge {
+    display: inline-block;
+    background-color: {{ section.settings.badge_bg_color | default: '#A6FF00' }};
+    color: {{ section.settings.badge_text_color | default: '#000000' }};
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__subheading {
+    font-size: {{ section.settings.subheading_size_mobile | default: 16 }}px;
+    font-weight: 700;
+    color: {{ section.settings.accent_color | default: '#6B2430' }};
+    margin: 0 0 14px 0;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__subheading {
+      font-size: {{ section.settings.subheading_size_desktop | default: 20 }}px;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__title {
+    font-family: {{ section.settings.heading_font_family | default: 'Georgia, serif' }};
+    font-size: {{ section.settings.title_size_mobile | default: 34 }}px;
+    font-weight: 700;
+    color: {{ section.settings.heading_color | default: '#111111' }};
+    line-height: 1.15;
+    margin: 0 0 28px 0;
+    letter-spacing: -0.5px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__title {
+      font-size: {{ section.settings.title_size_desktop | default: 52 }}px;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-richtext {
+    font-size: {{ section.settings.body_size_mobile | default: 16 }}px;
+    line-height: 1.75;
+    color: {{ section.settings.body_color | default: '#333333' }};
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__story-richtext {
+      font-size: {{ section.settings.body_size_desktop | default: 18 }}px;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-richtext p {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__hero-img-wrap {
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: {{ section.settings.image_border_radius | default: 0 }}px;
+    overflow: hidden;
+    background-color: #EFECE6;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  /* -------------------------------------------------------------
+     2. STORY & ECOSYSTEM SPLIT (Group Photo & Mission/Vision)
+  ------------------------------------------------------------- */
+  #bb-about-{{ section.id }} .bb-about__story-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: {{ section.settings.section_margin_bottom | default: 90 }}px;
+  }
+
+  @media (min-width: 992px) {
+    #bb-about-{{ section.id }} .bb-about__story-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+    #bb-about-{{ section.id }} .bb-about__story-grid--right .bb-about__story-img-wrap {
+      order: 2;
+    }
+    #bb-about-{{ section.id }} .bb-about__story-grid--right .bb-about__story-content {
+      order: 1;
+    }
+    #bb-about-{{ section.id }} .bb-about__story-grid--left .bb-about__story-img-wrap {
+      order: 1;
+    }
+    #bb-about-{{ section.id }} .bb-about__story-grid--left .bb-about__story-content {
+      order: 2;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-img-wrap {
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: {{ section.settings.image_border_radius | default: 0 }}px;
+    overflow: hidden;
+    background-color: #EFECE6;
+    border: 1px solid rgba(107, 36, 48, 0.15);
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-block-title {
+    font-family: {{ section.settings.heading_font_family | default: 'Georgia, serif' }};
+    font-size: 26px;
+    font-weight: 700;
+    color: {{ section.settings.accent_color | default: '#6B2430' }};
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-block-text {
+    font-size: 16px;
+    line-height: 1.65;
+    color: {{ section.settings.body_color | default: '#333333' }};
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-block-text p {
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-block-text ul {
+    margin: 12px 0;
+    padding-left: 20px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__story-block-text li {
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  /* -------------------------------------------------------------
+     3. MEET OUR FOUNDERS (EDITABLE POSITION & RICHTEXT)
+  ------------------------------------------------------------- */
+  #bb-about-{{ section.id }} .bb-about__founders-section {
+    width: 100%;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founders-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founders-title {
+    font-family: {{ section.settings.heading_font_family | default: 'Georgia, serif' }};
+    font-size: {{ section.settings.founders_heading_size_mobile | default: 32 }}px;
+    font-weight: 700;
+    color: {{ section.settings.heading_color | default: '#111111' }};
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__founders-title {
+      font-size: {{ section.settings.founders_heading_size_desktop | default: 48 }}px;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__founders-list {
+      gap: 80px;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+    background-color: #FFFFFF;
+    border: 1px solid #EAEDDD;
+    padding: 24px;
+    border-radius: {{ section.settings.image_border_radius | default: 0 }}px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__founder-row {
+      grid-template-columns: 1fr 1.2fr;
+      gap: 48px;
+      padding: 36px;
+    }
+
+    #bb-about-{{ section.id }} .bb-about__founder-row--img_right .bb-about__founder-img-wrap {
+      order: 2;
+    }
+    #bb-about-{{ section.id }} .bb-about__founder-row--img_right .bb-about__founder-content {
+      order: 1;
+    }
+
+    #bb-about-{{ section.id }} .bb-about__founder-row--img_left .bb-about__founder-img-wrap {
+      order: 1;
+    }
+    #bb-about-{{ section.id }} .bb-about__founder-row--img_left .bb-about__founder-content {
+      order: 2;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-img-wrap {
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: {{ section.settings.image_border_radius | default: 0 }}px;
+    overflow: hidden;
+    background-color: #EFECE6;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-row:hover .bb-about__founder-img {
+    transform: scale(1.02);
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-name {
+    font-family: {{ section.settings.heading_font_family | default: 'Georgia, serif' }};
+    font-size: 30px;
+    font-weight: 700;
+    color: #111111;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  @media (min-width: 768px) {
+    #bb-about-{{ section.id }} .bb-about__founder-name {
+      font-size: 38px;
+    }
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-role {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: {{ section.settings.accent_color | default: '#6B2430' }};
+    margin: 0 0 6px 0;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-bio {
+    font-size: 16px;
+    line-height: 1.7;
+    color: {{ section.settings.body_color | default: '#333333' }};
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-bio p {
+    margin: 0 0 12px 0;
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-about-{{ section.id }}"
+  class="bb-section bb-about-page {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-about__container">
+
+    <!-- 1. HERO STORY SECTION -->
+    <div class="bb-about__hero bb-about__hero--{{ section.settings.hero_layout }}">
+      {%- if section.settings.hero_layout == 'text_only' -%}
+        <!-- Text Centered Layout -->
+        {%- if section.settings.badge_text != blank -%}
+          <span class="bb-about__badge">{{ section.settings.badge_text }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != blank -%}
+          <p class="bb-about__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+
+        <h1 class="bb-about__title">{{ section.settings.title | default: 'About Hair Dare You' }}</h1>
+
+        <div class="bb-about__story-richtext">
+          {{ section.settings.story_content }}
+        </div>
+      {%- else -%}
+        <!-- Split Grid Layout (Image Left / Right) -->
+        <div class="bb-about__hero-grid bb-about__hero-grid--{{ section.settings.hero_layout }}">
+          <div class="bb-about__hero-content">
+            {%- if section.settings.badge_text != blank -%}
+              <span class="bb-about__badge">{{ section.settings.badge_text }}</span>
+            {%- endif -%}
+
+            {%- if section.settings.subheading != blank -%}
+              <p class="bb-about__subheading">{{ section.settings.subheading }}</p>
+            {%- endif -%}
+
+            <h1 class="bb-about__title">{{ section.settings.title | default: 'About Hair Dare You' }}</h1>
+
+            <div class="bb-about__story-richtext">
+              {{ section.settings.story_content }}
+            </div>
+          </div>
+
+          <div class="bb-about__hero-img-wrap">
+            {%- if section.settings.hero_image != blank -%}
+              <img
+                src="{{ section.settings.hero_image | image_url: width: 1000 }}"
+                alt="{{ section.settings.title | escape }}"
+                class="bb-about__hero-img"
+                loading="eager"
+                width="{{ section.settings.hero_image.width }}"
+                height="{{ section.settings.hero_image.height }}"
+              >
+            {%- else -%}
+              <img
+                src="{{ 'NIDDHI.png' | asset_url }}"
+                alt="Hair Dare You"
+                class="bb-about__hero-img"
+                loading="eager"
+              >
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- 2. STORY & ECOSYSTEM SPLIT (Group Photo Left/Right, Mission/Vision) -->
+    <div class="bb-about__story-grid bb-about__story-grid--{{ section.settings.story_image_position }}">
+      <div class="bb-about__story-img-wrap">
+        {%- if section.settings.story_image != blank -%}
+          <img
+            src="{{ section.settings.story_image | image_url: width: 1000 }}"
+            alt="Hair Dare You Founders"
+            class="bb-about__story-img"
+            loading="lazy"
+            width="{{ section.settings.story_image.width }}"
+            height="{{ section.settings.story_image.height }}"
+          >
+        {%- else -%}
+          <img
+            src="{{ 'founders_group.jpeg' | asset_url }}"
+            alt="Hair Dare You Founders"
+            class="bb-about__story-img"
+            loading="lazy"
+          >
+        {%- endif -%}
+      </div>
+
+      <div class="bb-about__story-content">
+        {%- if section.settings.vision_title != blank or section.settings.vision_content != blank -%}
+          <div>
+            <h3 class="bb-about__story-block-title">{{ section.settings.vision_title | default: 'Our Vision' }}</h3>
+            <div class="bb-about__story-block-text">{{ section.settings.vision_content }}</div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.mission_title != blank or section.settings.mission_content != blank -%}
+          <div>
+            <h3 class="bb-about__story-block-title">{{ section.settings.mission_title | default: 'Our Mission' }}</h3>
+            <div class="bb-about__story-block-text">{{ section.settings.mission_content }}</div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.promise_title != blank or section.settings.promise_content != blank -%}
+          <div>
+            <h3 class="bb-about__story-block-title">{{ section.settings.promise_title | default: 'Our Promise' }}</h3>
+            <div class="bb-about__story-block-text">{{ section.settings.promise_content }}</div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- 3. MEET OUR FOUNDERS (Alternating / Configurable Image Position) -->
+    <div class="bb-about__founders-section">
+      <div class="bb-about__founders-header">
+        <h2 class="bb-about__founders-title">
+          {{ section.settings.founders_heading | default: 'Meet Our Founders' }}
+        </h2>
+      </div>
+
+      <div class="bb-about__founders-list">
+        {%- for block in section.blocks -%}
+          {%- assign mod = forloop.index | modulo: 2 -%}
+          {%- assign img_pos = block.settings.image_position -%}
+          {%- if img_pos == 'auto' -%}
+            {%- if section.settings.founders_layout_direction == 'alternating' -%}
+              {%- if mod == 0 -%}
+                {%- assign final_pos = 'img_right' -%}
+              {%- else -%}
+                {%- assign final_pos = 'img_left' -%}
+              {%- endif -%}
+            {%- elsif section.settings.founders_layout_direction == 'image_right' -%}
+              {%- assign final_pos = 'img_right' -%}
+            {%- else -%}
+              {%- assign final_pos = 'img_left' -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- assign final_pos = 'img_' | append: img_pos -%}
+          {%- endif -%}
+
+          <div
+            class="bb-about__founder-row bb-about__founder-row--{{ final_pos }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="bb-about__founder-img-wrap">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 1000 }}"
+                  alt="{{ block.settings.name | escape }}"
+                  class="bb-about__founder-img"
+                  loading="lazy"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                >
+              {%- elsif block.settings.asset_image_name != blank -%}
+                <img
+                  src="{{ block.settings.asset_image_name | asset_url }}"
+                  alt="{{ block.settings.name | escape }}"
+                  class="bb-about__founder-img"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #EFECE6; color: #888;">
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="bb-about__founder-content">
+              <h3 class="bb-about__founder-name">{{ block.settings.name }}</h3>
+              <p class="bb-about__founder-role">{{ block.settings.role }}</p>
+              <div class="bb-about__founder-bio">{{ block.settings.bio }}</div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB About Page",
+  "tag": "section",
+  "class": "bb-section-about-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1280
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background Color",
+      "default": "#FAF8F5"
+    },
+
+    {
+      "type": "header",
+      "content": "1. Hero Story Options & Alignment"
+    },
+    {
+      "type": "select",
+      "id": "hero_layout",
+      "label": "Hero Section Layout",
+      "options": [
+        { "value": "text_only", "label": "Text Only (Centered)" },
+        { "value": "image_right", "label": "Text Left / Image Right" },
+        { "value": "image_left", "label": "Image Left / Text Right" }
+      ],
+      "default": "text_only"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image Upload"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "ABOUT HAIR DARE YOU"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#A6FF00"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Text",
+      "default": "Healthy Hair Starts with Healthy Water"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "About Hair Dare You"
+    },
+    {
+      "type": "richtext",
+      "id": "story_content",
+      "label": "Story Body Paragraphs (Rich Text Editor)",
+      "default": "<p>At Hair Dare You, we believe that beautiful hair doesn't begin with expensive shampoos, it begins at the source. That's why we've created India's first holistic hair wellness ecosystem designed to address the real root cause of hair concerns: water quality, scalp health, and follicle regeneration.</p><p>Our mission is simple: to help millions of people regain confidence through healthier, stronger, fuller hair using science-backed innovation.</p><p>From advanced shower filtration systems that protect your scalp from hard water and harmful contaminants to Korean-inspired hair regeneration technologies, every Hair Dare You product is thoughtfully developed to work together as one complete ritual, not just another haircare routine.</p><p>We combine cutting-edge research, premium ingredients, and clinically inspired formulations to create solutions that don't just mask hair problems, they help prevent them.</p><p>Today, Hair Dare You is building a complete ecosystem for hair wellness with innovative products including shower filters, micro-needling hair serums, LED hair growth devices, hair patches, shampoos, conditioners, and advanced scalp care solutions, all designed to help you achieve healthier hair from the root up.</p>"
+    },
+
+    {
+      "type": "header",
+      "content": "2. Story & Ecosystem Options & Alignment"
+    },
+    {
+      "type": "select",
+      "id": "story_image_position",
+      "label": "Group Story Image Position",
+      "options": [
+        { "value": "left", "label": "Image Left / Text Right" },
+        { "value": "right", "label": "Text Left / Image Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image",
+      "label": "Group Story Photo Upload"
+    },
+    {
+      "type": "text",
+      "id": "vision_title",
+      "label": "Vision Title",
+      "default": "Our Vision"
+    },
+    {
+      "type": "richtext",
+      "id": "vision_content",
+      "label": "Vision Content (Rich Text Editor)",
+      "default": "<p>To become the world's most trusted hair wellness brand by creating an ecosystem that transforms the way people care for their hair, starting with the water they use every single day.</p>"
+    },
+    {
+      "type": "text",
+      "id": "mission_title",
+      "label": "Mission Title",
+      "default": "Our Mission"
+    },
+    {
+      "type": "richtext",
+      "id": "mission_content",
+      "label": "Mission Content (Rich Text Editor)",
+      "default": "<p>To revolutionize hair care through science-backed, innovative, and accessible solutions that restore confidence, promote long-term scalp health, and empower everyone to experience stronger, healthier hair naturally.</p>"
+    },
+    {
+      "type": "text",
+      "id": "promise_title",
+      "label": "Promise Title",
+      "default": "Our Promise"
+    },
+    {
+      "type": "richtext",
+      "id": "promise_content",
+      "label": "Promise Content (Rich Text Editor)",
+      "default": "<p>At Hair Dare You, we're not just selling product, we're building a movement. A movement that believes:</p><ul><li>Healthy hair begins with healthy water.</li><li>Prevention is more powerful than correction.</li><li>Science and innovation create lasting results.</li><li>Every individual deserves to feel confident in their own hair.</li></ul><p><em>Welcome to Hair Dare You, where your journey to healthier hair begins.</em></p>"
+    },
+
+    {
+      "type": "header",
+      "content": "3. Founders Section Options & Alignment"
+    },
+    {
+      "type": "text",
+      "id": "founders_heading",
+      "label": "Founders Section Heading",
+      "default": "Meet Our Founders"
+    },
+    {
+      "type": "select",
+      "id": "founders_layout_direction",
+      "label": "Founders Layout Alignment",
+      "options": [
+        { "value": "alternating", "label": "Alternating (Zig-Zag Left & Right)" },
+        { "value": "image_left", "label": "All Images Left / Text Right" },
+        { "value": "image_right", "label": "All Text Left / Images Right" }
+      ],
+      "default": "alternating"
+    },
+
+    {
+      "type": "header",
+      "content": "Colors & Typography"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent / Maroon Color",
+      "default": "#6B2430"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Main Title Size (Desktop)",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Main Title Size (Mobile)",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "founders_heading_size_desktop",
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Founders Heading Size (Desktop)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "founders_heading_size_mobile",
+      "min": 20,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Founders Heading Size (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Image Border Radius",
+      "default": 0
+    },
+
+    {
+      "type": "header",
+      "content": "Section Spacing & Margins"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 92
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right (Mobile)",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "founder",
+      "name": "Co-Founder",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Founder Image Upload"
+        },
+        {
+          "type": "text",
+          "id": "asset_image_name",
+          "label": "Asset Image Name (Fallback)",
+          "info": "Filename from assets folder, e.g. NIDDHI.png"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image Position Alignment",
+          "options": [
+            { "value": "auto", "label": "Auto (Follow Section Rule)" },
+            { "value": "left", "label": "Image Left / Text Right" },
+            { "value": "right", "label": "Text Left / Image Right" }
+          ],
+          "default": "auto"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Founder Name",
+          "default": "Nidhhi Agerwal"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Title",
+          "default": "Co-Founder"
+        },
+        {
+          "type": "richtext",
+          "id": "bio",
+          "label": "Founder Bio / Description (Rich Text Editor)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB About Page",
+      "settings": {
+        "badge_text": "ABOUT HAIR DARE YOU",
+        "subheading": "Healthy Hair Starts with Healthy Water",
+        "title": "About Hair Dare You",
+        "accent_color": "#6B2430",
+        "founders_heading": "Meet Our Founders"
+      },
+      "blocks": [
+        {
+          "type": "founder",
+          "settings": {
+            "name": "Nidhhi Agerwal",
+            "role": "Co-Founder",
+            "asset_image_name": "NIDDHI.png",
+            "bio": "<p>Nidhhi Agerwal brings together entrepreneurship, brand building, and a passion for innovation to create Hair Dare You. Driven by the vision of making advanced hair regeneration solutions accessible to everyone, she leads the brand's strategic growth, partnerships, and long-term vision while championing the belief that confidence begins with healthy hair.</p>"
+          }
+        },
+        {
+          "type": "founder",
+          "settings": {
+            "name": "Prachi Mishra",
+            "role": "Co-Founder",
+            "asset_image_name": "founders_group.jpeg",
+            "bio": "<p>Prachi Mishra is passionate about building purposeful brands that solve real-world problems. With a focus on consumer experience, product innovation, and business development, she plays a key role in shaping Hair Dare You into a trusted name in modern hair wellness.</p>"
+          }
+        },
+        {
+          "type": "founder",
+          "settings": {
+            "name": "Gayathri Shruthi",
+            "role": "Co-Founder",
+            "asset_image_name": "IMG_0171.PNG",
+            "bio": "<p>Gayathri Shruthi oversees operations, execution, and product development, ensuring every Hair Dare You solution meets the highest standards of quality and effectiveness. Her commitment to innovation and customer satisfaction helps transform scientific advancements into products people love and trust.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

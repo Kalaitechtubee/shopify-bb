@@ -1,0 +1,59 @@
+{
+  "sections": {
+    "bb_about_page": {
+      "type": "bb-about-page",
+      "blocks": {
+        "founder_1": {
+          "type": "founder",
+          "settings": {
+            "name": "Nidhhi Agerwal",
+            "role": "Co-Founder",
+            "asset_image_name": "NIDDHI.png",
+            "image_position": "auto",
+            "bio": "<p>Nidhhi Agerwal brings together entrepreneurship, brand building, and a passion for innovation to create Hair Dare You. Driven by the vision of making advanced hair regeneration solutions accessible to everyone, she leads the brand's strategic growth, partnerships, and long-term vision while championing the belief that confidence begins with healthy hair.</p>"
+          }
+        },
+        "founder_2": {
+          "type": "founder",
+          "settings": {
+            "name": "Prachi Mishra",
+            "role": "Co-Founder",
+            "asset_image_name": "founders_group.jpeg",
+            "image_position": "auto",
+            "bio": "<p>Prachi Mishra is passionate about building purposeful brands that solve real-world problems. With a focus on consumer experience, product innovation, and business development, she plays a key role in shaping Hair Dare You into a trusted name in modern hair wellness.</p>"
+          }
+        },
+        "founder_3": {
+          "type": "founder",
+          "settings": {
+            "name": "Gayathri Shruthi",
+            "role": "Co-Founder",
+            "asset_image_name": "IMG_0171.PNG",
+            "image_position": "auto",
+            "bio": "<p>Gayathri Shruthi oversees operations, execution, and product development, ensuring every Hair Dare You solution meets the highest standards of quality and effectiveness. Her commitment to innovation and customer satisfaction helps transform scientific advancements into products people love and trust.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "founder_1",
+        "founder_2",
+        "founder_3"
+      ],
+      "settings": {
+        "enable_section": true,
+        "hero_layout": "text_only",
+        "story_image_position": "left",
+        "founders_layout_direction": "alternating",
+        "badge_text": "ABOUT HAIR DARE YOU",
+        "subheading": "Healthy Hair Starts with Healthy Water",
+        "title": "About Hair Dare You",
+        "section_bg": "#FAF8F5",
+        "accent_color": "#6B2430",
+        "founders_heading": "Meet Our Founders"
+      }
+    }
+  },
+  "order": [
+    "bb_about_page"
+  ]
+}
