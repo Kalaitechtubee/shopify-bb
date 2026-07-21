@@ -344,14 +344,14 @@
   /* === Progress Lines === */
   #bb-hero-{{ section.id }} .bb-hero__progress-bar-wrap {
     position: absolute;
-    bottom: 28px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 80px);
     max-width: 800px;
-    z-index: 10;
+    z-index: 20;
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
     justify-content: center;
   }
@@ -359,24 +359,19 @@
   #bb-hero-{{ section.id }} .bb-hero__progress-item {
     flex: 1;
     height: 3px;
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 3px;
-    overflow: hidden;
+    overflow: visible;
     cursor: pointer;
     position: relative;
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;                   /* always full width — we scale it */
-    transform: scaleX(0);          /* collapsed by default */
-    transform-origin: left center; /* expand left → right */
+    display: block;
+    height: 3px;
+    width: 0%;
     background-color: {{ section.settings.progress_bar_color | default: '#ffffff' }};
     border-radius: 3px;
-    /* NO transition here — JS drives it entirely */
   }
 {%- endstyle -%}
 
@@ -600,22 +595,24 @@
       var currentIndex = 0;
       var timer        = null;
 
-      // ── Helper: reset a single fill bar ─────────────────────────────────
-      function resetFill(fill) {
-        fill.style.transition = 'none';
-        fill.style.width      = '0%';
+      // ── Animate fill using Web Animations API ────────────────────────
+      function stopFill(fill) {
+        if (fill._anim) { fill._anim.cancel(); fill._anim = null; }
       }
-
-      // ── Animate fill: scaleX(0 → 1) left-to-right ─────────────────────
       function animateFill(fill) {
-        // 1. Kill any running transition and instantly collapse
-        fill.style.transition = 'none';
-        fill.style.transform  = 'scaleX(0)';
-        // 2. Force synchronous reflow so browser commits the collapsed state
-        void fill.offsetWidth;
-        // 3. Animate expand left → right over the full interval
-        fill.style.transition = 'transform ' + intervalMs + 'ms linear';
-        fill.style.transform  = 'scaleX(1)';
+        stopFill(fill);
+        fill._anim = fill.animate(
+          [{ width: '0%' }, { width: '100%' }],
+          { duration: intervalMs, easing: 'linear', fill: 'forwards' }
+        );
+      }
+      function setFillFull(fill) {
+        stopFill(fill);
+        fill.style.width = '100%';
+      }
+      function setFillEmpty(fill) {
+        stopFill(fill);
+        fill.style.width = '0%';
       }
 
       // ── Go to a specific slide ───────────────────────────────────────────
@@ -635,18 +632,13 @@
           if (!fill) return;
 
           if (i < next) {
-            // Already visited: instantly fully expanded
-            fill.style.transition = 'none';
-            fill.style.transform  = 'scaleX(1)';
+            setFillFull(fill);
             item.classList.add('is-completed');
           } else if (i === next) {
-            // Current slide: animate
             item.classList.add('is-active');
             animateFill(fill);
           } else {
-            // Upcoming: instantly collapsed
-            fill.style.transition = 'none';
-            fill.style.transform  = 'scaleX(0)';
+            setFillEmpty(fill);
           }
         });
 
