@@ -536,7 +536,10 @@
 
     <!-- Slider Pagination & Navigation Indicators -->
     {%- if section.blocks.size > 1 -%}
-      {%- assign p_style = section.settings.pagination_style | default: 'dots' -%}
+      {%- assign p_style = section.settings.pagination_style -%}
+      {%- if p_style == blank or p_style == '' -%}
+        {%- assign p_style = 'dots' -%}
+      {%- endif -%}
 
       {%- if p_style == 'dots' -%}
         <!-- Capsule Pill Dots Pagination -->

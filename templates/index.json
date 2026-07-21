@@ -48,6 +48,7 @@
         "hero_height_mobile": "70vh",
         "enable_autoplay": true,
         "autoplay_interval": 5,
+        "pagination_style": "dots",
         "highlight_color": "#A6FF00",
         "btn_bg_color": "#A6FF00",
         "btn_text_color": "#000000",
