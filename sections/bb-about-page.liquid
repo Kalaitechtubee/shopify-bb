@@ -141,24 +141,48 @@
     }
   }
 
-  /* Second Paragraph: Mission Feature Callout Card */
+  /* Mission Feature Callout - Clean Professional Editorial Pull-Quote */
   #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(2) {
-    background-color: {{ section.settings.accent_color | default: '#6B2430' }};
-    color: #FFFFFF;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1.6;
-    padding: 24px 32px;
-    border-radius: {{ section.settings.image_border_radius | default: 0 }}px;
+    background-color: transparent;
+    color: {{ section.settings.mission_text_color | default: '#111111' }};
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.65;
+    padding: 16px 0 16px 24px;
+    margin-top: 32px;
     margin-bottom: 32px;
-    box-shadow: 0 4px 20px rgba(107, 36, 48, 0.12);
+    border-left: 4px solid {{ section.settings.mission_line_color | default: '#111111' }};
+    box-shadow: none;
+    border-radius: 0;
+    letter-spacing: -0.2px;
   }
 
   @media (min-width: 768px) {
     #bb-about-{{ section.id }} .bb-about__story-richtext p:nth-child(2) {
-      font-size: 20px;
-      padding: 28px 36px;
+      font-size: 22px;
+      padding: 20px 0 20px 28px;
+      margin-top: 38px;
+      margin-bottom: 38px;
     }
+  }
+
+  /* Style Option 2: Light Card */
+  #bb-about-{{ section.id }}.bb-mission-style--light_card .bb-about__story-richtext p:nth-child(2) {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-left: 4px solid {{ section.settings.mission_line_color | default: '#A6FF00' }};
+    border-radius: 12px;
+    padding: 24px 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Style Option 3: Clean Large Bold Text */
+  #bb-about-{{ section.id }}.bb-mission-style--clean_text .bb-about__story-richtext p:nth-child(2) {
+    background-color: transparent;
+    border-left: none;
+    padding: 0;
+    font-size: 22px;
+    font-weight: 700;
   }
 
   #bb-about-{{ section.id }} .bb-about__hero-img-wrap {
@@ -395,7 +419,7 @@
 
 <section
   id="bb-about-{{ section.id }}"
-  class="bb-section bb-about-page {{ section.settings.custom_class }}"
+  class="bb-section bb-about-page bb-mission-style--{{ section.settings.mission_quote_style | default: 'left_line' }} {{ section.settings.custom_class }}"
   data-section-id="{{ section.id }}"
 >
   <div class="bb-about__container">
@@ -669,6 +693,29 @@
       "id": "story_content",
       "label": "Story Body Paragraphs (Rich Text Editor)",
       "default": "<p>At Hair Dare You, we believe that beautiful hair doesn't begin with expensive shampoos, it begins at the source. That's why we've created India's first holistic hair wellness ecosystem designed to address the real root cause of hair concerns: water quality, scalp health, and follicle regeneration.</p><p>Our mission is simple: to help millions of people regain confidence through healthier, stronger, fuller hair using science-backed innovation.</p><p>From advanced shower filtration systems that protect your scalp from hard water and harmful contaminants to Korean-inspired hair regeneration technologies, every Hair Dare You product is thoughtfully developed to work together as one complete ritual, not just another haircare routine.</p><p>We combine cutting-edge research, premium ingredients, and clinically inspired formulations to create solutions that don't just mask hair problems, they help prevent them.</p><p>Today, Hair Dare You is building a complete ecosystem for hair wellness with innovative products including shower filters, micro-needling hair serums, LED hair growth devices, hair patches, shampoos, conditioners, and advanced scalp care solutions, all designed to help you achieve healthier hair from the root up.</p>"
+    },
+    {
+      "type": "select",
+      "id": "mission_quote_style",
+      "label": "Mission Callout Style",
+      "options": [
+        { "value": "left_line", "label": "Editorial Left Accent Line (Default)" },
+        { "value": "light_card", "label": "Subtle Light Card" },
+        { "value": "clean_text", "label": "Clean Large Text (No Line/Box)" }
+      ],
+      "default": "left_line"
+    },
+    {
+      "type": "color",
+      "id": "mission_line_color",
+      "label": "Mission Line / Accent Color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "mission_text_color",
+      "label": "Mission Text Color",
+      "default": "#111111"
     },
 
     {
