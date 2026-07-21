@@ -118,21 +118,22 @@
 
   #bb-about-{{ section.id }} .bb-about__story-richtext {
     font-size: {{ section.settings.body_size_mobile | default: 16 }}px;
-    line-height: 1.75;
+    line-height: 1.8;
     color: {{ section.settings.body_color | default: '#333333' }};
-    text-align: left;
-    max-width: 960px;
+    text-align: center;
+    max-width: 860px;
     margin-left: auto;
     margin-right: auto;
   }
 
   #bb-about-{{ section.id }} .bb-about__story-richtext p {
+    text-align: center;
     font-size: {{ section.settings.body_size_mobile | default: 16 }}px;
     font-weight: 400;
     line-height: 1.8;
     color: {{ section.settings.body_color | default: '#333333' }};
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
 
   @media (min-width: 768px) {
@@ -338,6 +339,41 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    justify-content: center;
+  }
+
+  /* Alignment Modifier Classes */
+  #bb-about-{{ section.id }} .bb-about__founder-content--left {
+    text-align: left;
+    align-items: flex-start;
+  }
+  #bb-about-{{ section.id }} .bb-about__founder-content--left .bb-about__founder-name,
+  #bb-about-{{ section.id }} .bb-about__founder-content--left .bb-about__founder-role,
+  #bb-about-{{ section.id }} .bb-about__founder-content--left .bb-about__founder-bio,
+  #bb-about-{{ section.id }} .bb-about__founder-content--left .bb-about__founder-bio p {
+    text-align: left;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-content--center {
+    text-align: center;
+    align-items: center;
+  }
+  #bb-about-{{ section.id }} .bb-about__founder-content--center .bb-about__founder-name,
+  #bb-about-{{ section.id }} .bb-about__founder-content--center .bb-about__founder-role,
+  #bb-about-{{ section.id }} .bb-about__founder-content--center .bb-about__founder-bio,
+  #bb-about-{{ section.id }} .bb-about__founder-content--center .bb-about__founder-bio p {
+    text-align: center;
+  }
+
+  #bb-about-{{ section.id }} .bb-about__founder-content--right {
+    text-align: right;
+    align-items: flex-end;
+  }
+  #bb-about-{{ section.id }} .bb-about__founder-content--right .bb-about__founder-name,
+  #bb-about-{{ section.id }} .bb-about__founder-content--right .bb-about__founder-role,
+  #bb-about-{{ section.id }} .bb-about__founder-content--right .bb-about__founder-bio,
+  #bb-about-{{ section.id }} .bb-about__founder-content--right .bb-about__founder-bio p {
+    text-align: right;
   }
 
   #bb-about-{{ section.id }} .bb-about__founder-name {
@@ -543,7 +579,14 @@
               {%- endif -%}
             </div>
 
-            <div class="bb-about__founder-content">
+            {%- assign b_align = block.settings.text_alignment -%}
+            {%- if b_align == blank or b_align == 'auto' -%}
+              {%- assign final_align = section.settings.founder_text_alignment | default: 'center' -%}
+            {%- else -%}
+              {%- assign final_align = b_align -%}
+            {%- endif -%}
+
+            <div class="bb-about__founder-content bb-about__founder-content--{{ final_align }}">
               <h3 class="bb-about__founder-name">{{ block.settings.name }}</h3>
               <p class="bb-about__founder-role">{{ block.settings.role }}</p>
               <div class="bb-about__founder-bio">{{ block.settings.bio }}</div>
@@ -753,6 +796,17 @@
       ],
       "default": "alternating"
     },
+    {
+      "type": "select",
+      "id": "founder_text_alignment",
+      "label": "Founders Card Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left Aligned" },
+        { "value": "center", "label": "Center Aligned" },
+        { "value": "right", "label": "Right Aligned" }
+      ],
+      "default": "center"
+    },
 
     {
       "type": "header",
@@ -936,6 +990,18 @@
             { "value": "auto", "label": "Auto (Follow Section Rule)" },
             { "value": "left", "label": "Image Left / Text Right" },
             { "value": "right", "label": "Text Left / Image Right" }
+          ],
+          "default": "auto"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Card Text Alignment",
+          "options": [
+            { "value": "auto", "label": "Auto (Follow Section Setting)" },
+            { "value": "left", "label": "Left Aligned" },
+            { "value": "center", "label": "Center Aligned" },
+            { "value": "right", "label": "Right Aligned" }
           ],
           "default": "auto"
         },
