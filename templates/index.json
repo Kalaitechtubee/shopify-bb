@@ -1,42 +1,61 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "bb_hero_banner": {
+      "type": "bb-hero-banner",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "slide_1": {
+          "type": "slide",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "heading": "[Haircare] that works harder.",
+            "subtext": "Minimal routine. Maximum results. Built for real hair, real days.",
+            "button_text": "EXPLORE PRODUCTS",
+            "button_link": "shopify://collections/all",
+            "overlay_opacity": 30,
+            "content_alignment": "left"
           }
         },
-        "button": {
-          "type": "buttons",
+        "slide_2": {
+          "type": "slide",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "heading": "[Haircare] that works harder.",
+            "subtext": "Minimal routine. Maximum results. Built for real hair, real days.",
+            "button_text": "EXPLORE PRODUCTS",
+            "button_link": "shopify://collections/all",
+            "overlay_opacity": 30,
+            "content_alignment": "left"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "heading": "[Haircare] that works harder.",
+            "subtext": "Minimal routine. Maximum results. Built for real hair, real days.",
+            "button_text": "EXPLORE PRODUCTS",
+            "button_link": "shopify://collections/all",
+            "overlay_opacity": 30,
+            "content_alignment": "left"
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "slide_1",
+        "slide_2",
+        "slide_3"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "enable_section": true,
+        "hero_height_desktop": "85vh",
+        "hero_height_mobile": "70vh",
+        "enable_autoplay": true,
+        "autoplay_interval": 5,
+        "highlight_color": "#A6FF00",
+        "btn_bg_color": "#A6FF00",
+        "btn_text_color": "#000000",
+        "btn_border_radius": 0,
+        "title_size_desktop": 68,
+        "title_size_mobile": 36,
+        "subtext_size_desktop": 20,
+        "subtext_size_mobile": 16
       }
     },
     "featured_collection": {
