@@ -255,13 +255,14 @@
     height: 100%;
     width: 0%;
     background-color: #FFFFFF;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
     border-radius: 4px;
-    transition: width 0.05s linear;
+    will-change: width;
   }
 
   #bb-hero-{{ section.id }} .bb-hero__progress-item.is-completed .bb-hero__progress-fill {
     width: 100% !important;
+    transition: none !important;
     background-color: #FFFFFF !important;
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
   }
@@ -421,66 +422,68 @@
 
       const slides = heroSection.querySelectorAll('.bb-hero__slide');
       const progressItems = heroSection.querySelectorAll('.bb-hero__progress-item');
-      const isAutoplay = heroSection.dataset.autoplay === 'true';
-      const intervalTime = parseInt(heroSection.dataset.interval, 10) || 5000;
+      const isAutoplay = heroSection.getAttribute('data-autoplay') !== 'false';
+      const intervalTime = parseInt(heroSection.getAttribute('data-interval'), 10) || 5000;
 
       let currentIndex = 0;
-      let animFrameId = null;
-      let startTime = null;
+      let slideTimeout = null;
 
       if (slides.length <= 1) return;
 
       function goToSlide(nextIndex) {
-        if (animFrameId) cancelAnimationFrame(animFrameId);
+        if (slideTimeout) clearTimeout(slideTimeout);
 
-        slides[currentIndex].classList.remove('is-active');
-        slides[nextIndex].classList.add('is-active');
-
-        progressItems.forEach((item, idx) => {
-          item.classList.remove('is-active', 'is-completed');
-          const fill = item.querySelector('.bb-hero__progress-fill');
-          if (idx < nextIndex) {
-            item.classList.add('is-completed');
-            if (fill) fill.style.width = '100%';
-          } else if (idx > nextIndex) {
-            if (fill) fill.style.width = '0%';
+        // Update slides active state
+        slides.forEach((slide, idx) => {
+          if (idx === nextIndex) {
+            slide.classList.add('is-active');
           } else {
+            slide.classList.remove('is-active');
+          }
+        });
+
+        // Update progress items fill & animation
+        progressItems.forEach((item, idx) => {
+          const fill = item.querySelector('.bb-hero__progress-fill');
+          if (!fill) return;
+
+          if (idx < nextIndex) {
+            item.classList.remove('is-active');
+            item.classList.add('is-completed');
+            fill.style.transition = 'none';
+            fill.style.width = '100%';
+          } else if (idx > nextIndex) {
+            item.classList.remove('is-active', 'is-completed');
+            fill.style.transition = 'none';
+            fill.style.width = '0%';
+          } else {
+            // Active slide: start fill animation 0% -> 100%
+            item.classList.remove('is-completed');
             item.classList.add('is-active');
-            if (fill) fill.style.width = '0%';
+
+            fill.style.transition = 'none';
+            fill.style.width = '0%';
+
+            // Trigger reflow so browser registers width 0% before starting CSS transition
+            void fill.offsetHeight;
+
+            if (isAutoplay) {
+              fill.style.transition = 'width ' + intervalTime + 'ms linear';
+              fill.style.width = '100%';
+            } else {
+              fill.style.width = '100%';
+            }
           }
         });
 
         currentIndex = nextIndex;
 
         if (isAutoplay) {
-          startProgressLoop();
-        }
-      }
-
-      function startProgressLoop() {
-        if (animFrameId) cancelAnimationFrame(animFrameId);
-        startTime = performance.now();
-
-        const activeItem = progressItems[currentIndex];
-        const activeFill = activeItem ? activeItem.querySelector('.bb-hero__progress-fill') : null;
-
-        function animateProgress(now) {
-          const elapsed = now - startTime;
-          const progress = Math.min(100, (elapsed / intervalTime) * 100);
-
-          if (activeFill) {
-            activeFill.style.width = progress + '%';
-          }
-
-          if (progress >= 100) {
+          slideTimeout = setTimeout(function () {
             const nextIdx = (currentIndex + 1) % slides.length;
             goToSlide(nextIdx);
-          } else {
-            animFrameId = requestAnimationFrame(animateProgress);
-          }
+          }, intervalTime);
         }
-
-        animFrameId = requestAnimationFrame(animateProgress);
       }
 
       // Progress Line Click Handler
@@ -507,7 +510,7 @@
         }
       }, { passive: true });
 
-      // Initial state
+      // Start on initial slide 0
       goToSlide(0);
     }
 
