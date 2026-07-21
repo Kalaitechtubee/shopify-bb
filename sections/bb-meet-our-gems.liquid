@@ -1,0 +1,847 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-gems-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile | default: 32 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 32 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 16 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 16 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
+    background-color: {{ section.settings.section_bg_color | default: '#FFFFFF' }};
+  }
+
+  @media (min-width: 768px) {
+    #bb-gems-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | default: 60 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+      padding-left: {{ section.settings.padding_left | default: 32 }}px;
+      padding-right: {{ section.settings.padding_right | default: 32 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+    }
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__container {
+    {%- if section.settings.full_width == false -%}
+      max-width: {{ section.settings.container_max_width | default: 1400 }}px;
+      margin-left: auto;
+      margin-right: auto;
+    {%- endif -%}
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Section Header */
+  #bb-gems-{{ section.id }} .bb-gems__header {
+    text-align: center;
+    margin-bottom: {{ section.settings.heading_margin_bottom | default: 48 }}px;
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__subheading {
+    font-size: {{ section.settings.subheading_size | default: 13 }}px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: {{ section.settings.subheading_color | default: '#555555' }};
+    margin: 0 0 12px 0;
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__heading {
+    font-size: {{ section.settings.heading_size_mobile | default: 30 }}px;
+    font-weight: {{ section.settings.heading_weight | default: '700' }};
+    color: {{ section.settings.heading_color | default: '#000000' }};
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    #bb-gems-{{ section.id }} .bb-gems__heading {
+      font-size: {{ section.settings.heading_size_desktop | default: 60 }}px;
+    }
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__heading em,
+  #bb-gems-{{ section.id }} .bb-gems__heading i {
+    font-style: italic;
+    font-weight: {{ section.settings.heading_accent_weight | default: '700' }};
+    color: {{ section.settings.heading_accent_color | default: '#6B2430' }};
+  }
+
+  /* Grid Layout */
+  #bb-gems-{{ section.id }} .bb-gems__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_mobile | default: 1 }}, 1fr);
+    background-color: {{ section.settings.grid_border_color | default: '#70262E' }};
+    gap: {{ section.settings.grid_border_width | default: 1 }}px;
+    border: {{ section.settings.grid_border_width | default: 1 }}px solid {{ section.settings.grid_border_color | default: '#70262E' }};
+    border-radius: {{ section.settings.grid_border_radius | default: 0 }}px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 600px) {
+    #bb-gems-{{ section.id }} .bb-gems__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    #bb-gems-{{ section.id }} .bb-gems__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop | default: 4 }}, 1fr);
+    }
+  }
+
+  /* Card Item */
+  #bb-gems-{{ section.id }} .bb-gems__card {
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    {%- if section.settings.enable_custom_card_width -%}
+      max-width: {{ section.settings.card_max_width_mobile | default: 280 }}px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    {%- endif -%}
+  }
+
+  @media (min-width: 768px) {
+    #bb-gems-{{ section.id }} .bb-gems__card {
+      {%- if section.settings.enable_custom_card_width -%}
+        max-width: {{ section.settings.card_max_width_desktop | default: 340 }}px;
+      {%- endif -%}
+    }
+  }
+
+  /* Image Box */
+  #bb-gems-{{ section.id }} .bb-gems__image-box {
+    position: relative;
+    width: 100%;
+    {%- if section.settings.enable_custom_image_height -%}
+      height: {{ section.settings.image_height_mobile | default: 260 }}px;
+    {%- else -%}
+      aspect-ratio: {{ section.settings.image_aspect_ratio | default: '1/1' }};
+    {%- endif -%}
+    background-color: #FAF8F5;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    #bb-gems-{{ section.id }} .bb-gems__image-box {
+      {%- if section.settings.enable_custom_image_height -%}
+        height: {{ section.settings.image_height_desktop | default: 340 }}px;
+      {%- endif -%}
+    }
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__card:hover .bb-gems__image {
+    transform: scale(1.04);
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F4F1EA;
+    color: #999999;
+  }
+
+  /* Card Bottom Banner Strip */
+  #bb-gems-{{ section.id }} .bb-gems__banner {
+    background-color: {{ section.settings.banner_bg_color | default: '#5C1D24' }};
+    padding: {{ section.settings.banner_padding_mobile | default: 20 }}px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-grow: 1;
+    transition: background-color 0.2s ease;
+  }
+
+  @media (min-width: 768px) {
+    #bb-gems-{{ section.id }} .bb-gems__banner {
+      padding: {{ section.settings.banner_padding_desktop | default: 28 }}px;
+    }
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__card:hover .bb-gems__banner {
+    background-color: {{ section.settings.banner_bg_hover | default: '#4A151C' }};
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__title {
+    color: {{ section.settings.banner_text_color | default: '#FFFFFF' }};
+    font-size: {{ section.settings.banner_text_size_mobile | default: 18 }}px;
+    font-weight: {{ section.settings.banner_text_weight | default: '700' }};
+    line-height: 1.25;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  @media (min-width: 768px) {
+    #bb-gems-{{ section.id }} .bb-gems__title {
+      font-size: {{ section.settings.banner_text_size_desktop | default: 22 }}px;
+    }
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__arrow-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    color: {{ section.settings.banner_arrow_color | default: '#A6FF00' }};
+    transition: transform 0.3s ease;
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__arrow-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    fill: none;
+  }
+
+  #bb-gems-{{ section.id }} .bb-gems__card:hover .bb-gems__arrow-icon {
+    transform: translate(3px, -3px);
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-gems-{{ section.id }}"
+  class="bb-section bb-meet-our-gems {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-gems__container">
+    
+    <!-- Section Header -->
+    <div class="bb-gems__header">
+      {%- if section.settings.subheading != blank -%}
+        <p class="bb-gems__subheading">
+          {{ section.settings.subheading }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <{{ section.settings.heading_tag | default: 'h2' }} class="bb-gems__heading">
+          {{ section.settings.heading }}
+        </{{ section.settings.heading_tag | default: 'h2' }}>
+      {%- endif -%}
+    </div>
+
+    <!-- Gems Cards Grid -->
+    <div class="bb-gems__grid">
+      {%- for block in section.blocks -%}
+        <a
+          href="{{ block.settings.link_url | default: '#' }}"
+          class="bb-gems__card"
+          {{ block.shopify_attributes }}
+        >
+          <!-- Image Box -->
+          <div class="bb-gems__image-box">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 1000 }}"
+                alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                class="bb-gems__image"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            {%- else -%}
+              <div class="bb-gems__image-placeholder">
+                {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          <!-- Bottom Card Banner Strip -->
+          <div class="bb-gems__banner">
+            {%- if block.settings.title != blank -%}
+              <h3 class="bb-gems__title">
+                {{ block.settings.title }}
+              </h3>
+            {%- endif -%}
+
+            <span class="bb-gems__arrow-icon" style="{% if block.settings.custom_arrow_color != blank %}color: {{ block.settings.custom_arrow_color }};{% endif %}">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Meet Our Gems",
+  "tag": "section",
+  "class": "bb-section-meet-our-gems",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+
+    {
+      "type": "header",
+      "content": "Container Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width (Edge-to-Edge)",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1400
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background Color",
+      "default": "#FFFFFF"
+    },
+
+    {
+      "type": "header",
+      "content": "Section Header Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Text"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading Color",
+      "default": "#555555"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading Font Size",
+      "default": 13
+    },
+    {
+      "type": "html",
+      "id": "heading",
+      "label": "Heading HTML (Use <em> for italic accent text)",
+      "default": "meet <em>our gems</em>"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Main Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Heading Accent/Italic Color (<em> text)",
+      "default": "#6B2430"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Mobile)",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Main Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "heading_accent_weight",
+      "label": "Heading Accent Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "Cards Grid Options"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on Desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on Mobile",
+      "options": [
+        { "value": "1", "label": "1 Column" },
+        { "value": "2", "label": "2 Columns" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image Aspect Ratio",
+      "options": [
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "4/5", "label": "Portrait (4:5)" },
+        { "value": "4/3", "label": "Landscape (4:3)" },
+        { "value": "auto", "label": "Original Ratio" }
+      ],
+      "default": "1/1"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_image_height",
+      "label": "Enable Custom Card Image Height (Overrides Aspect Ratio)",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_height_desktop",
+      "min": 180,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Image Height (Desktop)",
+      "default": 340
+    },
+    {
+      "type": "range",
+      "id": "image_height_mobile",
+      "min": 140,
+      "max": 450,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Image Height (Mobile)",
+      "default": 260
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_card_width",
+      "label": "Enable Custom Card Max Width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_max_width_desktop",
+      "min": 180,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Max Width (Desktop)",
+      "default": 340
+    },
+    {
+      "type": "range",
+      "id": "card_max_width_mobile",
+      "min": 140,
+      "max": 450,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Max Width (Mobile)",
+      "default": 280
+    },
+    {
+      "type": "color",
+      "id": "grid_border_color",
+      "label": "Grid Border Line Color",
+      "default": "#70262E"
+    },
+    {
+      "type": "range",
+      "id": "grid_border_width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Grid Border Line Thickness",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "grid_border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Grid Outer Border Radius",
+      "default": 0
+    },
+
+    {
+      "type": "header",
+      "content": "Card Bottom Banner Strip Settings"
+    },
+    {
+      "type": "color",
+      "id": "banner_bg_color",
+      "label": "Banner Background Color",
+      "default": "#5C1D24"
+    },
+    {
+      "type": "color",
+      "id": "banner_bg_hover",
+      "label": "Banner Hover Background Color",
+      "default": "#4A151C"
+    },
+    {
+      "type": "color",
+      "id": "banner_text_color",
+      "label": "Banner Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "banner_arrow_color",
+      "label": "Banner Arrow Icon Color",
+      "default": "#A6FF00"
+    },
+    {
+      "type": "range",
+      "id": "banner_padding_desktop",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Banner Padding (Desktop)",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "banner_padding_mobile",
+      "min": 8,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "label": "Banner Padding (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "banner_text_size_desktop",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Banner Font Size (Desktop)",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "banner_text_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Banner Font Size (Mobile)",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "banner_text_weight",
+      "label": "Banner Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" }
+      ],
+      "default": "700"
+    },
+
+    {
+      "type": "header",
+      "content": "Section Spacing & Margins"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gem_card",
+      "name": "Gem Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Card Question / Title",
+          "default": "want cleaner hair every wash?"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Card Link URL"
+        },
+        {
+          "type": "color",
+          "id": "custom_arrow_color",
+          "label": "Custom Arrow Color (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Meet Our Gems",
+      "settings": {
+        "heading": "meet <em>our gems</em>",
+        "heading_accent_color": "#6B2430",
+        "banner_bg_color": "#5C1D24",
+        "banner_arrow_color": "#A6FF00"
+      },
+      "blocks": [
+        {
+          "type": "gem_card",
+          "settings": {
+            "title": "want cleaner hair every wash?"
+          }
+        },
+        {
+          "type": "gem_card",
+          "settings": {
+            "title": "is your hair craving deep nourishment?"
+          }
+        },
+        {
+          "type": "gem_card",
+          "settings": {
+            "title": "flyaways ruining your style?"
+          }
+        },
+        {
+          "type": "gem_card",
+          "settings": {
+            "title": "Need instant shine and strength?"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,438 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-statement-{{ section.id }} {
+    position: relative;
+    background-color: {{ section.settings.background_color | default: '#6B2430' }};
+    padding-top: {{ section.settings.padding_top_mobile | default: 40 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 40 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 20 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 20 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    #bb-statement-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | default: 70 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 70 }}px;
+      padding-left: {{ section.settings.padding_left | default: 32 }}px;
+      padding-right: {{ section.settings.padding_right | default: 32 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+    }
+  }
+
+  #bb-statement-{{ section.id }} .bb-statement__inner {
+    position: relative;
+    z-index: 2;
+    {%- if section.settings.full_width == false -%}
+      max-width: {{ section.settings.container_max_width | default: 1200 }}px;
+      margin-left: auto;
+      margin-right: auto;
+    {%- endif -%}
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #bb-statement-{{ section.id }} .bb-statement__heading {
+    color: {{ section.settings.text_color | default: '#FFFFFF' }};
+    font-size: {{ section.settings.text_size_mobile | default: 26 }}px;
+    font-weight: {{ section.settings.text_weight | default: '700' }};
+    line-height: {{ section.settings.line_height | default: 1.2 }};
+    letter-spacing: {{ section.settings.letter_spacing | default: -0.5 }}px;
+    text-transform: {{ section.settings.text_transform | default: 'none' }};
+    text-align: {{ section.settings.text_alignment | default: 'center' }};
+    margin: 0;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  @media (min-width: 768px) {
+    #bb-statement-{{ section.id }} .bb-statement__heading {
+      font-size: {{ section.settings.text_size_desktop | default: 44 }}px;
+    }
+  }
+
+  /* Optional Background Image & Overlay */
+  #bb-statement-{{ section.id }} .bb-statement__bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #bb-statement-{{ section.id }} .bb-statement__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: {{ section.settings.overlay_color | default: '#000000' }};
+    opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-statement-{{ section.id }}"
+  class="bb-section bb-statement-banner {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  {%- if section.settings.background_image != blank -%}
+    <img
+      src="{{ section.settings.background_image | image_url: width: 2000 }}"
+      alt="{{ section.settings.background_image.alt | default: section.settings.heading | escape }}"
+      class="bb-statement__bg-img"
+      loading="lazy"
+      width="{{ section.settings.background_image.width }}"
+      height="{{ section.settings.background_image.height }}"
+    >
+    <div class="bb-statement__overlay"></div>
+  {%- endif -%}
+
+  <div class="bb-statement__inner">
+    {%- if section.settings.heading != blank -%}
+      <{{ section.settings.heading_tag | default: 'h2' }} class="bb-statement__heading">
+        {{ section.settings.heading }}
+      </{{ section.settings.heading_tag | default: 'h2' }}>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Statement Banner",
+  "tag": "section",
+  "class": "bb-section-statement-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Viewport (Edge-to-Edge)",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Boxed Container Max Width",
+      "default": 1200
+    },
+
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Banner Text / Statement",
+      "default": "Hairdareyou challenges everything complicated about haircare"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "p", "label": "Paragraph" },
+        { "value": "div", "label": "Div" }
+      ],
+      "default": "h2"
+    },
+
+    {
+      "type": "header",
+      "content": "Color Options"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#6B2430"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+
+    {
+      "type": "header",
+      "content": "Typography Settings"
+    },
+    {
+      "type": "range",
+      "id": "text_size_desktop",
+      "min": 20,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Font Size (Desktop)",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Font Size (Mobile)",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "text_weight",
+      "label": "Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text Transform",
+      "options": [
+        { "value": "none", "label": "Normal (none)" },
+        { "value": "uppercase", "label": "UPPERCASE" },
+        { "value": "lowercase", "label": "lowercase" },
+        { "value": "capitalize", "label": "Capitalize" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "label": "Line Height multiplier",
+      "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "min": -2,
+      "max": 10,
+      "step": 0.5,
+      "unit": "px",
+      "label": "Letter Spacing",
+      "default": -0.5
+    },
+
+    {
+      "type": "header",
+      "content": "Background Image (Optional)"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Image Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Image Overlay Opacity",
+      "default": 0
+    },
+
+    {
+      "type": "header",
+      "content": "Section Spacing & Margins"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Statement Banner",
+      "settings": {
+        "heading": "Hairdareyou challenges everything complicated about haircare",
+        "background_color": "#6B2430",
+        "text_color": "#FFFFFF",
+        "text_size_desktop": 44,
+        "text_size_mobile": 26
+      }
+    }
+  ]
+}
+{% endschema %}

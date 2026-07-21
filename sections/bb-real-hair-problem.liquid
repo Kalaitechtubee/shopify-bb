@@ -1,0 +1,1102 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-problem-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile | default: 32 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 32 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 16 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 16 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
+    background-color: {{ section.settings.section_bg_color | default: '#FFFFFF' }};
+  }
+
+  @media (min-width: 768px) {
+    #bb-problem-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | default: 60 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+      padding-left: {{ section.settings.padding_left | default: 32 }}px;
+      padding-right: {{ section.settings.padding_right | default: 32 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+    }
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__container {
+    max-width: {{ section.settings.container_max_width | default: 1400 }}px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Header Section */
+  #bb-problem-{{ section.id }} .bb-problem__header {
+    text-align: center;
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: {{ section.settings.header_margin_bottom | default: 48 }}px;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__subheading {
+    font-size: {{ section.settings.subheading_size | default: 13 }}px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: {{ section.settings.subheading_spacing | default: 1.5 }}px;
+    color: {{ section.settings.subheading_color | default: '#555555' }};
+    margin: 0 0 {{ section.settings.subheading_margin_bottom | default: 12 }}px 0;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__heading {
+    font-size: {{ section.settings.heading_size_mobile | default: 30 }}px;
+    font-weight: {{ section.settings.heading_weight | default: '700' }};
+    color: {{ section.settings.heading_color | default: '#000000' }};
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    #bb-problem-{{ section.id }} .bb-problem__heading {
+      font-size: {{ section.settings.heading_size_desktop | default: 48 }}px;
+    }
+  }
+
+  /* Highlight / Italicized text styling in heading */
+  #bb-problem-{{ section.id }} .bb-problem__heading em,
+  #bb-problem-{{ section.id }} .bb-problem__heading i,
+  #bb-problem-{{ section.id }} .bb-problem__heading-accent {
+    font-style: italic;
+    font-weight: {{ section.settings.heading_accent_weight | default: '700' }};
+    color: {{ section.settings.heading_accent_color | default: '#6B2430' }};
+  }
+
+  /* Static Grid Layout */
+  #bb-problem-{{ section.id }} .bb-problem__grid-wrapper {
+    width: 100%;
+    margin-bottom: {{ section.settings.grid_margin_bottom | default: 40 }}px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_mobile | default: 1 }}, 1fr);
+    background-color: {{ section.settings.card_border_color | default: '#70262E' }};
+    gap: {{ section.settings.card_border_width | default: 1 }}px;
+    border: {{ section.settings.card_border_width | default: 1 }}px solid {{ section.settings.card_border_color | default: '#70262E' }};
+    border-radius: {{ section.settings.grid_border_radius | default: 0 }}px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 600px) {
+    #bb-problem-{{ section.id }} .bb-problem__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    #bb-problem-{{ section.id }} .bb-problem__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop | default: 4 }}, 1fr);
+    }
+  }
+
+  /* 2-Row Marquee Effect */
+  #bb-problem-{{ section.id }} .bb-problem__marquee-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: {{ section.settings.row_gap | default: 16 }}px;
+    margin-bottom: {{ section.settings.grid_margin_bottom | default: 40 }}px;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__marquee-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__marquee-track--row1 {
+    display: flex;
+    width: max-content;
+    gap: {{ section.settings.card_gap | default: 16 }}px;
+    {%- if section.settings.row1_direction == 'left_to_right' -%}
+      animation: bbProblemMarqueeLTR-{{ section.id }} {{ section.settings.marquee_speed | default: 30 }}s linear infinite;
+    {%- else -%}
+      animation: bbProblemMarqueeRTL-{{ section.id }} {{ section.settings.marquee_speed | default: 30 }}s linear infinite;
+    {%- endif -%}
+    will-change: transform;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__marquee-track--row2 {
+    display: flex;
+    width: max-content;
+    gap: {{ section.settings.card_gap | default: 16 }}px;
+    {%- if section.settings.row2_direction == 'right_to_left' -%}
+      animation: bbProblemMarqueeRTL-{{ section.id }} {{ section.settings.marquee_speed | default: 30 }}s linear infinite;
+    {%- else -%}
+      animation: bbProblemMarqueeLTR-{{ section.id }} {{ section.settings.marquee_speed | default: 30 }}s linear infinite;
+    {%- endif -%}
+    will-change: transform;
+  }
+
+  {%- if section.settings.pause_on_hover -%}
+    #bb-problem-{{ section.id }} .bb-problem__marquee-track--row1:hover,
+    #bb-problem-{{ section.id }} .bb-problem__marquee-track--row2:hover {
+      animation-play-state: paused;
+    }
+  {%- endif -%}
+
+  @keyframes bbProblemMarqueeRTL-{{ section.id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes bbProblemMarqueeLTR-{{ section.id }} {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__marquee-item {
+    width: {{ section.settings.card_width_mobile | default: 280 }}px;
+    flex-shrink: 0;
+    border: {{ section.settings.card_border_width | default: 1 }}px solid {{ section.settings.card_border_color | default: '#70262E' }};
+    border-radius: {{ section.settings.grid_border_radius | default: 0 }}px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-problem-{{ section.id }} .bb-problem__marquee-item {
+      width: {{ section.settings.card_width_desktop | default: 340 }}px;
+    }
+  }
+
+  /* Single Card Item */
+  #bb-problem-{{ section.id }} .bb-problem__card {
+    background-color: {{ section.settings.card_bg_color | default: '#FFFFFF' }};
+    padding: {{ section.settings.card_padding_mobile | default: 24 }}px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    box-sizing: border-box;
+    min-height: {{ section.settings.card_min_height | default: 160 }}px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  @media (min-width: 768px) {
+    #bb-problem-{{ section.id }} .bb-problem__card {
+      padding: {{ section.settings.card_padding_desktop | default: 32 }}px;
+    }
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__card:hover {
+    background-color: {{ section.settings.card_bg_hover | default: '#FAF8F5' }};
+  }
+
+  /* Quote Icon */
+  #bb-problem-{{ section.id }} .bb-problem__quote-icon {
+    font-size: {{ section.settings.quote_icon_size | default: 22 }}px;
+    color: {{ section.settings.quote_icon_color | default: '#70262E' }};
+    line-height: 1;
+    margin-bottom: 12px;
+    font-family: Georgia, serif;
+    font-weight: 700;
+  }
+
+  /* Card Text */
+  #bb-problem-{{ section.id }} .bb-problem__card-text {
+    font-size: {{ section.settings.card_font_size_mobile | default: 16 }}px;
+    font-weight: {{ section.settings.card_font_weight | default: '500' }};
+    line-height: 1.4;
+    color: {{ section.settings.card_text_color | default: '#111111' }};
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    #bb-problem-{{ section.id }} .bb-problem__card-text {
+      font-size: {{ section.settings.card_font_size_desktop | default: 19 }}px;
+    }
+  }
+
+  /* Footer CTA Area */
+  #bb-problem-{{ section.id }} .bb-problem__cta-wrap {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__cta-text {
+    font-size: {{ section.settings.cta_text_size | default: 16 }}px;
+    color: {{ section.settings.cta_text_color | default: '#333333' }};
+    margin: 0;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ section.settings.btn_bg_color | default: '#A6FF00' }};
+    color: {{ section.settings.btn_text_color | default: '#000000' }};
+    font-size: {{ section.settings.btn_font_size | default: 13 }}px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 14px 32px;
+    border-radius: {{ section.settings.btn_border_radius | default: 2 }}px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  #bb-problem-{{ section.id }} .bb-problem__btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-problem-{{ section.id }}"
+  class="bb-section bb-real-hair-problem {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-problem__container">
+    
+    <!-- Header -->
+    <div class="bb-problem__header">
+      {%- if section.settings.subheading != blank -%}
+        <p class="bb-problem__subheading">
+          {{ section.settings.subheading }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <{{ section.settings.heading_tag | default: 'h2' }} class="bb-problem__heading">
+          {{ section.settings.heading }}
+        </{{ section.settings.heading_tag | default: 'h2' }}>
+      {%- endif -%}
+    </div>
+
+    <!-- Cards (2-Row Auto-Scroll Marquee OR Static Grid) -->
+    {%- if section.settings.enable_marquee -%}
+      <div class="bb-problem__marquee-wrapper">
+        
+        {%- if section.settings.enable_two_rows and section.blocks.size > 1 -%}
+          {%- assign total_blocks = section.blocks.size -%}
+          {%- assign half_blocks = total_blocks | divided_by: 2 -%}
+          
+          <!-- Row 1 (First Half) -->
+          <div class="bb-problem__marquee-container">
+            <div class="bb-problem__marquee-track bb-problem__marquee-track--row1">
+              {%- for pass in (1..3) -%}
+                {%- for block in section.blocks -%}
+                  {%- if forloop.index <= half_blocks -%}
+                    <div class="bb-problem__card bb-problem__marquee-item" {{ block.shopify_attributes }}>
+                      <span class="bb-problem__quote-icon" style="{% if block.settings.custom_quote_color != blank %}color: {{ block.settings.custom_quote_color }};{% endif %}">
+                        ““
+                      </span>
+                      {%- if block.settings.quote_text != blank -%}
+                        <p class="bb-problem__card-text">
+                          {{ block.settings.quote_text }}
+                        </p>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+          <!-- Row 2 (Second Half) -->
+          <div class="bb-problem__marquee-container">
+            <div class="bb-problem__marquee-track bb-problem__marquee-track--row2">
+              {%- for pass in (1..3) -%}
+                {%- for block in section.blocks -%}
+                  {%- if forloop.index > half_blocks -%}
+                    <div class="bb-problem__card bb-problem__marquee-item" {{ block.shopify_attributes }}>
+                      <span class="bb-problem__quote-icon" style="{% if block.settings.custom_quote_color != blank %}color: {{ block.settings.custom_quote_color }};{% endif %}">
+                        ““
+                      </span>
+                      {%- if block.settings.quote_text != blank -%}
+                        <p class="bb-problem__card-text">
+                          {{ block.settings.quote_text }}
+                        </p>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+        {%- else -%}
+          <!-- Single Row Marquee -->
+          <div class="bb-problem__marquee-container">
+            <div class="bb-problem__marquee-track bb-problem__marquee-track--row1">
+              {%- for pass in (1..3) -%}
+                {%- for block in section.blocks -%}
+                  <div class="bb-problem__card bb-problem__marquee-item" {{ block.shopify_attributes }}>
+                    <span class="bb-problem__quote-icon" style="{% if block.settings.custom_quote_color != blank %}color: {{ block.settings.custom_quote_color }};{% endif %}">
+                      ““
+                    </span>
+                    {%- if block.settings.quote_text != blank -%}
+                      <p class="bb-problem__card-text">
+                        {{ block.settings.quote_text }}
+                      </p>
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+      </div>
+    {%- else -%}
+      <div class="bb-problem__grid-wrapper">
+        <div class="bb-problem__grid">
+          {%- for block in section.blocks -%}
+            <div class="bb-problem__card" {{ block.shopify_attributes }}>
+              <span class="bb-problem__quote-icon" style="{% if block.settings.custom_quote_color != blank %}color: {{ block.settings.custom_quote_color }};{% endif %}">
+                ““
+              </span>
+              {%- if block.settings.quote_text != blank -%}
+                <p class="bb-problem__card-text">
+                  {{ block.settings.quote_text }}
+                </p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- Bottom CTA -->
+    {%- if section.settings.cta_text != blank or section.settings.btn_text != blank -%}
+      <div class="bb-problem__cta-wrap">
+        {%- if section.settings.cta_text != blank -%}
+          <p class="bb-problem__cta-text">
+            {{ section.settings.cta_text }}
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.btn_text != blank -%}
+          <a
+            href="{{ section.settings.btn_url | default: '/collections/all' }}"
+            class="bb-problem__btn"
+          >
+            {{ section.settings.btn_text }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Real Hair Problem",
+  "tag": "section",
+  "class": "bb-section-real-hair-problem",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+
+    {
+      "type": "header",
+      "content": "Container Settings"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1400
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background Color",
+      "default": "#FFFFFF"
+    },
+
+    {
+      "type": "header",
+      "content": "Subheading Options"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Text",
+      "default": "WE ASKED 100 INDIAN WOMEN ONE QUESTION"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading Text Color",
+      "default": "#555555"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading Font Size",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "subheading_spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "label": "Subheading Letter Spacing",
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "subheading_margin_bottom",
+      "min": 4,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Subheading Margin Bottom",
+      "default": 12
+    },
+
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "html",
+      "id": "heading",
+      "label": "Heading HTML (Use <em> for italic accent text)",
+      "default": "What is the <em>real hair problem?</em>"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Main Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Heading Accent/Italic Color (<em> text)",
+      "default": "#6B2430"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Desktop)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Mobile)",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Main Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "heading_accent_weight",
+      "label": "Heading Accent Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "header_margin_bottom",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Header Margin Bottom",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "Auto Scroll / Marquee Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_marquee",
+      "label": "Enable Continuous Auto-Scroll (Marquee)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_two_rows",
+      "label": "Enable 2 Rows of Scrolling Cards",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "row1_direction",
+      "label": "Row 1 Scroll Direction",
+      "options": [
+        { "value": "right_to_left", "label": "Right to Left (⬅ Default)" },
+        { "value": "left_to_right", "label": "Left to Right (➡)" }
+      ],
+      "default": "right_to_left"
+    },
+    {
+      "type": "select",
+      "id": "row2_direction",
+      "label": "Row 2 Scroll Direction",
+      "options": [
+        { "value": "left_to_right", "label": "Left to Right (➡ Default)" },
+        { "value": "right_to_left", "label": "Right to Left (⬅)" }
+      ],
+      "default": "left_to_right"
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "label": "Vertical Gap Between Rows",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll Speed (Seconds)",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause Auto Scroll on Mouse Hover",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap Between Cards (Marquee)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_width_desktop",
+      "min": 220,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Width - Desktop (Marquee)",
+      "default": 340
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "min": 180,
+      "max": 380,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Width - Mobile (Marquee)",
+      "default": 280
+    },
+
+    {
+      "type": "header",
+      "content": "Cards Grid Settings (When Marquee Disabled)"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on Desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on Mobile",
+      "options": [
+        { "value": "1", "label": "1 Column" },
+        { "value": "2", "label": "2 Columns" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_hover",
+      "label": "Card Hover Background Color",
+      "default": "#FAF8F5"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Grid Border Line Color",
+      "default": "#70262E"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Grid Border Line Thickness",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "grid_border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Grid Outer Border Radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_padding_desktop",
+      "min": 16,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Card Padding (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "card_padding_mobile",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Padding (Mobile)",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "quote_icon_color",
+      "label": "Quote Icon Color",
+      "default": "#70262E"
+    },
+    {
+      "type": "range",
+      "id": "quote_icon_size",
+      "min": 14,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "label": "Quote Icon Size",
+      "default": 22
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "card_font_size_desktop",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Font Size (Desktop)",
+      "default": 19
+    },
+    {
+      "type": "range",
+      "id": "card_font_size_mobile",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Font Size (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "card_font_weight",
+      "label": "Card Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi-Bold (600)" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "grid_margin_bottom",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid Margin Bottom",
+      "default": 40
+    },
+
+    {
+      "type": "header",
+      "content": "Bottom CTA Options"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Text Above Button",
+      "default": "So we built products that solve exactly that."
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "cta_text_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "CTA Text Size",
+      "default": 16
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "EXPLORE PRODUCTS"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button Link URL"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background Color",
+      "default": "#A6FF00"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "btn_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Button Border Radius",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Font Size",
+      "default": 13
+    },
+
+    {
+      "type": "header",
+      "content": "Section Spacing & Margins"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote_card",
+      "name": "Problem Question Card",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote_text",
+          "label": "Question / Problem Text",
+          "default": "Why does my hair look flat and lifeless by the end of the day?"
+        },
+        {
+          "type": "color",
+          "id": "custom_quote_color",
+          "label": "Custom Quote Icon Color (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Real Hair Problem",
+      "settings": {
+        "subheading": "WE ASKED 100 INDIAN WOMEN ONE QUESTION",
+        "heading": "What is the <em>real hair problem?</em>",
+        "heading_accent_color": "#6B2430",
+        "enable_marquee": true,
+        "enable_two_rows": true,
+        "row_gap": 16,
+        "marquee_speed": 30,
+        "card_border_color": "#70262E",
+        "cta_text": "So we built products that solve exactly that.",
+        "btn_text": "EXPLORE PRODUCTS",
+        "btn_bg_color": "#A6FF00"
+      },
+      "blocks": [
+        {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why does my hair look flat and lifeless by the end of the day?"
+          }
+        },
+        {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why is my scalp always dry, itchy, or irritated?"
+          }
+        },
+        {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why does my hair feel dry after every shower?"
+          }
+        },
+        {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why does my hair keep shedding so much?"
+          }
+        },
+        {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why can't my routine just be simple and effective?"
+          }
+        },
+        {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why do I need so many different hair products?"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

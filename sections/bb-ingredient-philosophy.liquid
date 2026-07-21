@@ -1,0 +1,1155 @@
+{{ 'bb-theme.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.enable_section == false -%}
+
+{%- style -%}
+  #bb-philosophy-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile | default: 16 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 16 }}px;
+    padding-left: {{ section.settings.padding_left_mobile | default: 16 }}px;
+    padding-right: {{ section.settings.padding_right_mobile | default: 16 }}px;
+    margin-top: {{ section.settings.margin_top_mobile | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile | default: 0 }}px;
+  }
+
+  @media (min-width: 768px) {
+    #bb-philosophy-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | default: 24 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 24 }}px;
+      padding-left: {{ section.settings.padding_left | default: 32 }}px;
+      padding-right: {{ section.settings.padding_right | default: 32 }}px;
+      margin-top: {{ section.settings.margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+    }
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__card {
+    position: relative;
+    max-width: {{ section.settings.container_max_width | default: 1600 }}px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: {{ section.settings.container_bg | default: '#FAF8F5' }};
+    border-radius: {{ section.settings.section_border_radius | default: 0 }}px;
+    border: {{ section.settings.section_border_width | default: 2 }}px solid {{ section.settings.section_border_color | default: '#EAEDDD' }};
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__card-bg-img,
+  #bb-philosophy-{{ section.id }} .bb-philosophy__left-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__card-bg-img img,
+  #bb-philosophy-{{ section.id }} .bb-philosophy__left-bg-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  @media (min-width: 992px) {
+    #bb-philosophy-{{ section.id }} .bb-philosophy__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Left Content Column */
+  #bb-philosophy-{{ section.id }} .bb-philosophy__left {
+    position: relative;
+    padding: {{ section.settings.left_padding_mobile | default: 24 }}px {{ section.settings.left_padding_mobile | default: 20 }}px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 24px;
+    {%- if section.settings.container_bg_image != blank and section.settings.left_bg_image == blank -%}
+      background-color: transparent;
+    {%- else -%}
+      background-color: {{ section.settings.left_bg_color | default: '#FAF8F5' }};
+    {%- endif -%}
+    overflow: hidden;
+    z-index: 1;
+    height: auto;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 992px) {
+    #bb-philosophy-{{ section.id }} .bb-philosophy__left {
+      padding: {{ section.settings.left_padding_desktop | default: 40 }}px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 32px;
+      height: 100%;
+    }
+  }
+
+  /* Decorative yellow background shapes */
+  #bb-philosophy-{{ section.id }} .bb-philosophy__bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: {{ section.settings.shape_color | default: '#FDF8DC' }};
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__bg-shape--1 {
+    width: 320px;
+    height: 320px;
+    bottom: -40px;
+    right: 5%;
+    opacity: 0.85;
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__bg-shape--2 {
+    width: 220px;
+    height: 220px;
+    top: 20%;
+    right: -40px;
+    opacity: 0.5;
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__left-content {
+    position: relative;
+    z-index: 2;
+    max-width: 540px;
+    width: 100%;
+  }
+
+  /* Badge */
+  #bb-philosophy-{{ section.id }} .bb-philosophy__badge {
+    display: inline-block;
+    background-color: {{ section.settings.badge_bg_color | default: '#A6FF00' }};
+    color: {{ section.settings.badge_text_color | default: '#000000' }};
+    font-size: {{ section.settings.badge_font_size | default: 12 }}px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 6px 16px;
+    border-radius: {{ section.settings.badge_border_radius | default: 50 }}px;
+    margin-bottom: {{ section.settings.badge_margin_bottom | default: 48 }}px;
+    line-height: 1.2;
+  }
+
+  /* Heading */
+  #bb-philosophy-{{ section.id }} .bb-philosophy__heading {
+    font-size: {{ section.settings.heading_size_mobile | default: 28 }}px;
+    font-weight: {{ section.settings.heading_weight | default: '700' }};
+    color: {{ section.settings.heading_color | default: '#000000' }};
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-top: 0;
+    margin-bottom: {{ section.settings.heading_margin_bottom | default: 48 }}px;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: manual;
+  }
+
+  @media (min-width: 768px) {
+    #bb-philosophy-{{ section.id }} .bb-philosophy__heading {
+      font-size: {{ section.settings.heading_size_desktop | default: 54 }}px;
+    }
+  }
+
+  /* Description */
+  #bb-philosophy-{{ section.id }} .bb-philosophy__description {
+    font-size: {{ section.settings.description_size | default: 15 }}px;
+    line-height: 1.5;
+    color: {{ section.settings.description_color | default: '#333333' }};
+    margin: 0;
+  }
+
+  /* Product Bottle Area */
+  #bb-philosophy-{{ section.id }} .bb-philosophy__product-wrap {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: auto;
+    width: 100%;
+    max-width: {{ section.settings.product_image_width | default: 130 }}px;
+    align-self: center;
+  }
+
+  @media (min-width: 992px) {
+    #bb-philosophy-{{ section.id }} .bb-philosophy__product-wrap {
+      margin-top: 0;
+      width: {{ section.settings.product_image_width | default: 130 }}px;
+      max-width: 100%;
+      flex-shrink: 0;
+      align-self: center;
+    }
+  }
+
+  #bb-philosophy-{{ section.id }} .bb-philosophy__product-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  /* Right Column - Before/After Slider */
+  #bb-philosophy-{{ section.id }} .bb-philosophy__right {
+    position: relative;
+    height: {{ section.settings.slider_height_mobile | default: 280 }}px;
+    min-height: {{ section.settings.slider_height_mobile | default: 280 }}px;
+    background-color: #111111;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    #bb-philosophy-{{ section.id }} .bb-philosophy__right {
+      height: {{ section.settings.slider_height_desktop | default: 620 }}px;
+      min-height: {{ section.settings.slider_height_desktop | default: 620 }}px;
+    }
+  }
+
+  bb-before-after-slider {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    isolation: isolate;
+    user-select: none;
+    touch-action: pan-y;
+    --slider-pos: {{ section.settings.initial_slider_position | default: 50 }}%;
+  }
+
+  .bb-ba-slider__image-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .bb-ba-slider__image-layer img,
+  .bb-ba-slider__image-layer svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .bb-ba-slider__before-layer {
+    z-index: 2;
+    clip-path: inset(0 calc(100% - var(--slider-pos)) 0 0);
+    will-change: clip-path;
+  }
+
+  .bb-ba-slider__after-layer {
+    z-index: 1;
+  }
+
+  /* Badges - Strictly scoped inside slider container */
+  .bb-ba-slider__badge {
+    position: absolute;
+    top: 16px;
+    z-index: 5;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: {{ section.settings.badge_border_radius | default: 50 }}px;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .bb-ba-slider__badge--before {
+    left: 16px;
+    background-color: {{ section.settings.before_label_bg | default: '#FFFFFF' }};
+    color: {{ section.settings.before_label_color | default: '#000000' }};
+  }
+
+  .bb-ba-slider__badge--after {
+    right: 16px;
+    background-color: {{ section.settings.after_label_bg | default: '#FFFFFF' }};
+    color: {{ section.settings.after_label_color | default: '#000000' }};
+  }
+
+  /* Slider Divider Line & Handle */
+  .bb-ba-slider__divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--slider-pos);
+    width: 2px;
+    background-color: {{ section.settings.divider_line_color | default: '#FFFFFF' }};
+    z-index: 5;
+    transform: translateX(-50%);
+    pointer-events: none;
+    box-shadow: 0 0 6px rgba(0,0,0,0.25);
+  }
+
+  .bb-ba-slider__handle {
+    position: absolute;
+    top: 50%;
+    left: var(--slider-pos);
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    background-color: {{ section.settings.handle_bg_color | default: '#FFFFFF' }};
+    color: {{ section.settings.handle_icon_color | default: '#000000' }};
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: ew-resize;
+    pointer-events: none;
+  }
+
+  .bb-ba-slider__handle svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Accessible Range Input */
+  .bb-ba-slider__range {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 10;
+    cursor: ew-resize;
+    margin: 0;
+  }
+{%- endstyle -%}
+
+<section
+  id="bb-philosophy-{{ section.id }}"
+  class="bb-section bb-philosophy {{ section.settings.custom_class }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-philosophy__card">
+    {%- if section.settings.container_bg_image != blank -%}
+      <div class="bb-philosophy__card-bg-img">
+        <img
+          src="{{ section.settings.container_bg_image | image_url: width: 1800 }}"
+          alt="{{ section.settings.container_bg_image.alt | default: 'Container Background' | escape }}"
+          loading="lazy"
+          width="{{ section.settings.container_bg_image.width }}"
+          height="{{ section.settings.container_bg_image.height }}"
+        >
+      </div>
+    {%- endif -%}
+    <div class="bb-philosophy__grid">
+      
+      <!-- Left Column: Philosophy Text & Product -->
+      <div class="bb-philosophy__left">
+        {%- if section.settings.left_bg_image != blank -%}
+          <div class="bb-philosophy__left-bg-img">
+            <img
+              src="{{ section.settings.left_bg_image | image_url: width: 1400 }}"
+              alt="{{ section.settings.left_bg_image.alt | default: 'Left Background' | escape }}"
+              loading="lazy"
+              width="{{ section.settings.left_bg_image.width }}"
+              height="{{ section.settings.left_bg_image.height }}"
+            >
+          </div>
+        {%- endif -%}
+        {%- if section.settings.show_bg_shapes -%}
+          <div class="bb-philosophy__bg-shape bb-philosophy__bg-shape--1"></div>
+          <div class="bb-philosophy__bg-shape bb-philosophy__bg-shape--2"></div>
+        {%- endif -%}
+
+        <div class="bb-philosophy__left-content">
+          {%- if section.settings.badge_text != blank -%}
+            <span class="bb-philosophy__badge">
+              {{ section.settings.badge_text }}
+            </span>
+          {%- endif -%}
+
+          {%- if section.settings.heading != blank -%}
+            <{{ section.settings.heading_tag | default: 'h2' }} class="bb-philosophy__heading">
+              {{ section.settings.heading | newline_to_br }}
+            </{{ section.settings.heading_tag | default: 'h2' }}>
+          {%- endif -%}
+
+          {%- if section.settings.description != blank -%}
+            <div class="bb-philosophy__description">
+              {{ section.settings.description }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Product Image Area -->
+        <div class="bb-philosophy__product-wrap">
+          {%- if section.settings.product_image != blank -%}
+            <img
+              src="{{ section.settings.product_image | image_url: width: 600 }}"
+              srcset="{{ section.settings.product_image | image_url: width: 300 }} 300w, {{ section.settings.product_image | image_url: width: 600 }} 600w"
+              sizes="(min-width: 768px) 300px, 180px"
+              alt="{{ section.settings.product_image.alt | default: section.settings.heading | escape }}"
+              class="bb-philosophy__product-img"
+              loading="lazy"
+              width="{{ section.settings.product_image.width }}"
+              height="{{ section.settings.product_image.height }}"
+            >
+          {%- else -%}
+            <!-- High-quality Fallback SVG Product Bottle -->
+            <svg class="bb-philosophy__product-img" viewBox="0 0 140 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Clear Cap & Roller Head -->
+              <rect x="42" y="10" width="56" height="75" rx="28" stroke="#D1D5DB" stroke-width="2.5" fill="rgba(255,255,255,0.7)"/>
+              <circle cx="70" cy="32" r="12" fill="#9CA3AF"/>
+              <circle cx="70" cy="32" r="8" fill="#E5E7EB"/>
+              <rect x="62" y="44" width="16" height="36" fill="#E5E7EB" rx="4"/>
+              
+              <!-- Main Bottle Body -->
+              <rect x="36" y="85" width="68" height="230" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+              <rect x="36" y="85" width="68" height="12" fill="#F3F4F6"/>
+              
+              <!-- Vertical Brand Text -->
+              <text x="-210" y="62" transform="rotate(-90)" fill="#000000" font-family="sans-serif" font-weight="800" font-size="15" letter-spacing="0.5">Boost &amp; Bloom</text>
+              <text x="-210" y="76" transform="rotate(-90)" fill="#84CC16" font-family="sans-serif" font-weight="600" font-size="8" letter-spacing="0.2">Microneedling Hair Booster Serum</text>
+              
+              <!-- Bottom Lime Accent Stripe -->
+              <rect x="36" y="295" width="68" height="10" fill="#A6FF00"/>
+              <text x="70" y="303" text-anchor="middle" fill="#000000" font-family="sans-serif" font-size="5" font-weight="700">NET WT. 50ml / 1.7 fl.oz</text>
+            </svg>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Before / After Slider -->
+      <div class="bb-philosophy__right">
+        <bb-before-after-slider>
+          <!-- Badges -->
+          {%- if section.settings.before_label != blank -%}
+            <span class="bb-ba-slider__badge bb-ba-slider__badge--before">
+              {{ section.settings.before_label }}
+            </span>
+          {%- endif -%}
+
+          {%- if section.settings.after_label != blank -%}
+            <span class="bb-ba-slider__badge bb-ba-slider__badge--after">
+              {{ section.settings.after_label }}
+            </span>
+          {%- endif -%}
+
+          <!-- Before Layer (Top overlay layer with clip-path) -->
+          <div class="bb-ba-slider__image-layer bb-ba-slider__before-layer">
+            {%- if section.settings.before_image != blank -%}
+              <img
+                src="{{ section.settings.before_image | image_url: width: 1200 }}"
+                srcset="{{ section.settings.before_image | image_url: width: 600 }} 600w, {{ section.settings.before_image | image_url: width: 1200 }} 1200w"
+                sizes="(min-width: 992px) 50vw, 100vw"
+                alt="{{ section.settings.before_image.alt | default: 'Before' | escape }}"
+                loading="lazy"
+                width="{{ section.settings.before_image.width }}"
+                height="{{ section.settings.before_image.height }}"
+              >
+            {%- else -%}
+              <!-- Fallback Before Scalp Image SVG -->
+              <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="600" height="600" fill="#2D2926"/>
+                <ellipse cx="300" cy="300" rx="280" ry="260" fill="#A87B64" opacity="0.9"/>
+                <circle cx="300" cy="300" r="160" fill="#C49279" opacity="0.6"/>
+                <g stroke="#1A1817" stroke-width="1.8" stroke-linecap="round" opacity="0.75">
+                  <path d="M300 300 Q280 200 240 120"/>
+                  <path d="M300 300 Q340 220 380 140"/>
+                  <path d="M300 300 Q220 280 140 240"/>
+                  <path d="M300 300 Q380 320 460 360"/>
+                  <path d="M300 300 Q260 380 200 460"/>
+                  <path d="M300 300 Q350 380 400 480"/>
+                  <path d="M300 300 Q290 180 280 80"/>
+                  <path d="M300 300 Q310 420 320 520"/>
+                </g>
+              </svg>
+            {%- endif -%}
+          </div>
+
+          <!-- After Layer (Base background layer) -->
+          <div class="bb-ba-slider__image-layer bb-ba-slider__after-layer">
+            {%- if section.settings.after_image != blank -%}
+              <img
+                src="{{ section.settings.after_image | image_url: width: 1200 }}"
+                srcset="{{ section.settings.after_image | image_url: width: 600 }} 600w, {{ section.settings.after_image | image_url: width: 1200 }} 1200w"
+                sizes="(min-width: 992px) 50vw, 100vw"
+                alt="{{ section.settings.after_image.alt | default: 'After' | escape }}"
+                loading="lazy"
+                width="{{ section.settings.after_image.width }}"
+                height="{{ section.settings.after_image.height }}"
+              >
+            {%- else -%}
+              <!-- Fallback After Dense Hair Image SVG -->
+              <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="600" height="600" fill="#1C1816"/>
+                <ellipse cx="300" cy="300" rx="280" ry="260" fill="#8C624E" opacity="0.6"/>
+                <g stroke="#0E0C0B" stroke-width="3" stroke-linecap="round" opacity="0.95">
+                  {% for i in (1..90) %}
+                    <path d="M300 300 Q{{ i | times: 7 | modulo: 600 }} {{ i | times: 13 | modulo: 600 }} {{ i | times: 19 | modulo: 600 }} {{ i | times: 23 | modulo: 600 }}"/>
+                  {% endfor %}
+                </g>
+              </svg>
+            {%- endif -%}
+          </div>
+
+          <!-- Divider & Handle Knob -->
+          <div class="bb-ba-slider__divider"></div>
+          <div class="bb-ba-slider__handle">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="7 16 3 12 7 8"></polyline>
+              <polyline points="17 16 21 12 17 8"></polyline>
+            </svg>
+          </div>
+
+          <!-- Range Input Overlay for Keyboard/Touch Accessibility -->
+          <input
+            type="range"
+            class="bb-ba-slider__range"
+            min="0"
+            max="100"
+            value="{{ section.settings.initial_slider_position | default: 50 }}"
+            aria-label="Before and after image comparison slider"
+          >
+        </bb-before-after-slider>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  if (!customElements.get('bb-before-after-slider')) {
+    customElements.define('bb-before-after-slider', class BBBeforeAfterSlider extends HTMLElement {
+      constructor() {
+        super();
+        this.range = this.querySelector('.bb-ba-slider__range');
+        this.isDragging = false;
+        if (!this.range) return;
+
+        this.onInput = this.onInput.bind(this);
+        this.onStart = this.onStart.bind(this);
+        this.onMove = this.onMove.bind(this);
+        this.onEnd = this.onEnd.bind(this);
+      }
+
+      connectedCallback() {
+        if (!this.range) return;
+        this.range.addEventListener('input', this.onInput);
+        this.addEventListener('mousedown', this.onStart);
+        window.addEventListener('mousemove', this.onMove);
+        window.addEventListener('mouseup', this.onEnd);
+
+        this.addEventListener('touchstart', this.onStart, { passive: true });
+        window.addEventListener('touchmove', this.onMove, { passive: true });
+        window.addEventListener('touchend', this.onEnd);
+
+        this.updatePosition(this.range.value);
+      }
+
+      disconnectedCallback() {
+        if (!this.range) return;
+        this.range.removeEventListener('input', this.onInput);
+        this.removeEventListener('mousedown', this.onStart);
+        window.removeEventListener('mousemove', this.onMove);
+        window.removeEventListener('mouseup', this.onEnd);
+        this.removeEventListener('touchstart', this.onStart);
+        window.removeEventListener('touchmove', this.onMove);
+        window.removeEventListener('touchend', this.onEnd);
+      }
+
+      onInput(e) {
+        this.updatePosition(e.target.value);
+      }
+
+      onStart(e) {
+        this.isDragging = true;
+        this.handleMove(e);
+      }
+
+      onMove(e) {
+        if (!this.isDragging) return;
+        this.handleMove(e);
+      }
+
+      onEnd() {
+        this.isDragging = false;
+      }
+
+      handleMove(e) {
+        const rect = this.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        if (clientX === undefined) return;
+        let percentage = ((clientX - rect.left) / rect.width) * 100;
+        percentage = Math.max(0, Math.min(100, percentage));
+        this.range.value = percentage;
+        this.updatePosition(percentage);
+      }
+
+      updatePosition(val) {
+        this.style.setProperty('--slider-pos', `${val}%`);
+      }
+    });
+  }
+</script>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BB Ingredient Philosophy",
+  "tag": "section",
+  "class": "bb-section-ingredient-philosophy",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Control"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS Class"
+    },
+
+    {
+      "type": "header",
+      "content": "Container Settings"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1600
+    },
+    {
+      "type": "color",
+      "id": "container_bg",
+      "label": "Container Background Color",
+      "default": "#FAF8F5"
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Section Border Radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Border Width",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "section_border_color",
+      "label": "Section Border Color",
+      "default": "#EAEDDD"
+    },
+    {
+      "type": "image_picker",
+      "id": "container_bg_image",
+      "label": "Container Background Image"
+    },
+
+    {
+      "type": "header",
+      "content": "Left Column Settings (Text & Product)"
+    },
+    {
+      "type": "color",
+      "id": "left_bg_color",
+      "label": "Left Column Background Color",
+      "default": "#FAF8F5"
+    },
+    {
+      "type": "image_picker",
+      "id": "left_bg_image",
+      "label": "Left Column Background Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bg_shapes",
+      "label": "Show Decorative Yellow Background Shapes",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "shape_color",
+      "label": "Background Shapes Color",
+      "default": "#FDF8DC"
+    },
+    {
+      "type": "range",
+      "id": "left_padding_desktop",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Left Column Padding (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "left_padding_mobile",
+      "min": 12,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Left Column Padding (Mobile)",
+      "default": 20
+    },
+
+    {
+      "type": "header",
+      "content": "Badge Options"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "INGREDIENT PHILOSOPHY"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#A6FF00"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Border Radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "min": 8,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Badge Margin Bottom",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "Heading Options"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Scientifically selected ingredients for stronger hair"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 20,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Desktop)",
+      "default": 54
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Mobile)",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 8,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "Description Options"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description Text",
+      "default": "We combine proven actives that support scalp health, hair strength and growth."
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Font Size",
+      "default": 15
+    },
+
+    {
+      "type": "header",
+      "content": "Product Image Options"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Bottle Image"
+    },
+    {
+      "type": "range",
+      "id": "product_image_width",
+      "min": 80,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Product Image Max Width",
+      "default": 130
+    },
+
+    {
+      "type": "header",
+      "content": "Right Column (Before / After Slider) Options"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before Image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before Label Text",
+      "default": "Before"
+    },
+    {
+      "type": "color",
+      "id": "before_label_bg",
+      "label": "Before Label Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "before_label_color",
+      "label": "Before Label Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After Image"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After Label Text",
+      "default": "After"
+    },
+    {
+      "type": "color",
+      "id": "after_label_bg",
+      "label": "After Label Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "after_label_color",
+      "label": "After Label Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "initial_slider_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Initial Slider Position",
+      "default": 50
+    },
+    {
+      "type": "color",
+      "id": "divider_line_color",
+      "label": "Slider Divider Line Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "handle_bg_color",
+      "label": "Slider Handle Button Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "handle_icon_color",
+      "label": "Slider Handle Arrow Icon Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "slider_height_desktop",
+      "min": 200,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "label": "Slider Height (Desktop)",
+      "default": 620
+    },
+    {
+      "type": "range",
+      "id": "slider_height_mobile",
+      "min": 180,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Slider Height (Mobile)",
+      "default": 280
+    },
+
+    {
+      "type": "header",
+      "content": "Section Spacing & Margins"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Left (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Right (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "BB Ingredient Philosophy",
+      "settings": {
+        "badge_text": "INGREDIENT PHILOSOPHY",
+        "badge_bg_color": "#A6FF00",
+        "heading": "Scientifically selected ingredients for stronger hair",
+        "description": "We combine proven actives that support scalp health, hair strength and growth.",
+        "before_label": "Before",
+        "after_label": "After",
+        "slider_height_desktop": 620,
+        "slider_height_mobile": 280
+      }
+    }
+  ]
+}
+{% endschema %}

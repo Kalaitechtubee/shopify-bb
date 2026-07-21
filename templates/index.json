@@ -66,10 +66,162 @@
         "padding_top": 44,
         "padding_bottom": 36
       }
+    },
+    "bb_ingredient_philosophy": {
+      "type": "bb-ingredient-philosophy",
+      "settings": {
+        "enable_section": true,
+        "container_max_width": 1600,
+        "container_bg": "#FAF8F5",
+        "section_border_radius": 0,
+        "section_border_width": 2,
+        "section_border_color": "#EAEDDD",
+        "badge_text": "INGREDIENT PHILOSOPHY",
+        "badge_bg_color": "#A6FF00",
+        "badge_margin_bottom": 48,
+        "heading": "Scientifically selected ingredients for stronger hair",
+        "heading_color": "#000000",
+        "heading_size_desktop": 54,
+        "heading_size_mobile": 28,
+        "heading_weight": "700",
+        "heading_margin_bottom": 48,
+        "description": "We combine proven actives that support scalp health, hair strength and growth.",
+        "before_label": "Before",
+        "after_label": "After",
+        "product_image_width": 130,
+        "slider_height_desktop": 620,
+        "slider_height_mobile": 280
+      }
+    },
+    "bb_real_hair_problem": {
+      "type": "bb-real-hair-problem",
+      "blocks": {
+        "card_1": {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why does my hair look flat and lifeless by the end of the day?"
+          }
+        },
+        "card_2": {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why is my scalp always dry, itchy, or irritated?"
+          }
+        },
+        "card_3": {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why does my hair feel dry after every shower?"
+          }
+        },
+        "card_4": {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why does my hair keep shedding so much?"
+          }
+        },
+        "card_5": {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why can't my routine just be simple and effective?"
+          }
+        },
+        "card_6": {
+          "type": "quote_card",
+          "settings": {
+            "quote_text": "Why do I need so many different hair products?"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4",
+        "card_5",
+        "card_6"
+      ],
+      "settings": {
+        "enable_section": true,
+        "enable_marquee": true,
+        "enable_two_rows": true,
+        "row1_direction": "right_to_left",
+        "row2_direction": "left_to_right",
+        "row_gap": 16,
+        "marquee_speed": 30,
+        "subheading": "WE ASKED 100 INDIAN WOMEN ONE QUESTION",
+        "heading": "What is the <em>real hair problem?</em>",
+        "heading_accent_color": "#6B2430",
+        "card_border_color": "#70262E",
+        "cta_text": "So we built products that solve exactly that.",
+        "btn_text": "EXPLORE PRODUCTS",
+        "btn_bg_color": "#A6FF00"
+      }
+    },
+    "bb_statement_banner": {
+      "type": "bb-statement-banner",
+      "settings": {
+        "enable_section": true,
+        "full_width": true,
+        "heading": "Hairdareyou challenges everything complicated about haircare",
+        "background_color": "#6B2430",
+        "text_color": "#FFFFFF",
+        "text_size_desktop": 44,
+        "text_size_mobile": 26
+      }
+    },
+    "bb_meet_our_gems": {
+      "type": "bb-meet-our-gems",
+      "blocks": {
+        "gem_1": {
+          "type": "gem_card",
+          "settings": {
+            "title": "want cleaner hair every wash?"
+          }
+        },
+        "gem_2": {
+          "type": "gem_card",
+          "settings": {
+            "title": "is your hair craving deep nourishment?"
+          }
+        },
+        "gem_3": {
+          "type": "gem_card",
+          "settings": {
+            "title": "flyaways ruining your style?"
+          }
+        },
+        "gem_4": {
+          "type": "gem_card",
+          "settings": {
+            "title": "Need instant shine and strength?"
+          }
+        }
+      },
+      "block_order": [
+        "gem_1",
+        "gem_2",
+        "gem_3",
+        "gem_4"
+      ],
+      "settings": {
+        "enable_section": true,
+        "heading": "meet <em>our gems</em>",
+        "heading_accent_color": "#6B2430",
+        "heading_size_desktop": 60,
+        "heading_size_mobile": 30,
+        "columns_desktop": 4,
+        "banner_bg_color": "#5C1D24",
+        "banner_arrow_color": "#A6FF00"
+      }
     }
   },
   "order": [
     "image_banner",
+    "bb_ingredient_philosophy",
+    "bb_real_hair_problem",
+    "bb_statement_banner",
+    "bb_meet_our_gems",
     "featured_collection"
   ]
 }
